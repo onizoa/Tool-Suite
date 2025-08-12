@@ -144,14 +144,17 @@
         .header-title .header-page-icon { width: 28px; height: 28px; stroke: var(--c-on-surface); }
         .header-controls { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
         .search-container { position: relative; width: 100%; max-width: 500px; transition: opacity var(--animation-speed), visibility var(--animation-speed); }
-        .search-input { width: 100%; padding: 12px 16px 12px 48px; border-radius: 20px; border: 1px solid var(--c-border); background-color: var(--c-background); color: var(--c-on-surface); font-size: 14px; outline: none; }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: var(--c-on-surface); opacity: 0.5; }
+        .search-input { width: 100%; padding: 12px 40px 12px 48px; border-radius: 20px; border: 1px solid var(--c-border); background-color: var(--c-background); color: var(--c-on-surface); font-size: 14px; outline: none; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: var(--c-on-surface); opacity: 0.5; z-index: 1; }
+        #clearSearchBtn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 60px; height: 30px; background-color: var(--c-surface); border-radius: 9999px; border: 1px solid var(--c-border); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background-color var(--transition-speed); }
+        #clearSearchBtn svg { stroke: var(--c-primary-variant); transition: stroke var(--transition-speed); }
+        #clearSearchBtn:hover { background-color: var(--c-primary-variant); }
+        #clearSearchBtn:hover svg { stroke: #fff; }
         .header-btn { cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--c-surface); border: 1px solid var(--c-border); position: relative; transition: background-color var(--transition-speed); }
-        .header-btn:hover { background-color: var(--c-background); }
+        .header-btn:hover { background-color: var(--c-primary-variant); }
         .header-icon { transition: transform var(--animation-speed) ease, opacity calc(var(--animation-speed) / 2) ease, stroke var(--transition-speed), fill var(--transition-speed); position: absolute; stroke: var(--c-primary-variant); fill: none; }
-        .header-btn:hover .header-icon { stroke: var(--c-primary); }
+        .header-btn:hover .header-icon { stroke: #fff; fill: #fff; }
         .header-icon.moon { fill: var(--c-primary-variant); stroke: none; }
-        .header-btn:hover .header-icon.moon { fill: var(--c-primary); stroke: none; }
         #themeToggle.spin .header-icon { transform: rotate(360deg); }
         body:not(.light-mode) .header-icon.sun { display: none; }
         body.light-mode .header-icon.moon { display: none; }
@@ -271,6 +274,7 @@
                 <div class="search-container hidden" id="searchContainer">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input type="text" id="cardSearchInput" class="search-input" placeholder="Search templates...">
+                    <button id="clearSearchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
             </div>
             <div class="header-controls">
@@ -412,6 +416,8 @@
             const headerTitle = document.getElementById('headerTitle');
             const searchContainer = document.getElementById('searchContainer');
             const backToSuiteBtn = document.getElementById('backToSuiteBtn');
+            const cardSearchInput = document.getElementById('cardSearchInput');
+            const clearSearchBtn = document.getElementById('clearSearchBtn');
 
             const navigateToHotAlerts = document.getElementById('navigateToHotAlerts');
             const navigateToTemplateManager = document.getElementById('navigateToTemplateManager');
@@ -830,7 +836,18 @@
                     themeToggle.classList.add('spin'); 
                     setTimeout(() => themeToggle.classList.remove('spin'), 500); 
                 });
-                document.getElementById('cardSearchInput').addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
+                
+                cardSearchInput.addEventListener('keyup', (e) => { 
+                    const searchTerm = e.target.value.toLowerCase(); 
+                    document.querySelectorAll('.card').forEach(card => { 
+                        card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; 
+                    });
+                });
+                clearSearchBtn.addEventListener('click', () => {
+                    cardSearchInput.value = '';
+                    cardSearchInput.dispatchEvent(new Event('keyup'));
+                });
+
                 templateSelect.addEventListener('change', renderEditorForSelection);
                 document.getElementById('clearAllBtn').addEventListener('click', clearAllFields);
                 addNewTemplateBtn.addEventListener('click', handleAddNewClick);
