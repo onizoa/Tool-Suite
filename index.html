@@ -19,8 +19,8 @@
             --surface-light-dark: #2a2a2a;
             --on-surface-dark: #e0e0e0;
             --on-surface-variant-dark: #8c8c8c;
-            --primary-dark: #00aaff;
-            --primary-variant-dark: #0088cc;
+            --primary-dark: #0088cc; /* UPDATED COLOR */
+            --primary-variant-dark: #006699; /* UPDATED COLOR */
             --border-dark: #333333;
             --thumb-dark: #4a4a4a;
             --shadow-dark: rgba(0, 0, 0, 0.3);
@@ -35,8 +35,8 @@
             --surface-light-light: #f0f2f5;
             --on-surface-light: #111111;
             --on-surface-variant-light: #6c757d;
-            --primary-light: #007bff;
-            --primary-variant-light: #0056b3;
+            --primary-light: #0066cc; /* UPDATED COLOR */
+            --primary-variant-light: #004c99; /* UPDATED COLOR */
             --border-light: #e0e0e0;
             --thumb-light: #c1c1c1;
             --shadow-light: rgba(0, 0, 0, 0.1);
@@ -287,7 +287,10 @@
         #toolSuitePage { flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 40px; }
         .tool-suite-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; width: 100%; max-width: 1000px; }
         .tool-card { background-color: var(--c-surface); border-radius: 16px; border: 1px solid var(--c-border); padding: 32px; text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
-        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px var(--c-shadow); }
+        .tool-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 12px 40px var(--c-shadow), 0 0 25px 0 #0088cc; /* ADDED GLOW */
+        }
         .tool-card-icon { width: 64px; height: 64px; margin-bottom: 20px; color: var(--c-primary); }
         .tool-card h3 { font-size: 22px; font-weight: 700; margin: 0 0 12px 0; color: var(--c-on-surface); }
         .tool-card p { font-size: 15px; color: var(--c-on-surface-variant); line-height: 1.6; margin: 0; }
@@ -471,7 +474,8 @@
                             </button>
                         </div>
                         <div id="templateEditor">
-                             </div>
+                             <!-- Editor will be rendered here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -493,6 +497,7 @@
                         <button data-tab="Eagle" class="catalog-tab-button">Eagle</button>
                     </div>
                     <main id="catalog-content-area">
+                        <!-- Chrysler Content -->
                         <div id="catalog-Chrysler" class="catalog-tab-content">
                             <div class="catalog-view-section" data-brand-color="Chrysler">
                                 <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
@@ -519,6 +524,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Dodge Content -->
                         <div id="catalog-Dodge" class="catalog-tab-content hidden">
                             <div class="catalog-view-section" data-brand-color="Dodge">
                                 <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
@@ -549,6 +555,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Jeep Content -->
                         <div id="catalog-Jeep" class="catalog-tab-content hidden">
                             <div class="catalog-view-section" data-brand-color="Jeep">
                                 <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
@@ -573,6 +580,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Ram Content -->
                         <div id="catalog-Ram" class="catalog-tab-content hidden">
                             <div class="catalog-view-section" data-brand-color="Ram">
                                 <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
@@ -591,6 +599,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Plymouth Content -->
                         <div id="catalog-Plymouth" class="catalog-tab-content hidden">
                             <div class="catalog-view-section" data-brand-color="Plymouth">
                                 <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
@@ -604,7 +613,8 @@
                                 </div>
                             </div>
                         </div>
-                         <div id="catalog-Eagle" class="catalog-tab-content hidden">
+                         <!-- Eagle Content -->
+                        <div id="catalog-Eagle" class="catalog-tab-content hidden">
                             <div class="catalog-view-section" data-brand-color="Eagle">
                                 <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
                                 <div class="catalog-view-container">
@@ -951,7 +961,8 @@
                         <svg class="card-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </div>
                     <div class="card-body">
-                        <div class="in-card-controls"></div> <div class="template-preview"></div>
+                        <div class="in-card-controls"></div> <!-- Placeholder for special controls -->
+                        <div class="template-preview"></div>
                         <div class="warning-message"></div>
                         <button class="btn btn-primary copy-btn">Copy Template</button>
                     </div>
