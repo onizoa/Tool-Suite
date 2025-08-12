@@ -113,18 +113,93 @@
 
         .input-group { margin-bottom: 8px; }
 
-        .select-wrapper { position: relative; width: 100%; }
-        .select-wrapper::after { content: '▼'; font-size: 12px; color: var(--c-on-surface-variant); position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; transition: transform var(--transition-speed) ease, color var(--transition-speed) ease; }
-        .select-wrapper:has(.select-field:focus)::after { transform: translateY(-50%) rotate(180deg); color: var(--c-primary); }
-        .input-field, .select-field, textarea { width: 100%; padding: 12px 16px; background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; color: var(--c-on-surface); font-family: var(--font-family-sans); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-        .select-field option { background-color: var(--c-surface); color: var(--c-on-surface); }
-        select::-webkit-scrollbar { width: 8px; }
-        select::-webkit-scrollbar-track { background-color: var(--c-surface-light); }
-        select::-webkit-scrollbar-thumb { background-color: var(--c-thumb); border-radius: 4px; }
-        select::-webkit-scrollbar-thumb:hover { background-color: var(--c-primary-variant); }
+        /* === MODERN COMBOBOX STYLES START === */
+        .select-wrapper { 
+            position: relative; 
+            width: 100%; 
+        }
+        .select-field { 
+            display: none; 
+        }
+        .custom-select-wrapper { 
+            position: relative; 
+            width: 100%; 
+            color: var(--c-on-surface); 
+        }
+        .select-selected { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background-color: var(--c-background); 
+            padding: 12px 16px; 
+            border: 1px solid var(--c-border); 
+            border-radius: 8px; /* Modern rounded corners */
+            cursor: pointer; 
+            transition: border-color 0.3s, box-shadow 0.3s; 
+            user-select: none; 
+        }
+        .select-selected:hover {
+            border-color: color-mix(in srgb, var(--c-primary) 50%, var(--c-border));
+        }
+        .select-selected.select-arrow-active { 
+            border-color: var(--c-primary); 
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); 
+            border-bottom-left-radius: 0; /* Flatten bottom corners when open */
+            border-bottom-right-radius: 0; 
+        }
+        .select-selected::after { 
+            content: "▼"; /* Using a character for the arrow */
+            font-size: 12px;
+            color: var(--c-on-surface-variant);
+            transition: all 0.3s; 
+        }
+        .select-selected.select-arrow-active::after { 
+            transform: rotate(180deg); 
+        }
+        .select-items { 
+            position: absolute; 
+            background-color: var(--c-surface); 
+            top: 100%; 
+            left: 0; 
+            right: 0; 
+            z-index: 99; 
+            border: 1px solid var(--c-primary); 
+            border-top: none; 
+            border-radius: 0 0 8px 8px; /* Rounded bottom corners for the listbox */
+            box-shadow: 0 8px 16px var(--c-shadow); 
+            overflow-y: auto; 
+            max-height: 200px; 
+        }
+        .select-hide { 
+            display: none; 
+        }
+        .select-items div { 
+            padding: 12px 16px; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+        }
+        .select-items div:not(.optgroup):hover { 
+            background-color: var(--c-surface-light); 
+        }
+        .same-as-selected { 
+            background-color: color-mix(in srgb, var(--c-primary) 80%, #fff) !important;
+            color: #fff !important;
+            font-weight: 500;
+        }
+        .optgroup { 
+            font-weight: bold; 
+            color: var(--c-on-surface-variant); 
+            padding-bottom: 8px; 
+            margin-top: 8px; 
+            border-bottom: 1px solid var(--c-border); 
+            cursor: default !important;
+        }
+        /* === MODERN COMBOBOX STYLES END === */
+
+        .input-field, textarea { width: 100%; padding: 12px 16px; background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; color: var(--c-on-surface); font-family: var(--font-family-sans); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
         .input-field::placeholder, textarea::placeholder { color: var(--c-on-surface-variant); }
-        .input-field:focus, .select-field:focus, textarea:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
-        .input-field.missing, .select-field.missing { border-color: var(--c-error); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-error) 20%, transparent); animation: shake 0.3s; }
+        .input-field:focus, textarea:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
+        .input-field.missing, .select-selected.missing { border-color: var(--c-error) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-error) 20%, transparent) !important; animation: shake 0.3s; }
         
         .sidebar-footer { padding-top: 16px; border-top: 1px solid var(--c-border); }
         .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; border: none; transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
@@ -174,6 +249,7 @@
         .card.expanded .card-toggle-icon { transform: rotate(45deg); }
         .card-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 24px; }
         .card.expanded .card-body { max-height: 1000px; padding: 0 24px 24px; }
+        .in-card-controls { margin-bottom: 16px; }
         .template-preview { background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; padding: 20px; font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-wrap: break-word; }
         .template-preview .filled { font-weight: 600; color: var(--c-on-surface); }
         .template-preview .empty { color: var(--c-error); font-weight: 500; }
@@ -394,12 +470,123 @@
         let unsubscribeFromTemplates = null; 
         let justAuthenticated = false;
 
+        // --- CUSTOM COMBOBOX/SELECT SCRIPT (REFACTORED & FIXED) ---
+
+        function closeAllSelects(exceptThisOne) {
+            document.querySelectorAll('.select-items').forEach(item => {
+                if (item.previousElementSibling !== exceptThisOne) {
+                    item.classList.add('select-hide');
+                }
+            });
+            document.querySelectorAll('.select-selected').forEach(item => {
+                if (item !== exceptThisOne) {
+                    item.classList.remove('select-arrow-active');
+                }
+            });
+        }
+
+        function createOptionDiv(option, nativeSelect, selectedItem, optionsList) {
+            const optionDiv = document.createElement('div');
+            optionDiv.textContent = option.textContent;
+            if (nativeSelect.value === option.value) {
+                optionDiv.classList.add('same-as-selected');
+            }
+
+            optionDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nativeSelect.value = option.value;
+                selectedItem.textContent = option.textContent;
+                
+                const currentSelected = optionsList.querySelector('.same-as-selected');
+                if (currentSelected) {
+                    currentSelected.classList.remove('same-as-selected');
+                }
+                optionDiv.classList.add('same-as-selected');
+                
+                nativeSelect.dispatchEvent(new Event('input', { bubbles: true }));
+                nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+                closeAllSelects();
+            });
+            return optionDiv;
+        }
+
+        function buildCustomSelect(wrapper) {
+            const nativeSelect = wrapper.querySelector('select.select-field');
+            if (!nativeSelect) return;
+
+            // Clear any previous custom elements to prevent duplication on re-build
+            wrapper.querySelectorAll('.select-selected, .select-items').forEach(el => el.remove());
+
+            nativeSelect.style.display = 'none';
+
+            const selectedItem = document.createElement('div');
+            selectedItem.className = 'select-selected';
+            // FIX: Safely access textContent, providing a fallback for empty selects
+            selectedItem.textContent = nativeSelect.options[nativeSelect.selectedIndex]?.textContent || (nativeSelect.options[0]?.textContent || 'Select...');
+            
+            const optionsList = document.createElement('div');
+            optionsList.className = 'select-items select-hide';
+
+            Array.from(nativeSelect.children).forEach(child => {
+                if (child.tagName.toLowerCase() === 'optgroup') {
+                    const optgroupDiv = document.createElement('div');
+                    optgroupDiv.className = 'optgroup';
+                    optgroupDiv.textContent = child.label;
+                    optionsList.appendChild(optgroupDiv);
+
+                    Array.from(child.children).forEach(option => {
+                        const optionDiv = createOptionDiv(option, nativeSelect, selectedItem, optionsList);
+                        optionsList.appendChild(optionDiv);
+                    });
+                } else if (child.tagName.toLowerCase() === 'option') {
+                     if (child.value || child.textContent) {
+                        const optionDiv = createOptionDiv(child, nativeSelect, selectedItem, optionsList);
+                        optionsList.appendChild(optionDiv);
+                     }
+                }
+            });
+            
+            wrapper.appendChild(selectedItem);
+            wrapper.appendChild(optionsList);
+            
+            selectedItem.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isAlreadyOpen = !optionsList.classList.contains('select-hide');
+                closeAllSelects(isAlreadyOpen ? null : selectedItem);
+                optionsList.classList.toggle('select-hide');
+                selectedItem.classList.toggle('select-arrow-active');
+            });
+        }
+
+        function initializeCustomSelects() {
+            document.querySelectorAll('.select-wrapper').forEach(buildCustomSelect);
+            document.addEventListener('click', () => closeAllSelects(null));
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             
+            initializeCustomSelects();
+
             let combinedTemplates = [];
             let publicTmpls = [];
             let userTmpls = [];
-            const fieldDisplayNames = { customerTitle: "Select Title", customerName: "Customer Name", phoneNumber: "Phone Number", vehicle: "Vehicle", vin: "VIN", advisor: "Advisor", schedule: "Schedule", accessoryParts: "Accessory / Parts", tireBrandSize: "Tire Brand & Size", service: "Service", otherConcern: "Other Concern", recall: "RECALL" };
+            const fieldDisplayNames = { 
+                customerTitle: "Select Title", 
+                customerName: "Customer Name", 
+                phoneNumber: "Phone Number", 
+                vehicle: "Vehicle", 
+                vin: "VIN", 
+                advisor: "Advisor", 
+                schedule: "Schedule", 
+                accessoryParts: "Accessory / Parts", 
+                tireBrandSize: "Tire Brand & Size", 
+                service: "Service", 
+                otherConcern: "Other Concern", 
+                recall: "RECALL",
+                numberOfTires: "Number of Tires" // Added new field
+            };
             const appState = { currentView: 'toolSuite', editorMode: 'none', selectedTemplateId: null, hiddenTemplates: [] };
             const body = document.body;
             
@@ -564,11 +751,38 @@
                         <svg class="card-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </div>
                     <div class="card-body">
+                        <div class="in-card-controls"></div> <!-- Placeholder for special controls -->
                         <div class="template-preview"></div>
                         <div class="warning-message"></div>
                         <button class="btn btn-primary copy-btn">Copy Template</button>
                     </div>
                 `;
+
+                // If this is the Tire template, add the special combobox
+                if (templateData.title.toLowerCase() === 'tire') {
+                    const inCardControls = card.querySelector('.in-card-controls');
+                    const tireSelectWrapper = document.createElement('div');
+                    tireSelectWrapper.className = 'select-wrapper input-group';
+                    
+                    const tireSelect = document.createElement('select');
+                    tireSelect.className = 'select-field';
+                    tireSelect.dataset.fieldId = 'numberOfTires'; // Use data attribute for identification
+
+                    const options = ["Select number of tires", "One tire", "Two tires", "Three tires", "Four tires"];
+                    options.forEach((optText, index) => {
+                        const option = document.createElement('option');
+                        option.value = (index === 0) ? "" : optText;
+                        option.textContent = optText;
+                        tireSelect.appendChild(option);
+                    });
+
+                    tireSelectWrapper.appendChild(tireSelect);
+                    inCardControls.appendChild(tireSelectWrapper);
+
+                    // Build the custom select UI for this new element
+                    buildCustomSelect(tireSelectWrapper);
+                }
+
                 cardContainer.appendChild(card);
                 card.querySelector('.card-header').addEventListener('click', () => toggleCard(card));
                 card.querySelector('.copy-btn').addEventListener('click', () => copyTemplate(card));
@@ -623,6 +837,11 @@
                 templateSelect.appendChild(defaultOptGroup);
 
                 templateSelect.value = selectedValue;
+                
+                const wrapper = document.querySelector('#manageTemplatesPage .select-wrapper');
+                if (wrapper) {
+                    buildCustomSelect(wrapper);
+                }
             }
 
             function renderEditorForSelection() {
@@ -740,6 +959,8 @@
                 appState.selectedTemplateId = 'new-template';
                 appState.editorMode = 'add';
                 templateSelect.value = '';
+                const customSelect = document.querySelector('#manageTemplatesPage .select-selected');
+                if (customSelect) customSelect.textContent = 'Select a template...';
                 renderFullEditor({title: '', template: ''});
             }
 
@@ -747,6 +968,8 @@
                 appState.selectedTemplateId = null;
                 appState.editorMode = 'none';
                 templateSelect.value = '';
+                const customSelect = document.querySelector('#manageTemplatesPage .select-selected');
+                if (customSelect) customSelect.textContent = 'Select a template...';
                 renderEditorForSelection();
             }
 
@@ -812,11 +1035,102 @@
             }
 
             function getFormattedValue(fieldId, value) { value = value.trim(); if (!value) return value; switch (fieldId) { case 'customerName': case 'advisor': case 'accessoryParts': case 'service': return value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); case 'vehicle': case 'vin': case 'schedule': case 'tireBrandSize': return value.toUpperCase(); case 'otherConcern': return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(); default: return value; } }
-            function toggleCard(card) { document.querySelectorAll('.card.expanded').forEach(openCard => { if (openCard !== card) openCard.classList.remove('expanded'); }); document.querySelectorAll('.missing').forEach(el => el.classList.remove('missing')); card.classList.toggle('expanded'); if (card.classList.contains('expanded')) updateCardContent(card); }
-            function updateAllCards() { document.querySelectorAll('.card.expanded').forEach(updateCardContent); }
-            function copyTemplate(card) { const preview = card.querySelector('.template-preview'); const copyBtn = card.querySelector('.copy-btn'); const tempTextArea = document.createElement('textarea'); tempTextArea.value = preview.innerText; document.body.appendChild(tempTextArea); tempTextArea.select(); document.execCommand('copy'); document.body.removeChild(tempTextArea); copyBtn.textContent = 'Copied!'; setTimeout(() => { copyBtn.textContent = 'Copy Template'; }, 1500); }
-            function clearAllFields() { const clearButton = document.getElementById('clearAllBtn'); allInputFields.forEach(input => { input.value = ''; input.classList.remove('missing'); }); document.querySelectorAll('.card-body .select-field').forEach(select => { select.value = ''; select.classList.remove('missing'); }); updateAllCards(); clearButton.textContent = 'Cleared!'; setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); }
-            function updateCardContent(card) { const templateId = card.dataset.id; const templateData = combinedTemplates.find(t => t.id === templateId); if (!templateData) return; const requiredFields = card.dataset.required.split(','); const preview = card.querySelector('.template-preview'); const warning = card.querySelector('.warning-message'); const copyBtn = card.querySelector('.copy-btn'); let allRequiredFilled = true; const missingFieldNames = []; requiredFields.forEach(fieldId => { if (!fieldId) return; const element = document.getElementById(fieldId); if (element && !element.value.trim()) { allRequiredFilled = false; element.classList.add('missing'); missingFieldNames.push(element.placeholder || fieldDisplayNames[fieldId]); } else if (element) { element.classList.remove('missing'); } }); const renderedTemplate = templateData.template.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => { const element = document.getElementById(fieldId); const value = element ? element.value : ''; const formattedValue = getFormattedValue(fieldId, value); return formattedValue ? `<span class="filled">${formattedValue}</span>` : `<span class="empty">[${fieldDisplayNames[fieldId] || fieldId}]</span>`; }); preview.innerHTML = renderedTemplate; warning.style.display = allRequiredFilled ? 'none' : 'block'; copyBtn.disabled = !allRequiredFilled; if (!allRequiredFilled) warning.textContent = `⚠️ Required: ${[...new Set(missingFieldNames)].join(', ')}`; }
+            
+            function toggleCard(card) { 
+                document.querySelectorAll('.card.expanded').forEach(openCard => { 
+                    if (openCard !== card) openCard.classList.remove('expanded'); 
+                }); 
+                document.querySelectorAll('.missing').forEach(el => el.classList.remove('missing')); 
+                card.classList.toggle('expanded'); 
+                if (card.classList.contains('expanded')) {
+                    updateCardContent(card);
+                }
+            }
+            
+            function updateAllCards() { 
+                document.querySelectorAll('.card.expanded').forEach(updateCardContent); 
+            }
+            
+            function copyTemplate(card) { 
+                const preview = card.querySelector('.template-preview'); 
+                const copyBtn = card.querySelector('.copy-btn'); 
+                const tempTextArea = document.createElement('textarea'); 
+                tempTextArea.value = preview.innerText; 
+                document.body.appendChild(tempTextArea); 
+                tempTextArea.select(); 
+                document.execCommand('copy'); 
+                document.body.removeChild(tempTextArea); 
+                copyBtn.textContent = 'Copied!'; 
+                setTimeout(() => { copyBtn.textContent = 'Copy Template'; }, 1500); 
+            }
+            
+            function clearAllFields() { 
+                const clearButton = document.getElementById('clearAllBtn'); 
+                document.querySelectorAll('.sidebar-content .input-field').forEach(input => { input.value = ''; input.classList.remove('missing'); }); 
+                document.querySelectorAll('.sidebar-content .select-field').forEach(select => { 
+                    select.value = ''; 
+                    select.classList.remove('missing');
+                    const customSelect = select.closest('.select-wrapper').querySelector('.select-selected'); 
+                    if (customSelect) { 
+                        customSelect.textContent = select.options[0].textContent; 
+                        customSelect.classList.remove('missing');
+                        const customOptions = select.closest('.select-wrapper').querySelector('.select-items'); 
+                        if(customOptions) { 
+                            const current = customOptions.querySelector('.same-as-selected'); 
+                            if(current) current.classList.remove('same-as-selected'); 
+                        } 
+                    } 
+                }); 
+                updateAllCards(); 
+                clearButton.textContent = 'Cleared!'; 
+                setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); 
+            }
+
+            function updateCardContent(card) {
+                const templateId = card.dataset.id;
+                const templateData = combinedTemplates.find(t => t.id === templateId);
+                if (!templateData) return;
+
+                const requiredFields = card.dataset.required ? card.dataset.required.split(',') : [];
+                const preview = card.querySelector('.template-preview');
+                const warning = card.querySelector('.warning-message');
+                const copyBtn = card.querySelector('.copy-btn');
+                let allRequiredFilled = true;
+                const missingFieldNames = new Set();
+
+                // Clear previous missing states from this card and the sidebar
+                card.querySelectorAll('.missing').forEach(el => el.classList.remove('missing'));
+                document.querySelectorAll('#sidebar .missing').forEach(el => el.classList.remove('missing'));
+                
+                const fieldValues = {};
+
+                requiredFields.forEach(fieldId => {
+                    if (!fieldId) return;
+                    let element = document.getElementById(fieldId) || card.querySelector(`[data-field-id="${fieldId}"]`);
+                    
+                    if (element && !element.value.trim()) {
+                        allRequiredFilled = false;
+                        missingFieldNames.add(fieldDisplayNames[fieldId] || fieldId);
+                        
+                        let elementToMark = element.closest('.select-wrapper')?.querySelector('.select-selected') || element;
+                        elementToMark.classList.add('missing');
+                    }
+                    fieldValues[fieldId] = element ? element.value : '';
+                });
+
+                const renderedTemplate = templateData.template.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => {
+                    const value = fieldValues[fieldId] || '';
+                    const formattedValue = getFormattedValue(fieldId, value);
+                    return formattedValue ? `<span class="filled">${formattedValue}</span>` : `<span class="empty">[${fieldDisplayNames[fieldId] || fieldId}]</span>`;
+                });
+                
+                preview.innerHTML = renderedTemplate;
+                warning.style.display = allRequiredFilled ? 'none' : 'block';
+                copyBtn.disabled = !allRequiredFilled;
+                if (!allRequiredFilled) {
+                    warning.textContent = `⚠️ Required: ${[...missingFieldNames].join(', ')}`;
+                }
+            }
             
             let isInitialized = false;
             function initializeApp() {
@@ -855,7 +1169,13 @@
                 
                 modalConfirmBtn.addEventListener('click', () => { if (confirmCallback) confirmCallback(); });
                 modalCancelBtn.addEventListener('click', hideConfirmationModal);
-                allInputFields.forEach(field => field.addEventListener('input', updateAllCards));
+                
+                // Add event listeners to all inputs, including dynamically added ones
+                document.body.addEventListener('input', (e) => {
+                    if (e.target.matches('.sidebar-content .input-field, .sidebar-content .select-field, .in-card-controls .select-field')) {
+                        updateAllCards();
+                    }
+                });
             }
 
             // --- Authentication Flow ---
