@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Suite</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='7' width='20' height='14' rx='2' ry='2'></rect><path d='M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'></path></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -19,8 +21,8 @@
             --surface-light-dark: #2a2a2a;
             --on-surface-dark: #e0e0e0;
             --on-surface-variant-dark: #8c8c8c;
-            --primary-dark: #0088cc; /* UPDATED COLOR */
-            --primary-variant-dark: #006699; /* UPDATED COLOR */
+            --primary-dark: #0088cc;
+            --primary-variant-dark: #006699;
             --border-dark: #333333;
             --thumb-dark: #4a4a4a;
             --shadow-dark: rgba(0, 0, 0, 0.3);
@@ -35,8 +37,8 @@
             --surface-light-light: #f0f2f5;
             --on-surface-light: #111111;
             --on-surface-variant-light: #6c757d;
-            --primary-light: #0066cc; /* UPDATED COLOR */
-            --primary-variant-light: #004c99; /* UPDATED COLOR */
+            --primary-light: #0066cc;
+            --primary-variant-light: #004c99;
             --border-light: #e0e0e0;
             --thumb-light: #c1c1c1;
             --shadow-light: rgba(0, 0, 0, 0.1);
@@ -89,7 +91,7 @@
         ::-webkit-scrollbar-track { background-color: transparent; }
         ::-webkit-scrollbar-thumb { background-color: var(--c-thumb); border-radius: 4px; border: 2px solid var(--c-surface); }
         ::-webkit-scrollbar-thumb:hover { background-color: var(--c-primary-variant); }
-        .sidebar-content, .card-container, .settings-container, #manageTemplatesContainer, #cdjrCatalogPage { scrollbar-width: thin; scrollbar-color: var(--c-thumb) var(--c-surface); }
+        .sidebar-content, .card-container, .settings-container, #manageTemplatesContainer, #cdjrCatalogPage, #dealershipListPage { scrollbar-width: thin; scrollbar-color: var(--c-thumb) var(--c-surface); }
 
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-background); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s, visibility 0.5s; }
         #splashScreen.hidden { opacity: 0; visibility: hidden; }
@@ -112,149 +114,25 @@
 
         .input-group { margin-bottom: 8px; }
 
-        /* === MODERN TOOLTIP STYLES START === */
-        .header-btn {
-            /* position: relative; is already on this class, which is perfect */
-            overflow: visible; /* Ensure tooltip isn't clipped by button bounds */
-        }
-
-        /* The main tooltip box */
-        .header-btn::after {
-            content: attr(aria-label); /* Use the aria-label text for the tooltip content */
-            position: absolute;
-            top: calc(100% + 12px); /* Position below the button with a 12px gap */
-            left: 0; /* Align to the left edge of the button */
-            
-            /* Style */
-            background-color: var(--c-primary);
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap; /* Prevent the text from wrapping */
-            box-shadow: 0 4px 12px var(--c-shadow);
-            
-            /* Animation */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-5px); /* Start slightly higher */
-            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
-            transition-delay: 0.3s; /* Delay before showing */
-            z-index: 1001; /* Ensure it's on top of other content */
-        }
-
-        /* The little triangle arrow pointing to the button */
-        .header-btn::before {
-            content: '';
-            position: absolute;
-            top: calc(100% + 2px); /* Position between the button and the tooltip box */
-            left: 15px; /* Indent the arrow from the left */
-            
-            /* UPDATED: Upward-pointing triangle shape */
-            border: 5px solid transparent;
-            border-bottom-color: var(--c-primary);
-
-            /* Animation */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-5px); /* Start slightly higher */
-            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
-            transition-delay: 0.3s;
-            z-index: 1001;
-        }
-
-        /* Show the tooltip and arrow on hover */
-        .header-btn:hover::after,
-        .header-btn:hover::before {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0); /* Animate to final position */
-        }
-        /* === MODERN TOOLTIP STYLES END === */
-
-        /* === MODERN COMBOBOX STYLES START === */
-        .select-wrapper { 
-            position: relative; 
-            width: 100%; 
-        }
-        .select-field { 
-            display: none; 
-        }
-        .custom-select-wrapper { 
-            position: relative; 
-            width: 100%; 
-            color: var(--c-on-surface); 
-        }
-        .select-selected { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background-color: var(--c-background); 
-            padding: 12px 16px; 
-            border: 1px solid var(--c-border); 
-            border-radius: 8px; /* Modern rounded corners */
-            cursor: pointer; 
-            transition: border-color 0.3s, box-shadow 0.3s; 
-            user-select: none; 
-        }
-        .select-selected:hover {
-            border-color: color-mix(in srgb, var(--c-primary) 50%, var(--c-border));
-        }
-        .select-selected.select-arrow-active { 
-            border-color: var(--c-primary); 
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); 
-            border-bottom-left-radius: 0; /* Flatten bottom corners when open */
-            border-bottom-right-radius: 0; 
-        }
-        .select-selected::after { 
-            content: "▼"; /* Using a character for the arrow */
-            font-size: 12px;
-            color: var(--c-on-surface-variant);
-            transition: all 0.3s; 
-        }
-        .select-selected.select-arrow-active::after { 
-            transform: rotate(180deg); 
-        }
-        .select-items { 
-            position: absolute; 
-            background-color: var(--c-surface); 
-            top: 100%; 
-            left: 0; 
-            right: 0; 
-            z-index: 99; 
-            border: 1px solid var(--c-primary); 
-            border-top: none; 
-            border-radius: 0 0 8px 8px; /* Rounded bottom corners for the listbox */
-            box-shadow: 0 8px 16px var(--c-shadow); 
-            overflow-y: auto; 
-            max-height: 200px; 
-        }
-        .select-hide { 
-            display: none; 
-        }
-        .select-items div { 
-            padding: 12px 16px; 
-            cursor: pointer; 
-            transition: background-color 0.2s; 
-        }
-        .select-items div:not(.optgroup):hover { 
-            background-color: var(--c-surface-light); 
-        }
-        .same-as-selected { 
-            background-color: color-mix(in srgb, var(--c-primary) 80%, #fff) !important;
-            color: #fff !important;
-            font-weight: 500;
-        }
-        .optgroup { 
-            font-weight: bold; 
-            color: var(--c-on-surface-variant); 
-            padding-bottom: 8px; 
-            margin-top: 8px; 
-            border-bottom: 1px solid var(--c-border); 
-            cursor: default !important;
-        }
-        /* === MODERN COMBOBOX STYLES END === */
+        .header-btn { overflow: visible; }
+        .header-btn::after { content: attr(aria-label); position: absolute; top: calc(100% + 12px); left: 0; background-color: var(--c-primary); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; box-shadow: 0 4px 12px var(--c-shadow); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
+        .header-btn::before { content: ''; position: absolute; top: calc(100% + 2px); left: 15px; border: 5px solid transparent; border-bottom-color: var(--c-primary); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
+        .header-btn:hover::after, .header-btn:hover::before { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        .select-wrapper { position: relative; width: 100%; }
+        .select-field { display: none; }
+        .custom-select-wrapper { position: relative; width: 100%; color: var(--c-on-surface); }
+        .select-selected { display: flex; justify-content: space-between; align-items: center; background-color: var(--c-background); padding: 12px 16px; border: 1px solid var(--c-border); border-radius: 8px; cursor: pointer; transition: border-color 0.3s, box-shadow 0.3s; user-select: none; }
+        .select-selected:hover { border-color: color-mix(in srgb, var(--c-primary) 50%, var(--c-border)); }
+        .select-selected.select-arrow-active { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        .select-selected::after { content: "▼"; font-size: 12px; color: var(--c-on-surface-variant); transition: all 0.3s; }
+        .select-selected.select-arrow-active::after { transform: rotate(180deg); }
+        .select-items { position: absolute; background-color: var(--c-surface); top: 100%; left: 0; right: 0; z-index: 99; border: 1px solid var(--c-primary); border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 8px 16px var(--c-shadow); overflow-y: auto; max-height: 200px; }
+        .select-hide { display: none; }
+        .select-items div { padding: 12px 16px; cursor: pointer; transition: background-color 0.2s; }
+        .select-items div:not(.optgroup):hover { background-color: var(--c-surface-light); }
+        .same-as-selected { background-color: color-mix(in srgb, var(--c-primary) 80%, #fff) !important; color: #fff !important; font-weight: 500; }
+        .optgroup { font-weight: bold; color: var(--c-on-surface-variant); padding-bottom: 8px; margin-top: 8px; border-bottom: 1px solid var(--c-border); cursor: default !important; }
 
         .input-field, textarea { width: 100%; padding: 12px 16px; background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; color: var(--c-on-surface); font-family: var(--font-family-sans); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
         .input-field::placeholder, textarea::placeholder { color: var(--c-on-surface-variant); }
@@ -313,8 +191,6 @@
         .template-preview .filled { font-weight: 600; color: var(--c-on-surface); }
         .template-preview .empty { color: var(--c-error); font-weight: 500; }
         .warning-message { margin-top: 16px; padding: 12px; background-color: var(--c-warning); color: var(--c-warning-text); border-radius: 8px; font-size: 14px; display: none; }
-        .copy-btn { margin-top: 16px; }
-
         #manageTemplatesPage { flex-direction: column; flex-grow: 1; padding: 40px; overflow-y: auto; }
         .settings-wrapper { width: 100%; max-width: 1050px; margin: 0 auto; display: flex; flex-direction: column; flex-grow: 1; }
         .settings-wrapper p { font-size: 15px; color: var(--c-on-surface-variant); margin: 0 0 24px 0; flex-shrink: 0; }
@@ -344,64 +220,46 @@
 
         .editor-actions { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--c-border); display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0; }
         
-        /* Tool Suite Styles */
         #toolSuitePage { flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 40px; }
         .tool-suite-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; width: 100%; max-width: 1000px; }
-        .tool-card { background-color: var(--c-surface); border-radius: 16px; border: 1px solid var(--c-border); padding: 32px; text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
-        .tool-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 12px 40px var(--c-shadow), 0 0 25px 0 #0088cc; /* ADDED GLOW */
-        }
+        .tool-card { background-color: var(--c-surface); border-radius: 16px; border: 1px solid var(--c-border); padding: 32px; text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; align-items: center; }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px var(--c-shadow), 0 0 25px 0 #0088cc; }
         .tool-card-icon { width: 64px; height: 64px; margin-bottom: 20px; color: var(--c-primary); }
         .tool-card h3 { font-size: 22px; font-weight: 700; margin: 0 0 12px 0; color: var(--c-on-surface); }
         .tool-card p { font-size: 15px; color: var(--c-on-surface-variant); line-height: 1.6; margin: 0; }
 
-        /* CDJR Catalog Page Styles */
-        #cdjrCatalogPage {
-            flex-direction: column;
-            padding: 40px;
-            overflow-y: auto;
-        }
-        .catalog-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .catalog-header { text-align: center; margin-bottom: 32px; }
-        .catalog-header h1 { font-size: 28px; font-weight: 700; }
-        .catalog-header p { color: var(--c-on-surface-variant); margin-top: 8px; }
-
+        #cdjrCatalogPage { flex-direction: column; padding: 40px; overflow-y: auto; }
+        .catalog-container { width: 100%; max-width: 1200px; margin: 0 auto; }
         .catalog-search-container { margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .catalog-search-container .relative { position: relative; } /* Ensure parent is relative */
-
+        .catalog-search-container .relative { position: relative; }
         .catalog-tabs { display: flex; flex-wrap: wrap; justify-content: center; border-bottom: 1px solid var(--c-border); margin-bottom: 32px; }
         .catalog-tab-button { padding: 12px 24px; font-weight: 600; border: none; background: none; color: var(--c-on-surface-variant); border-bottom: 3px solid transparent; transition: color 0.3s, border-color 0.3s; font-size: 16px; }
         .catalog-tab-button.tab-active { color: var(--c-primary); border-bottom-color: var(--c-primary); }
-        
         .catalog-view-section { margin-bottom: 40px; }
-        .catalog-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 24px; }
-        .catalog-section-header h2 { font-size: 22px; font-weight: 600; }
-        /* Brand-specific header colors */
-        [data-brand-color="Chrysler"] .catalog-section-header { border-bottom: 2px solid #00aaff; } [data-brand-color="Chrysler"] .catalog-section-header h2 { color: #00aaff; }
-        [data-brand-color="Jeep"] .catalog-section-header { border-bottom: 2px solid #22c55e; } [data-brand-color="Jeep"] .catalog-section-header h2 { color: #22c55e; }
-        [data-brand-color="Dodge"] .catalog-section-header { border-bottom: 2px solid #ef4444; } [data-brand-color="Dodge"] .catalog-section-header h2 { color: #ef4444; }
-        [data-brand-color="Ram"] .catalog-section-header { border-bottom: 2px solid #facc15; } [data-brand-color="Ram"] .catalog-section-header h2 { color: #facc15; }
-        [data-brand-color="Plymouth"] .catalog-section-header { border-bottom: 2px solid #22d3ee; } [data-brand-color="Plymouth"] .catalog-section-header h2 { color: #22d3ee; }
-        [data-brand-color="Eagle"] .catalog-section-header { border-bottom: 2px solid #9ca3af; } [data-brand-color="Eagle"] .catalog-section-header h2 { color: #9ca3af; }
-        
+        .catalog-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 24px; border-bottom: 2px solid; }
+        [data-brand-color="Chrysler"] .catalog-section-header { border-color: #00aaff; } [data-brand-color="Chrysler"] .catalog-section-header h2 { color: #00aaff; }
+        [data-brand-color="Jeep"] .catalog-section-header { border-color: #22c55e; } [data-brand-color="Jeep"] .catalog-section-header h2 { color: #22c55e; }
+        [data-brand-color="Dodge"] .catalog-section-header { border-color: #ef4444; } [data-brand-color="Dodge"] .catalog-section-header h2 { color: #ef4444; }
+        [data-brand-color="Ram"] .catalog-section-header { border-color: #facc15; } [data-brand-color="Ram"] .catalog-section-header h2 { color: #facc15; }
+        [data-brand-color="Plymouth"] .catalog-section-header { border-color: #22d3ee; } [data-brand-color="Plymouth"] .catalog-section-header h2 { color: #22d3ee; }
+        [data-brand-color="Eagle"] .catalog-section-header { border-color: #9ca3af; } [data-brand-color="Eagle"] .catalog-section-header h2 { color: #9ca3af; }
+
         .catalog-view-switcher { display: flex; gap: 8px; }
         .catalog-view-btn { background-color: var(--c-surface-light); border: 1px solid var(--c-border); color: var(--c-on-surface-variant); padding: 8px; border-radius: 6px; }
         .catalog-view-btn.view-btn-active { background-color: var(--c-primary); border-color: var(--c-primary); color: #fff; }
-        
         .catalog-view-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
         .catalog-view-container.list-view { display: flex; flex-direction: column; }
-
         .vehicle-card { background-color: var(--c-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--c-border); transition: transform 0.3s, box-shadow 0.3s; }
         .vehicle-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px var(--c-shadow); }
         .vehicle-card h3 { font-size: 20px; font-weight: 700; }
         .vehicle-card .vehicle-years { font-size: 14px; color: var(--c-on-surface-variant); margin-bottom: 16px; }
         .vehicle-card .vehicle-desc { font-size: 15px; color: var(--c-on-surface); line-height: 1.6; }
         #catalog-no-results { text-align: center; padding: 40px 0; }
+        
+        #dealershipListPage {
+            overflow-y: auto;
+            flex-direction: column;
+        }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-modal-backdrop); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; z-index: 1000; }
         .modal-overlay.visible { opacity: 1; visibility: visible; }
@@ -425,10 +283,101 @@
         .hidden { display: none !important; }
         @keyframes shake { 25% { transform: translateX(6px); } 75% { transform: translateX(-2px); } }
     </style>
+    <style>
+        /* Styles from tester.html for Dealership Manager */
+        #dealershipListPage body {
+            font-family: 'Inter', sans-serif;
+            cursor: default;
+            background-color: var(--c-background);
+            color: var(--c-on-surface);
+        }
+        #dealershipListPage input, #dealershipListPage textarea, #dealershipListPage select, #dealershipListPage [contenteditable="true"] {
+            cursor: text;
+        }
+        #dealershipListPage h1, #dealershipListPage h2, #dealershipListPage h3, #dealershipListPage p, #dealershipListPage label, #dealershipListPage button, #dealershipListPage i, #dealershipListPage .card-header-title {
+            user-select: none;
+        }
+
+        #dealershipListPage .password-input-container { position: relative; }
+        #dealershipListPage .password-toggle { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); cursor: pointer; color: var(--c-on-surface-variant); }
+        
+        #dealershipListPage .expand-icon { transition: transform 0.3s ease-in-out; }
+        #dealershipListPage .card-header.expanded .expand-icon { transform: rotate(-180deg); }
+        
+        #dealershipListPage .card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            background-color: var(--c-surface);
+        }
+        #dealershipListPage .card-header.expanded + .card-body {
+            max-height: 1000px; 
+            border-top: 1px solid var(--c-border);
+        }
+
+        #dealershipListPage input[type="text"], #dealershipListPage input[type="url"], #dealershipListPage input[type="password"], #dealershipListPage input[type="email"], #dealershipListPage select, #dealershipListPage textarea {
+            background-color: var(--c-surface);
+            border: 1px solid var(--c-border);
+            color: var(--c-on-surface);
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            min-height: 49px;
+        }
+        #dealershipListPage select {
+             -webkit-appearance: none; -moz-appearance: none; appearance: none;
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238c8c8c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+             background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; padding-right: 2.5rem;
+        }
+        #dealershipListPage input[type="text"]:focus, #dealershipListPage input[type="url"]:focus, #dealershipListPage input[type="password"]:focus, #dealershipListPage input[type="email"]:focus, #dealershipListPage select:focus, #dealershipListPage textarea:focus {
+            outline: none; border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent);
+        }
+        
+        #dealershipListPage #search-bar { background-color: var(--c-background); padding-left: 44px; }
+
+        #dealershipListPage .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; border: none; transition: background-color 0.3s, color 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+        #dealershipListPage .btn-primary { background-color: var(--c-primary); color: #fff; }
+        #dealershipListPage .btn-primary:hover { background-color: var(--c-primary-variant); }
+        #dealershipListPage .btn-danger { background-color: var(--c-error); color: #fff; margin-right: 0; }
+        #dealershipListPage .btn-danger:hover { background-color: color-mix(in srgb, var(--c-error) 80%, black); }
+        #dealershipListPage .btn-secondary { background-color: var(--c-surface-light); color: var(--c-on-surface); border: 1px solid var(--c-border); }
+        #dealershipListPage .btn-secondary:hover { background-color: var(--c-border); }
+
+        #dealershipListPage .tab-active { background-color: var(--c-primary); color: white; }
+        #dealershipListPage .tab-button { transition: background-color 0.3s, color 0.3s; }
+        
+        #dealershipListPage .icon-container { position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        #dealershipListPage .vpn-badge { position: absolute; bottom: -4px; right: -8px; background-color: #14b8a6; color: white; font-size: 0.6rem; font-weight: bold; padding: 1px 4px; border-radius: 4px; border: 1px solid var(--c-surface-light); line-height: 1; pointer-events: none; }
+        
+        #dealershipListPage .toggle-switch { width: 44px; height: 24px; background-color: var(--c-surface-light); border-radius: 9999px; position: relative; transition: background-color .2s, border-color .2s; border: 1px solid var(--c-border); }
+        #dealershipListPage .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; background-color: white; border: 1px solid #e5e7eb; border-radius: 9999px; height: 20px; width: 20px; transition: transform .2s; }
+        #dealershipListPage .toggle-input:checked + .toggle-switch { background-color: var(--c-primary); border-color: var(--c-primary-variant); }
+        #dealershipListPage .toggle-input:checked + .toggle-switch::after { transform: translateX(20px); }
+        #dealershipListPage .toggle-input:focus + .toggle-switch { box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-primary) 30%, transparent); }
+
+        #dealershipListPage .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            color: var(--c-on-surface-variant);
+            transition: background-color 0.2s, color 0.2s;
+            border: none;
+        }
+        #dealershipListPage .action-btn:hover {
+            background-color: var(--c-surface);
+        }
+        #dealershipListPage .action-btn.edit-btn:hover { color: var(--c-primary); }
+        #dealershipListPage .action-btn.delete-btn:hover { color: var(--c-error); }
+    </style>
 </head>
 <body>
 
-    <div id="splashScreen">
+    <div id="splashScreen" class="hidden">
         <div class="loader"></div>
         <p>Loading Application...</p>
     </div>
@@ -485,15 +434,20 @@
                         <h3>Hot Alerts</h3>
                         <p>Quickly generate and copy templated messages for customer communication.</p>
                     </div>
-                    <div class="tool-card" id="navigateToTemplateManager">
-                        <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        <h3>Template Manager</h3>
-                        <p>Create, edit, and delete your own custom templates for the Hot Alerts tool.</p>
+                    <div class="tool-card" id="navigateToDealershipList">
+                        <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <h3>Dealership List</h3>
+                        <p>View and manage a list of dealerships.</p>
                     </div>
                     <div class="tool-card" id="navigateToCdjrCatalog">
                         <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>
                         <h3>CDJR Catalog</h3>
                         <p>An interactive guide to models from Chrysler, Jeep, Dodge, Ram, and more.</p>
+                    </div>
+                    <div class="tool-card" id="navigateToTemplateManager">
+                        <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <h3>Template Manager</h3>
+                        <p>Create, edit, and delete your own custom templates for the Hot Alerts tool.</p>
                     </div>
                 </div>
             </div>
@@ -534,8 +488,7 @@
                                 New
                             </button>
                         </div>
-                        <div id="templateEditor">
-                             </div>
+                        <div id="templateEditor"></div>
                     </div>
                 </div>
             </div>
@@ -557,130 +510,158 @@
                         <button data-tab="Eagle" class="catalog-tab-button">Eagle</button>
                     </div>
                     <main id="catalog-content-area">
-                        <div id="catalog-Chrysler" class="catalog-tab-content">
-                            <div class="catalog-view-section" data-brand-color="Chrysler">
-                                <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler pacifica"><h3 class="text-xl font-bold">Chrysler Pacifica</h3><p class="vehicle-years">Minivan | 2017-Present</p><p class="vehicle-desc">The modern successor to the Town & Country. Also available as a class-leading Plug-in Hybrid (PHEV).</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler voyager"><h3 class="text-xl font-bold">Chrysler Voyager</h3><p class="vehicle-years">Minivan | 2020-Present</p><p class="vehicle-desc">Initially a budget-friendly version of the Pacifica, later transitioned to a fleet-exclusive model.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="(upcoming ev crossover)"><h3 class="text-xl font-bold">(Upcoming EV Crossover)</h3><p class="vehicle-years">Crossover SUV | 2025/2026 (Expected)</p><p class="vehicle-desc">Represents the brand's future direction, pivoting towards an all-electric, premium crossover.</p></div>
-                                </div>
-                            </div>
-                            <div class="catalog-view-section" data-brand-color="Chrysler">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler 300 / 300c"><h3 class="text-xl font-bold">Chrysler 300 / 300C</h3><p class="vehicle-years">Full-Size Sedan | 2005-2023</p><p class="vehicle-desc">An iconic rear-wheel-drive American sedan known for its bold styling and available HEMI V8 power.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler 200"><h3 class="text-xl font-bold">Chrysler 200</h3><p class="vehicle-years">Mid-Size Sedan | 2011-2017</p><p class="vehicle-desc">Successor to the Sebring, offered with an advanced all-wheel-drive system.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler town & country"><h3 class="text-xl font-bold">Chrysler Town & Country</h3><p class="vehicle-years">Minivan | 1990-2016</p><p class="vehicle-desc">The brand's flagship luxury minivan for decades, pioneering features like Stow 'n Go seating.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler aspen"><h3 class="text-xl font-bold">Chrysler Aspen</h3><p class="vehicle-years">Full-Size SUV | 2007-2009</p><p class="vehicle-desc">A short-lived luxury SUV based on the Dodge Durango, notable for its available hybrid powertrain.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler concorde / lhs / 300m"><h3 class="text-xl font-bold">Chrysler Concorde / LHS / 300M</h3><p class="vehicle-years">Full-Size Sedan | 1993-2004</p><p class="vehicle-desc">A family of influential "cab-forward" sedans that maximized interior space and defined 90s design.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler new yorker / imperial"><h3 class="text-xl font-bold">Chrysler New Yorker / Imperial</h3><p class="vehicle-years">Full-Size Luxury Sedan | to 1996</p><p class="vehicle-desc">Long-running nameplates representing the peak of Chrysler luxury in the early 90s.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler cirrus"><h3 class="text-xl font-bold">Chrysler Cirrus</h3><p class="vehicle-years">Mid-Size Sedan | 1995-2000</p><p class="vehicle-desc">A key member of the "cloud cars" (alongside Dodge Stratus), praised for its modern design.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler pt cruiser"><h3 class="text-xl font-bold">Chrysler PT Cruiser</h3><p class="vehicle-years">Compact Hatchback | 2001-2010</p><p class="vehicle-desc">A cultural phenomenon, this retro-styled compact car offered unique versatility and a convertible model.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler sebring"><h3 class="text-xl font-bold">Chrysler Sebring</h3><p class="vehicle-years">Mid-Size Sedan/Coupe/Convertible | 1995-2010</p><p class="vehicle-desc">A versatile nameplate used on multiple body styles, best known for its popular convertible version.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler crossfire"><h3 class="text-xl font-bold">Chrysler Crossfire</h3><p class="vehicle-years">Sports Car | 2004-2008</p><p class="vehicle-desc">A unique sports car from the Daimler-Chrysler era, based on the Mercedes-Benz SLK platform.</p></div>
-                                    <div class="vehicle-card" data-brand="Chrysler" data-model="chrysler prowler"><h3 class="text-xl font-bold">Chrysler Prowler</h3><p class="vehicle-years">Sports Car | 1997-2002</p><p class="vehicle-desc">A factory-built hot rod with an aluminum chassis. Initially launched as a Plymouth.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="catalog-Dodge" class="catalog-tab-content hidden">
-                            <div class="catalog-view-section" data-brand-color="Dodge">
-                                <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge charger"><h3 class="text-xl font-bold">Dodge Charger</h3><p class="vehicle-years">Muscle Car | 2006-Present</p><p class="vehicle-desc">The latest iteration offers both all-electric (Daytona) and twin-turbo I6 (Sixpack) powertrains.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge hornet"><h3 class="text-xl font-bold">Dodge Hornet</h3><p class="vehicle-years">Compact Crossover | 2023-Present</p><p class="vehicle-desc">Dodge's entry into the performance CUV segment, offering a powerful R/T PHEV model.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge durango"><h3 class="text-xl font-bold">Dodge Durango</h3><p class="vehicle-years">Full-Size SUV | 1998-Present</p><p class="vehicle-desc">The "three-row Charger," a unique SUV that blends utility with true muscle-car performance.</p></div>
-                                </div>
-                            </div>
-                            <div class="catalog-view-section" data-brand-color="Dodge">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge challenger"><h3 class="text-xl font-bold">Dodge Challenger</h3><p class="vehicle-years">Muscle Car | 2008-2023</p><p class="vehicle-desc">A celebrated modern revival of the classic pony car, culminating in models like the Hellcat and Demon.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge viper"><h3 class="text-xl font-bold">Dodge Viper</h3><p class="vehicle-years">Sports Car | 1992-2017</p><p class="vehicle-desc">An uncompromising, raw American supercar powered by a massive V10 engine. A true legend.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge dart"><h3 class="text-xl font-bold">Dodge Dart</h3><p class="vehicle-years">Compact Sedan | 2013-2016</p><p class="vehicle-desc">A compact sedan based on an Alfa Romeo platform, offering distinctive style and options.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge journey"><h3 class="text-xl font-bold">Dodge Journey</h3><p class="vehicle-years">Mid-Size Crossover | 2009-2020</p><p class="vehicle-desc">A popular and affordable crossover, often equipped with three rows of seating.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge caliber"><h3 class="text-xl font-bold">Dodge Caliber</h3><p class="vehicle-years">Compact Hatchback | 2007-2012</p><p class="vehicle-desc">The 5-door hatchback that replaced the Neon, including a high-performance SRT-4 version.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge nitro"><h3 class="text-xl font-bold">Dodge Nitro</h3><p class="vehicle-years">Compact SUV | 2007-2012</p><p class="vehicle-desc">An aggressively styled SUV based on the Jeep Liberty platform.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge magnum"><h3 class="text-xl font-bold">Dodge Magnum</h3><p class="vehicle-years">Station Wagon | 2005-2008</p><p class="vehicle-desc">A bold, rear-wheel-drive muscle wagon with Charger-inspired styling and available HEMI power.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge grand caravan"><h3 class="text-xl font-bold">Dodge Grand Caravan</h3><p class="vehicle-years">Minivan | 1984-2020</p><p class="vehicle-desc">The minivan that started it all, offering unparalleled value and practicality for families for over 35 years.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge dakota"><h3 class="text-xl font-bold">Dodge Dakota</h3><p class="vehicle-years">Mid-Size Pickup | 1987-2011</p><p class="vehicle-desc">A unique mid-size truck that stood out by offering an available V8 engine.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge ram van / wagon"><h3 class="text-xl font-bold">Dodge Ram Van / Wagon</h3><p class="vehicle-years">Full-Size Van | to 2003</p><p class="vehicle-desc">The classic, long-running full-size van that was a staple for work and travel.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge ramcharger"><h3 class="text-xl font-bold">Dodge Ramcharger</h3><p class="vehicle-years">Full-Size SUV | to 1993</p><p class="vehicle-desc">The classic two-door SUV based on the Ram pickup, a competitor to the Ford Bronco.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge intrepid"><h3 class="text-xl font-bold">Dodge Intrepid</h3><p class="vehicle-years">Full-Size Sedan | 1993-2004</p><p class="vehicle-desc">The Dodge flagship of the "cab-forward" era, offering a huge interior and sleek styling.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge stratus"><h3 class="text-xl font-bold">Dodge Stratus</h3><p class="vehicle-years">Mid-Size Sedan | 1995-2006</p><p class="vehicle-desc">Dodge's "cloud car" counterpart to the Chrysler Cirrus, a popular family sedan.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge neon"><h3 class="text-xl font-bold">Dodge Neon</h3><p class="vehicle-years">Compact Car | 1995-2005</p><p class="vehicle-desc">A fun-to-drive and affordable compact car, famous for its "Hi" marketing and SRT-4 variant.</p></div>
-                                    <div class="vehicle-card" data-brand="Dodge" data-model="dodge stealth"><h3 class="text-xl font-bold">Dodge Stealth</h3><p class="vehicle-years">Sports Car | 1991-1996</p><p class="vehicle-desc">A rebadged Mitsubishi 3000GT, this was a high-tech, AWD sports car that was ahead of its time.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="catalog-Jeep" class="catalog-tab-content hidden">
-                            <div class="catalog-view-section" data-brand-color="Jeep">
-                                <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep wrangler"><h3 class="text-xl font-bold">Jeep Wrangler</h3><p class="vehicle-years">Off-Road SUV | 1987-Present</p><p class="vehicle-desc">The undisputed icon of off-roading. Now in its JL generation, it includes the innovative 4xe Plug-in Hybrid model.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep gladiator"><h3 class="text-xl font-bold">Jeep Gladiator</h3><p class="vehicle-years">Mid-Size Pickup | 2020-Present</p><p class="vehicle-desc">Combines the open-air freedom and off-road capability of a Wrangler with the utility of a pickup truck bed.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep grand cherokee"><h3 class="text-xl font-bold">Jeep Grand Cherokee</h3><p class="vehicle-years">Mid-Size SUV | 1993-Present</p><p class="vehicle-desc">The benchmark for premium SUVs. Available in 2-row, 3-row (L), and 4xe PHEV versions.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep wagoneer / grand wagoneer"><h3 class="text-xl font-bold">Jeep Wagoneer / Grand Wagoneer</h3><p class="vehicle-years">Full-Size SUV | 2022-Present</p><p class="vehicle-desc">The return of a classic nameplate, representing the pinnacle of premium for the Jeep brand.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep compass"><h3 class="text-xl font-bold">Jeep Compass</h3><p class="vehicle-years">Compact Crossover | 2007-Present</p><p class="vehicle-desc">A global compact SUV, now in its second, more refined generation.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep renegade"><h3 class="text-xl font-bold">Jeep Renegade</h3><p class="vehicle-years">Subcompact Crossover | 2015-Present</p><p class="vehicle-desc">Jeep's entry into the subcompact segment with distinctive styling.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep recon & wagoneer s"><h3 class="text-xl font-bold">Jeep Recon & Wagoneer S</h3><p class="vehicle-years">Electric SUV | 2025 (Expected)</p><p class="vehicle-desc">Spearheading Jeep's electric future. The Recon is a rugged EV, while the Wagoneer S is a sleek, performance luxury EV.</p></div>
-                                </div>
-                            </div>
-                            <div class="catalog-view-section" data-brand-color="Jeep">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep cherokee (xj & kl)"><h3 class="text-xl font-bold">Jeep Cherokee (XJ & KL)</h3><p class="vehicle-years">Compact SUV | 1984-2001 & 2014-2023</p><p class="vehicle-desc">The original XJ defined the modern SUV. The name was revived for the modern KL crossover.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep comanche (mj)"><h3 class="text-xl font-bold">Jeep Comanche (MJ)</h3><p class="vehicle-years">Compact Pickup | 1985-1992</p><p class="vehicle-desc">The pickup truck version of the legendary Cherokee XJ, prized by collectors.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep liberty"><h3 class="text-xl font-bold">Jeep Liberty</h3><p class="vehicle-years">Compact SUV | 2002-2012</p><p class="vehicle-desc">The successor to the classic Cherokee, it featured independent front suspension for two generations.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep commander"><h3 class="text-xl font-bold">Jeep Commander</h3><p class="vehicle-years">Mid-Size SUV | 2006-2010</p><p class="vehicle-desc">A rugged, boxy, three-row SUV based on the Grand Cherokee platform.</p></div>
-                                    <div class="vehicle-card" data-brand="Jeep" data-model="jeep patriot"><h3 class="text-xl font-bold">Jeep Patriot</h3><p class="vehicle-years">Compact Crossover | 2007-2017</p><p class="vehicle-desc">A more traditionally styled, boxy counterpart to the first-generation Compass.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="catalog-Ram" class="catalog-tab-content hidden">
-                            <div class="catalog-view-section" data-brand-color="Ram">
-                                <div class="catalog-section-header"><h2>Current & Future Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Ram" data-model="ram 1500"><h3 class="text-xl font-bold">Ram 1500</h3><p class="vehicle-years">Full-Size Pickup | 2010-Present</p><p class="vehicle-desc">A leader in the truck segment, praised for its benchmark interiors and comfortable ride.</p></div>
-                                    <div class="vehicle-card" data-brand="Ram" data-model="ram 1500 rev / ramcharger"><h3 class="text-xl font-bold">Ram 1500 REV / Ramcharger</h3><p class="vehicle-years">Electric Pickup | 2025 (Expected)</p><p class="vehicle-desc">Ram's two-pronged approach to electrification: the all-electric REV and the innovative Ramcharger range-extended EV.</p></div>
-                                    <div class="vehicle-card" data-brand="Ram" data-model="ram 2500/3500 heavy duty"><h3 class="text-xl font-bold">Ram 2500/3500 Heavy Duty</h3><p class="vehicle-years">Heavy Duty Pickup | 2010-Present</p><p class="vehicle-desc">The workhorses of the lineup, built for extreme towing with the available Cummins diesel engine.</p></div>
-                                    <div class="vehicle-card" data-brand="Ram" data-model="ram promaster"><h3 class="text-xl font-bold">Ram ProMaster</h3><p class="vehicle-years">Full-Size Van | 2014-Present</p><p class="vehicle-desc">A highly capable and versatile front-wheel-drive commercial van based on the Fiat Ducato.</p></div>
-                                </div>
-                            </div>
-                            <div class="catalog-view-section" data-brand-color="Ram">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Ram" data-model="dodge ram (pre-2010)"><h3 class="text-xl font-bold">Dodge Ram (Pre-2010)</h3><p class="vehicle-years">Full-Size Pickup | 1981-2009</p><p class="vehicle-desc">The truck line before Ram became a standalone brand. The 2nd Gen (1994-2001) revolutionized truck design.</p></div>
-                                    <div class="vehicle-card" data-brand="Ram" data-model="ram promaster city"><h3 class="text-xl font-bold">Ram ProMaster City</h3><p class="vehicle-years">Compact Van | 2015-2022</p><p class="vehicle-desc">A smaller, more maneuverable work van designed for urban environments, based on the Fiat Doblò.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="catalog-Plymouth" class="catalog-tab-content hidden">
-                            <div class="catalog-view-section" data-brand-color="Plymouth">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth prowler"><h3 class="text-xl font-bold">Plymouth Prowler</h3><p class="vehicle-years">Sports Car | 1997-2001</p><p class="vehicle-desc">The original branding for the retro-styled factory hot rod before it became a Chrysler.</p></div>
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth neon"><h3 class="text-xl font-bold">Plymouth Neon</h3><p class="vehicle-years">Compact Car | 1995-2001</p><p class="vehicle-desc">The Plymouth version of the popular and fun-to-drive compact sedan and coupe.</p></div>
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth voyager / grand voyager"><h3 class="text-xl font-bold">Plymouth Voyager / Grand Voyager</h3><p class="vehicle-years">Minivan | to 2000</p><p class="vehicle-desc">The Plymouth version of the groundbreaking minivan that created a segment.</p></div>
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth breeze"><h3 class="text-xl font-bold">Plymouth Breeze</h3><p class="vehicle-years">Mid-Size Sedan | 1996-2000</p><p class="vehicle-desc">The Plymouth "cloud car" sibling to the Chrysler Cirrus and Dodge Stratus.</p></div>
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth acclaim"><h3 class="text-xl font-bold">Plymouth Acclaim</h3><p class="vehicle-years">Mid-Size Sedan | to 1995</p><p class="vehicle-desc">A reliable and popular sedan from the K-car platform lineage.</p></div>
-                                    <div class="vehicle-card" data-brand="Plymouth" data-model="plymouth laser"><h3 class="text-xl font-bold">Plymouth Laser</h3><p class="vehicle-years">Sports Coupe | to 1994</p><p class="vehicle-desc">A sibling to the Mitsubishi Eclipse and Eagle Talon, part of the Diamond-Star Motors venture.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                         <div id="catalog-Eagle" class="catalog-tab-content hidden">
-                            <div class="catalog-view-section" data-brand-color="Eagle">
-                                <div class="catalog-section-header"><h2>Notable Past Models</h2><div class="catalog-view-switcher"><button data-view="grid" class="catalog-view-btn view-btn-active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button><button data-view="list" class="catalog-view-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button></div></div>
-                                <div class="catalog-view-container">
-                                    <div class="vehicle-card" data-brand="Eagle" data-model="eagle talon"><h3 class="text-xl font-bold">Eagle Talon</h3><p class="vehicle-years">Sports Coupe | to 1998</p><p class="vehicle-desc">A popular sports coupe from the Diamond-Star Motors venture, known for its available turbo and AWD.</p></div>
-                                    <div class="vehicle-card" data-brand="Eagle" data-model="eagle vision"><h3 class="text-xl font-bold">Eagle Vision</h3><p class="vehicle-years">Full-Size Sedan | 1993-1997</p><p class="vehicle-desc">The Eagle version of the innovative "cab-forward" sedans, marketed as a sportier alternative.</p></div>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
+                        </main>
                     <div id="catalog-no-results" class="hidden">
                         <h3>No vehicles found</h3>
                         <p>Try adjusting your search term.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dealershipListPage" class="page-content antialiased">
+                <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+                    <div class="flex flex-col sm:flex-row gap-4 my-6 max-w-4xl mx-auto">
+                        <div class="relative flex-grow">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+                                <i class="fas fa-search text-[var(--c-on-surface-variant)]"></i>
+                            </span>
+                            <input type="text" id="search-bar" placeholder="Search for Dealerships" class="pr-20">
+                            <button id="clear-search-btn" class="absolute inset-y-0 right-0 flex items-center px-4 hidden transition-opacity" aria-label="Clear search">
+                                <span class="text-sm font-medium text-[var(--c-on-surface-variant)] hover:text-white">Clear</span>
+                            </button>
+                        </div>
+                        <button id="add-new-btn" class="btn btn-primary">
+                            <i class="fas fa-plus mr-1"></i>Add New
+                        </button>
+                    </div>
+
+                    <div class="mb-8 max-w-4xl mx-auto" id="tabs-container">
+                        <div class="flex items-end border-b border-[var(--c-border)]">
+                            <h3 class="text-lg font-semibold text-[var(--c-on-surface)] mb-0 mr-6 pb-3 whitespace-nowrap">Schedulers:</h3>
+                            <div class="flex flex-wrap" id="tab-buttons"></div>
+                        </div>
+                    </div>
+
+                    <main id="credentials-list-container" class="space-y-3 max-w-4xl mx-auto"></main>
+
+                    <div id="no-results-message" class="text-center py-10 max-w-4xl mx-auto hidden">
+                        <h3 class="text-2xl font-semibold text-[var(--c-on-surface)]">No Information Found</h3>
+                        <p class="text-[var(--c-on-surface-variant)] mt-2">Try adjusting your search or add new information to a category.</p>
+                    </div>
+                </div>
+
+                <div id="credential-modal" class="fixed inset-0 bg-[var(--c-modal-backdrop)] flex items-center justify-center hidden z-50 p-4 transition-opacity duration-300 ease-in-out opacity-0">
+                    <div class="modal-content-inner relative bg-[var(--c-background)] rounded-xl shadow-2xl p-6 w-full max-w-4xl border border-[var(--c-border)] transition-all duration-300 ease-in-out scale-95 opacity-0 flex flex-col max-h-[90vh]">
+                        <div class="flex justify-between items-center mb-6 flex-shrink-0">
+                            <h2 id="modal-title" class="text-2xl font-semibold text-[var(--c-on-surface)]">Add New Information</h2>
+                            <button id="modal-close-btn" class="text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] text-3xl leading-none">&times;</button>
+                        </div>
+                        <form id="credential-form" class="flex-grow overflow-y-auto overflow-x-hidden pr-2">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="category" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Scheduler</label>
+                                        <input type="text" id="category" required>
+                                    </div>
+                                    <div>
+                                        <label for="title" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Dealership</label>
+                                        <input type="text" id="title" required>
+                                    </div>
+                                    <div class="space-y-4 border-t border-[var(--c-border)] pt-4 mt-4">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-[var(--c-on-surface)]">Enable Link</span>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" id="toggle-link" class="sr-only toggle-input">
+                                                <div class="toggle-switch"></div>
+                                            </label>
+                                        </div>
+                                        <div id="link-fields-container" class="space-y-4 hidden">
+                                            <div>
+                                                <label for="url" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Website URL</label>
+                                                <input type="url" id="url">
+                                            </div>
+                                            <div>
+                                                <label for="online-scheduler-link" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">ONLINE SCHEDULER LINK</label>
+                                                <input type="url" id="online-scheduler-link">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4 border-t border-[var(--c-border)] pt-4 mt-4">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-[var(--c-on-surface)]">Enable Login Info</span>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" id="toggle-login" class="sr-only toggle-input">
+                                                <div class="toggle-switch"></div>
+                                            </label>
+                                        </div>
+                                        <div id="login-fields-container" class="space-y-4 hidden">
+                                            <div>
+                                                <label for="username" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Username / Email</label>
+                                                <input type="text" id="username">
+                                            </div>
+                                            <div>
+                                                <label for="password" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Password</label>
+                                                <div class="password-input-container">
+                                                    <input type="password" id="password" class="pr-10">
+                                                    <i id="password-toggle" class="fas fa-eye password-toggle"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4 border-t border-[var(--c-border)] pt-4 mt-4">
+                                        <h3 class="text-sm font-medium text-[var(--c-on-surface)]">General Settings</h3>
+                                        <div>
+                                            <label for="browser" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Preferred Browser</label>
+                                            <select id="browser"><option value="chrome">Google Chrome</option><option value="firefox">Mozilla Firefox</option><option value="edge">Microsoft Edge</option><option value="safari">Apple Safari</option><option value="other">Other</option></select>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <label for="vpn-required" class="font-medium text-[var(--c-on-surface)] cursor-pointer">Requires VPN</label>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" id="vpn-required" class="sr-only toggle-input">
+                                                <div class="toggle-switch"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col mt-4 md:mt-0">
+                                    <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                                        <div class="flex items-center gap-4">
+                                            <h3 class="text-lg font-semibold text-[var(--c-on-surface)]">Enable Notes</h3>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" id="toggle-notes" class="sr-only toggle-input">
+                                                <div class="toggle-switch"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="notes-section-content" class="flex flex-col flex-grow min-h-0 hidden">
+                                        <div id="notes-container" class="space-y-3 flex-grow overflow-y-auto pr-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                             <input type="hidden" id="credential-id">
+                        </form>
+                        <div id="add-note-button-container" class="absolute bottom-24 right-8 hidden">
+                            <button type="button" id="add-note-btn" class="btn btn-primary w-12 h-12 rounded-full flex items-center justify-center p-0 shadow-lg">
+                                <i class="fas fa-plus fa-lg"></i>
+                            </button>
+                        </div>
+                        <div class="pt-6">
+                            <button type="submit" form="credential-form" class="btn btn-primary w-full">
+                                <i class="fas fa-save mr-1"></i>Save Information
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="delete-modal" class="fixed inset-0 bg-[var(--c-modal-backdrop)] flex items-center justify-center hidden z-50 p-4 transition-opacity duration-300 ease-in-out opacity-0">
+                    <div class="delete-modal-content bg-[var(--c-surface)] rounded-xl shadow-2xl p-6 w-full max-w-sm border border-[var(--c-border)] text-center transition-all duration-300 ease-in-out scale-95 opacity-0">
+                        <div class="text-[var(--c-error)] mb-4"><i class="fas fa-exclamation-triangle fa-3x"></i></div>
+                        <h2 class="text-2xl font-bold text-[var(--c-on-surface)] mb-2">Are you sure?</h2>
+                        <p id="delete-modal-text" class="text-[var(--c-on-surface-variant)] mb-6">This action cannot be undone.</p>
+                        <div class="modal-actions">
+                            <button id="delete-cancel-btn" class="btn btn-secondary">Cancel</button>
+                            <button id="delete-confirm-btn" class="btn btn-danger">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -726,89 +707,59 @@
         let userTemplatesRef = null;
         let publicTemplatesRef = null;
         let settingsDocRef = null;
-        let unsubscribeFromTemplates = null; 
+        let dealershipsRef = null; 
+        let unsubscribeFromTemplates = null;
+        let unsubscribeFromDealerships = null; 
         let justAuthenticated = false;
+        let allDealerships = []; 
+        let dealershipManagerInitialized = false;
+        let renderDealershipsNow = null; 
 
-        // --- CUSTOM COMBOBOX/SELECT SCRIPT (REFACTORED & FIXED) ---
-
+        // --- CUSTOM COMBOBOX/SELECT SCRIPT ---
         function closeAllSelects(exceptThisOne) {
-            document.querySelectorAll('.select-items').forEach(item => {
-                if (item.previousElementSibling !== exceptThisOne) {
-                    item.classList.add('select-hide');
-                }
-            });
-            document.querySelectorAll('.select-selected').forEach(item => {
-                if (item !== exceptThisOne) {
-                    item.classList.remove('select-arrow-active');
-                }
-            });
+            document.querySelectorAll('.select-items').forEach(item => { if (item.previousElementSibling !== exceptThisOne) item.classList.add('select-hide'); });
+            document.querySelectorAll('.select-selected').forEach(item => { if (item !== exceptThisOne) item.classList.remove('select-arrow-active'); });
         }
-
         function createOptionDiv(option, nativeSelect, selectedItem, optionsList) {
             const optionDiv = document.createElement('div');
             optionDiv.textContent = option.textContent;
-            if (nativeSelect.value === option.value) {
-                optionDiv.classList.add('same-as-selected');
-            }
-
+            if (nativeSelect.value === option.value) optionDiv.classList.add('same-as-selected');
             optionDiv.addEventListener('click', (e) => {
                 e.stopPropagation();
                 nativeSelect.value = option.value;
                 selectedItem.textContent = option.textContent;
-                
                 const currentSelected = optionsList.querySelector('.same-as-selected');
-                if (currentSelected) {
-                    currentSelected.classList.remove('same-as-selected');
-                }
+                if (currentSelected) currentSelected.classList.remove('same-as-selected');
                 optionDiv.classList.add('same-as-selected');
-                
                 nativeSelect.dispatchEvent(new Event('input', { bubbles: true }));
                 nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
-
                 closeAllSelects();
             });
             return optionDiv;
         }
-
         function buildCustomSelect(wrapper) {
             const nativeSelect = wrapper.querySelector('select.select-field');
             if (!nativeSelect) return;
-
-            // Clear any previous custom elements to prevent duplication on re-build
             wrapper.querySelectorAll('.select-selected, .select-items').forEach(el => el.remove());
-
             nativeSelect.style.display = 'none';
-
             const selectedItem = document.createElement('div');
             selectedItem.className = 'select-selected';
-            // FIX: Safely access textContent, providing a fallback for empty selects
             selectedItem.textContent = nativeSelect.options[nativeSelect.selectedIndex]?.textContent || (nativeSelect.options[0]?.textContent || 'Select...');
-            
             const optionsList = document.createElement('div');
             optionsList.className = 'select-items select-hide';
-
             Array.from(nativeSelect.children).forEach(child => {
                 if (child.tagName.toLowerCase() === 'optgroup') {
                     const optgroupDiv = document.createElement('div');
                     optgroupDiv.className = 'optgroup';
                     optgroupDiv.textContent = child.label;
                     optionsList.appendChild(optgroupDiv);
-
-                    Array.from(child.children).forEach(option => {
-                        const optionDiv = createOptionDiv(option, nativeSelect, selectedItem, optionsList);
-                        optionsList.appendChild(optionDiv);
-                    });
-                } else if (child.tagName.toLowerCase() === 'option') {
-                     if (child.value || child.textContent) {
-                        const optionDiv = createOptionDiv(child, nativeSelect, selectedItem, optionsList);
-                        optionsList.appendChild(optionDiv);
-                     }
+                    Array.from(child.children).forEach(option => optionsList.appendChild(createOptionDiv(option, nativeSelect, selectedItem, optionsList)));
+                } else if (child.tagName.toLowerCase() === 'option' && (child.value || child.textContent)) {
+                    optionsList.appendChild(createOptionDiv(child, nativeSelect, selectedItem, optionsList));
                 }
             });
-            
             wrapper.appendChild(selectedItem);
             wrapper.appendChild(optionsList);
-            
             selectedItem.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isAlreadyOpen = !optionsList.classList.contains('select-hide');
@@ -817,36 +768,17 @@
                 selectedItem.classList.toggle('select-arrow-active');
             });
         }
-
         function initializeCustomSelects() {
             document.querySelectorAll('.select-wrapper').forEach(buildCustomSelect);
             document.addEventListener('click', () => closeAllSelects(null));
         }
 
-
         document.addEventListener('DOMContentLoaded', () => {
-            
-            initializeCustomSelects();
-
             let combinedTemplates = [];
             let publicTmpls = [];
             let userTmpls = [];
-            let catalogListenersAttached = false; // Flag to check if listeners are already on
-            const fieldDisplayNames = { 
-                customerTitle: "Select Title", 
-                customerName: "Customer Name", 
-                phoneNumber: "Phone Number", 
-                vehicle: "Vehicle", 
-                vin: "VIN", 
-                advisor: "Advisor", 
-                schedule: "Schedule", 
-                accessoryParts: "Accessory / Parts", 
-                tireBrandSize: "Tire Brand & Size", 
-                service: "Service", 
-                otherConcern: "Other Concern", 
-                recall: "RECALL",
-                numberOfTires: "Number of Tires"
-            };
+            let catalogListenersAttached = false;
+            const fieldDisplayNames = { customerTitle: "Select Title", customerName: "Customer Name", phoneNumber: "Phone Number", vehicle: "Vehicle", vin: "VIN", advisor: "Advisor", schedule: "Schedule", accessoryParts: "Accessory / Parts", tireBrandSize: "Tire Brand & Size", service: "Service", otherConcern: "Other Concern", recall: "RECALL", numberOfTires: "Number of Tires" };
             const appState = { currentView: 'toolSuite', editorMode: 'none', selectedTemplateId: null, hiddenTemplates: [] };
             const body = document.body;
             
@@ -870,6 +802,7 @@
             const navigateToHotAlerts = document.getElementById('navigateToHotAlerts');
             const navigateToTemplateManager = document.getElementById('navigateToTemplateManager');
             const navigateToCdjrCatalog = document.getElementById('navigateToCdjrCatalog');
+            const navigateToDealershipList = document.getElementById('navigateToDealershipList');
 
             const cardContainer = document.getElementById('cardContainer');
             const loader = document.getElementById('loader');
@@ -880,7 +813,7 @@
             const templateEditor = document.getElementById('templateEditor');
 
             const modal = document.getElementById('confirmationModal');
-            const modalTitle = document.getElementById('modalTitle');
+            const modalTitleEl = document.getElementById('modalTitle');
             const modalMessage = document.getElementById('modalMessage');
             const modalConfirmBtn = document.getElementById('modalConfirmBtn');
             const modalCancelBtn = document.getElementById('modalCancelBtn');
@@ -889,10 +822,8 @@
 
             function renderCurrentView(view) {
                 appState.currentView = view;
-
                 allPageContents.forEach(page => page.classList.remove('active'));
                 document.getElementById(`${view}Page`).classList.add('active');
-                
                 searchContainer.classList.add('hidden');
                 backToSuiteBtn.classList.add('hidden');
 
@@ -900,6 +831,7 @@
                 const hotAlertsLogoSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`;
                 const manageTemplatesSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
                 const cdjrCatalogSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>`;
+                const dealershipListSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
 
                 if (view === 'toolSuite') {
                     headerTitle.innerHTML = `${toolSuiteSVG} <span>Tool Suite</span>`;
@@ -908,7 +840,6 @@
                     cardContainer.classList.add('loading');
                     loader.classList.remove('hidden');
                     cardContainer.appendChild(loader);
-
                     setTimeout(() => {
                         searchContainer.classList.remove('hidden');
                         backToSuiteBtn.classList.remove('hidden');
@@ -925,36 +856,21 @@
                     backToSuiteBtn.classList.remove('hidden');
                     headerTitle.innerHTML = `${cdjrCatalogSVG} <span>CDJR Catalog</span>`;
                     loadCdjrCatalog();
+                } else if (view === 'dealershipList') {
+                    backToSuiteBtn.classList.remove('hidden');
+                    headerTitle.innerHTML = `${dealershipListSVG} <span>Dealership List</span>`;
+                    initializeDealershipManager();
+                    if (allDealerships.length > 0 && typeof renderDealershipsNow === 'function') {
+                        renderDealershipsNow();
+                    }
                 }
             }
 
-
             // --- Firestore Functions ---
-            async function addTemplate(templateData) {
-                if (!userTemplatesRef) return;
-                try { await addDoc(userTemplatesRef, templateData); } catch (e) { console.error("Error adding document: ", e); }
-            }
-
-            async function updateTemplate(id, templateData) {
-                if (!userTemplatesRef) return;
-                try {
-                    const templateDocRef = doc(userTemplatesRef, id);
-                    await setDoc(templateDocRef, templateData);
-                } catch (e) { console.error("Error updating document: ", e); }
-            }
-
-            async function deleteTemplate(id) {
-                if (!userTemplatesRef) return;
-                try {
-                    const templateDocRef = doc(userTemplatesRef, id);
-                    await deleteDoc(templateDocRef);
-                } catch (e) { console.error("Error deleting document: ", e); }
-            }
-            
-            async function saveUserPreference(key, value) {
-                if (!settingsDocRef) return;
-                try { await setDoc(settingsDocRef, { [key]: value }, { merge: true }); } catch (e) { console.error(`Error saving preference '${key}':`, e); }
-            }
+            async function addTemplate(templateData) { if (userTemplatesRef) await addDoc(userTemplatesRef, templateData); }
+            async function updateTemplate(id, templateData) { if (userTemplatesRef) await setDoc(doc(userTemplatesRef, id), templateData); }
+            async function deleteTemplate(id) { if (userTemplatesRef) await deleteDoc(doc(userTemplatesRef, id)); }
+            async function saveUserPreference(key, value) { if (settingsDocRef) await setDoc(settingsDocRef, { [key]: value }, { merge: true }); }
             
             async function initializeUserSettings() {
                 if (!settingsDocRef) return;
@@ -972,17 +888,10 @@
 
             function mergeAndRenderTemplates(userSnapshot) {
                 userTmpls = userSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), isPublic: false, isCustom: true }));
-                
                 const visiblePublicTmpls = publicTmpls.filter(t => !appState.hiddenTemplates.includes(t.id));
                 combinedTemplates = [...visiblePublicTmpls, ...userTmpls].sort((a, b) => a.title.localeCompare(b.title));
-                
-                if (appState.currentView === 'hotAlerts') {
-                    renderAllCards();
-                }
-                
-                if(appState.currentView === 'manageTemplates') {
-                    renderManageTemplatesView();
-                }
+                if (appState.currentView === 'hotAlerts') renderAllCards();
+                if(appState.currentView === 'manageTemplates') renderManageTemplatesView();
             }
 
             function showToast(message, isError = false) {
@@ -1008,7 +917,6 @@
                 card.dataset.title = templateData.title.toLowerCase();
                 const required = (templateData.template.match(/\[\[(.*?)\]\]/g) || []).map(v => v.slice(2, -2));
                 card.dataset.required = [...new Set(required)].join(',');
-
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="card-title">${templateData.title} ${templateData.isCustom ? ' (Custom)' : ''}</span>
@@ -1018,52 +926,60 @@
                         <div class="in-card-controls"></div> <div class="template-preview"></div>
                         <div class="warning-message"></div>
                         <button class="btn btn-primary copy-btn">Copy Template</button>
-                    </div>
-                `;
-
+                    </div>`;
                 if (templateData.title.toLowerCase() === 'tire') {
                     const inCardControls = card.querySelector('.in-card-controls');
                     const tireSelectWrapper = document.createElement('div');
                     tireSelectWrapper.className = 'select-wrapper input-group';
-                    
                     const tireSelect = document.createElement('select');
                     tireSelect.className = 'select-field';
                     tireSelect.dataset.fieldId = 'numberOfTires';
-
-                    const options = ["Select number of tires", "One tire", "Two tires", "Three tires", "Four tires"];
-                    options.forEach((optText, index) => {
+                    ["Select number of tires", "One tire", "Two tires", "Three tires", "Four tires"].forEach((optText, index) => {
                         const option = document.createElement('option');
                         option.value = (index === 0) ? "" : optText;
                         option.textContent = optText;
                         tireSelect.appendChild(option);
                     });
-
                     tireSelectWrapper.appendChild(tireSelect);
                     inCardControls.appendChild(tireSelectWrapper);
                     buildCustomSelect(tireSelectWrapper);
                 }
-
                 cardContainer.appendChild(card);
                 card.querySelector('.card-header').addEventListener('click', () => toggleCard(card));
                 card.querySelector('.copy-btn').addEventListener('click', () => copyTemplate(card));
             }
             
             async function handleHideTemplate(templateId) {
-                if (!appState.hiddenTemplates.includes(templateId)) {
+                if (appState.hiddenTemplates.includes(templateId)) return;
+                showLoader('Hiding Template...');
+                try {
                     appState.hiddenTemplates.push(templateId);
                     await saveUserPreference('hiddenTemplates', appState.hiddenTemplates);
                     showToast("Template hidden.");
                     mergeAndRenderTemplates({ docs: userTmpls.map(t => ({ id: t.id, data: () => t })) });
                     handleCancelAction();
+                } catch (error) {
+                    console.error("Error hiding template:", error);
+                    showToast("Failed to hide template.", true);
+                } finally {
+                    hideLoader();
                 }
             }
 
             async function handleUnhideTemplate(templateId) {
-                appState.hiddenTemplates = appState.hiddenTemplates.filter(id => id !== templateId);
-                await saveUserPreference('hiddenTemplates', appState.hiddenTemplates);
-                showToast("Template unhidden.");
-                mergeAndRenderTemplates({ docs: userTmpls.map(t => ({ id: t.id, data: () => t })) });
-                handleCancelAction();
+                showLoader('Updating Template...');
+                try {
+                    appState.hiddenTemplates = appState.hiddenTemplates.filter(id => id !== templateId);
+                    await saveUserPreference('hiddenTemplates', appState.hiddenTemplates);
+                    showToast("Template unhidden.");
+                    mergeAndRenderTemplates({ docs: userTmpls.map(t => ({ id: t.id, data: () => t })) });
+                    handleCancelAction();
+                } catch (error) {
+                    console.error("Error unhiding template:", error);
+                    showToast("Failed to unhide template.", true);
+                } finally {
+                    hideLoader();
+                }
             }
 
             function renderManageTemplatesView() {
@@ -1074,7 +990,6 @@
             function populateTemplateSelect() {
                 const selectedValue = templateSelect.value;
                 templateSelect.innerHTML = '<option value="">Select a template...</option>';
-                
                 const customOptGroup = document.createElement('optgroup');
                 customOptGroup.label = 'Custom Templates';
                 userTmpls.sort((a,b) => a.title.localeCompare(b.title)).forEach(template => {
@@ -1084,7 +999,6 @@
                     customOptGroup.appendChild(option);
                 });
                 templateSelect.appendChild(customOptGroup);
-
                 const defaultOptGroup = document.createElement('optgroup');
                 defaultOptGroup.label = 'Default Templates';
                 publicTmpls.sort((a,b) => a.title.localeCompare(b.title)).forEach(template => {
@@ -1095,19 +1009,14 @@
                     defaultOptGroup.appendChild(option);
                 });
                 templateSelect.appendChild(defaultOptGroup);
-
                 templateSelect.value = selectedValue;
-                
                 const wrapper = document.querySelector('#manageTemplatesPage .select-wrapper');
-                if (wrapper) {
-                    buildCustomSelect(wrapper);
-                }
+                if (wrapper) buildCustomSelect(wrapper);
             }
 
             function renderEditorForSelection() {
                 const selectedId = templateSelect.value;
                 appState.selectedTemplateId = selectedId;
-
                 if (!selectedId) {
                     manageTemplatesContainer.style.minHeight = '200px';
                     templateEditor.innerHTML = `<div class="editor-placeholder">
@@ -1116,10 +1025,8 @@
                     </div>`;
                     return;
                 }
-
                 const templateData = [...publicTmpls, ...userTmpls].find(t => t.id === selectedId);
                 if (!templateData) return;
-
                 if (templateData.isCustom) {
                     appState.editorMode = 'edit';
                     renderFullEditor(templateData);
@@ -1132,33 +1039,16 @@
             function renderFullEditor(templateData) {
                 manageTemplatesContainer.style.minHeight = '600px';
                 templateEditor.innerHTML = `
-                    <div class="setting-item">
-                        <label for="templateTitle">Template Title</label>
-                        <input type="text" id="templateTitle" class="input-field" placeholder="e.g., Follow-up Call" value="${templateData.title}">
-                    </div>
-                    <div class="setting-item">
-                        <label>Available Fields (Click to insert)</label>
-                        <div id="availableFields"></div>
-                    </div>
-                    <div class="setting-item template-body-item">
-                        <label for="templateBody">Template Body</label>
-                        <textarea id="templateBody" class="template-body-textarea" placeholder="Compose template... e.g., Good day, This is [[advisor]]...">${templateData.template}</textarea>
-                    </div>
+                    <div class="setting-item"><label for="templateTitle">Template Title</label><input type="text" id="templateTitle" class="input-field" placeholder="e.g., Follow-up Call" value="${templateData.title}"></div>
+                    <div class="setting-item"><label>Available Fields (Click to insert)</label><div id="availableFields"></div></div>
+                    <div class="setting-item template-body-item"><label for="templateBody">Template Body</label><textarea id="templateBody" class="template-body-textarea" placeholder="Compose template... e.g., Good day, This is [[advisor]]...">${templateData.template}</textarea></div>
                     <div id="requiredFieldsIndicator" class="required-fields-indicator"></div>
-                    <div class="editor-actions">
-                        <button id="deleteTemplateBtn" class="btn btn-danger">Delete</button>
-                        <button id="cancelActionBtn" class="btn btn-secondary">Cancel</button>
-                        <button id="saveActionBtn" class="btn btn-primary">${appState.editorMode === 'add' ? 'Save as New Custom Template' : 'Save Changes'}</button>
-                    </div>
-                `;
-
+                    <div class="editor-actions"><button id="deleteTemplateBtn" class="btn btn-danger">Delete</button><button id="cancelActionBtn" class="btn btn-secondary">Cancel</button><button id="saveActionBtn" class="btn btn-primary">${appState.editorMode === 'add' ? 'Save as New Custom Template' : 'Save Changes'}</button></div>`;
                 const bodyTextarea = document.getElementById('templateBody');
                 const availableFieldsContainer = document.getElementById('availableFields');
                 const requiredIndicator = document.getElementById('requiredFieldsIndicator');
-
                 populateAvailableFields(availableFieldsContainer, bodyTextarea);
                 updateRequiredFieldsIndicator(bodyTextarea, requiredIndicator);
-
                 bodyTextarea.addEventListener('input', () => updateRequiredFieldsIndicator(bodyTextarea, requiredIndicator));
                 document.getElementById('cancelActionBtn').addEventListener('click', handleCancelAction);
                 document.getElementById('saveActionBtn').addEventListener('click', handleSaveAction);
@@ -1169,20 +1059,10 @@
                 manageTemplatesContainer.style.minHeight = '350px';
                 const isHidden = appState.hiddenTemplates.includes(templateData.id);
                 templateEditor.innerHTML = `
-                    <div class="setting-item">
-                        <label>Template Preview</label>
-                        <div class="template-preview">${templateData.template.replace(/\[\[(.*?)\]\]/g, '<span class="empty">[$1]</span>')}</div>
-                    </div>
-                    <div class="editor-actions">
-                         <button id="cancelActionBtn" class="btn btn-secondary">Cancel</button>
-                         <button id="visibilityToggleBtn" class="btn ${isHidden ? 'btn-primary' : 'btn-secondary'}">${isHidden ? 'Unhide' : 'Hide'}</button>
-                    </div>
-                `;
+                    <div class="setting-item"><label>Template Preview</label><div class="template-preview">${templateData.template.replace(/\[\[(.*?)\]\]/g, '<span class="empty">[$1]</span>')}</div></div>
+                    <div class="editor-actions"><button id="cancelActionBtn" class="btn btn-secondary">Cancel</button><button id="visibilityToggleBtn" class="btn ${isHidden ? 'btn-primary' : 'btn-secondary'}">${isHidden ? 'Unhide' : 'Hide'}</button></div>`;
                 document.getElementById('cancelActionBtn').addEventListener('click', handleCancelAction);
-                document.getElementById('visibilityToggleBtn').addEventListener('click', () => {
-                    if (isHidden) handleUnhideTemplate(templateData.id);
-                    else handleHideTemplate(templateData.id);
-                });
+                document.getElementById('visibilityToggleBtn').addEventListener('click', () => { isHidden ? handleUnhideTemplate(templateData.id) : handleHideTemplate(templateData.id); });
             }
 
             function populateAvailableFields(container, textarea) {
@@ -1206,7 +1086,6 @@
             function updateRequiredFieldsIndicator(textarea, indicatorElement) {
                 const foundFields = textarea.value.match(/\[\[(.*?)\]\]/g) || [];
                 const uniqueFieldIds = [...new Set(foundFields.map(f => f.slice(2, -2)))];
-                
                 if (uniqueFieldIds.length === 0) {
                     indicatorElement.innerHTML = '<strong>Required Fields Detected:</strong> None';
                     return;
@@ -1239,7 +1118,6 @@
                 const title = titleInput.value.trim();
                 const template = bodyInput.value.trim();
                 const currentTemplate = [...publicTmpls, ...userTmpls].find(t => t.id === appState.selectedTemplateId);
-
                 if (!title || !template) {
                     if (!title) titleInput.classList.add('missing');
                     if (!template) bodyInput.classList.add('missing');
@@ -1250,40 +1128,57 @@
                 bodyInput.classList.remove('missing');
 
                 const templateData = { title, template };
-
                 const isCreating = appState.editorMode === 'add';
                 const isUpdating = appState.editorMode === 'edit' && currentTemplate && currentTemplate.isCustom;
 
-                if (isCreating) {
-                    const duplicate = [...publicTmpls, ...userTmpls].find(t => t.title.toLowerCase() === title.toLowerCase());
-                    if (duplicate) { showToast("A template with this title already exists.", true); titleInput.classList.add('missing'); return; }
-                    await addTemplate(templateData);
-                    showToast("Custom template saved successfully!");
+                showLoader(isCreating ? 'Saving New Template...' : 'Updating Template...');
+                try {
+                    if (isCreating) {
+                        if ([...publicTmpls, ...userTmpls].find(t => t.title.toLowerCase() === title.toLowerCase())) {
+                            showToast("A template with this title already exists.", true);
+                            titleInput.classList.add('missing');
+                            return;
+                        }
+                        await addTemplate(templateData);
+                        showToast("Custom template saved successfully!");
+                    } else if (isUpdating) {
+                        if ([...publicTmpls, ...userTmpls].find(t => t.id !== currentTemplate.id && t.title.toLowerCase() === title.toLowerCase())) {
+                            showToast("Another template with this title already exists.", true);
+                            titleInput.classList.add('missing');
+                            return;
+                        }
+                        await updateTemplate(currentTemplate.id, templateData);
+                        showToast("Template updated successfully!");
+                    }
                     handleCancelAction();
-                } else if (isUpdating) {
-                     const duplicate = [...publicTmpls, ...userTmpls].find(t => t.id !== currentTemplate.id && t.title.toLowerCase() === title.toLowerCase());
-                    if (duplicate) { showToast("Another template with this title already exists.", true); titleInput.classList.add('missing'); return; }
-                    await updateTemplate(currentTemplate.id, templateData);
-                    showToast("Template updated successfully!");
-                    handleCancelAction();
+                } catch (error) {
+                    console.error("Error saving template:", error);
+                    showToast("Failed to save template.", true);
+                } finally {
+                    hideLoader();
                 }
             }
             
             async function handleDeleteTemplate(templateId) {
                 if (!templateId) return;
-                showConfirmationModal(
-                    'Delete Template', 'Are you sure you want to permanently delete this custom template?',
-                    async () => {
+                showConfirmationModal('Delete Template', 'Are you sure you want to permanently delete this custom template?', async () => {
+                    hideConfirmationModal();
+                    showLoader('Deleting Template...');
+                    try {
                         await deleteTemplate(templateId);
-                        hideConfirmationModal();
                         showToast("Template deleted.");
                         handleCancelAction();
+                    } catch (error) {
+                        console.error("Error deleting template:", error);
+                        showToast("Failed to delete template.", true);
+                    } finally {
+                        hideLoader();
                     }
-                );
+                });
             }
 
             function showConfirmationModal(title, message, onConfirm) {
-                modalTitle.textContent = title;
+                modalTitleEl.textContent = title;
                 modalMessage.textContent = message;
                 confirmCallback = onConfirm;
                 modal.classList.add('visible');
@@ -1295,79 +1190,26 @@
             }
 
             function getFormattedValue(fieldId, value) { value = value.trim(); if (!value) return value; switch (fieldId) { case 'customerName': case 'advisor': case 'accessoryParts': case 'service': return value.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); case 'vehicle': case 'vin': case 'schedule': case 'tireBrandSize': return value.toUpperCase(); case 'otherConcern': return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(); default: return value; } }
-            
-            function toggleCard(card) { 
-                document.querySelectorAll('.card.expanded').forEach(openCard => { 
-                    if (openCard !== card) openCard.classList.remove('expanded'); 
-                }); 
-                document.querySelectorAll('.missing').forEach(el => el.classList.remove('missing')); 
-                card.classList.toggle('expanded'); 
-                if (card.classList.contains('expanded')) {
-                    updateCardContent(card);
-                }
-            }
-            
-            function updateAllCards() { 
-                document.querySelectorAll('.card.expanded').forEach(updateCardContent); 
-            }
-            
-            function copyTemplate(card) { 
-                const preview = card.querySelector('.template-preview'); 
-                const copyBtn = card.querySelector('.copy-btn'); 
-                const tempTextArea = document.createElement('textarea'); 
-                tempTextArea.value = preview.innerText; 
-                document.body.appendChild(tempTextArea); 
-                tempTextArea.select(); 
-                document.execCommand('copy'); 
-                document.body.removeChild(tempTextArea); 
-                copyBtn.textContent = 'Copied!'; 
-                setTimeout(() => { copyBtn.textContent = 'Copy Template'; }, 1500); 
-            }
-            
-            function clearAllFields() { 
-                const clearButton = document.getElementById('clearAllBtn'); 
-                document.querySelectorAll('.sidebar-content .input-field').forEach(input => { input.value = ''; input.classList.remove('missing'); }); 
-                document.querySelectorAll('.sidebar-content .select-field').forEach(select => { 
-                    select.value = ''; 
-                    select.classList.remove('missing');
-                    const customSelect = select.closest('.select-wrapper').querySelector('.select-selected'); 
-                    if (customSelect) { 
-                        customSelect.textContent = select.options[0].textContent; 
-                        customSelect.classList.remove('missing');
-                        const customOptions = select.closest('.select-wrapper').querySelector('.select-items'); 
-                        if(customOptions) { 
-                            const current = customOptions.querySelector('.same-as-selected'); 
-                            if(current) current.classList.remove('same-as-selected'); 
-                        } 
-                    } 
-                }); 
-                updateAllCards(); 
-                clearButton.textContent = 'Cleared!'; 
-                setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); 
-            }
-
+            function toggleCard(card) { document.querySelectorAll('.card.expanded').forEach(openCard => { if (openCard !== card) openCard.classList.remove('expanded'); }); document.querySelectorAll('.missing').forEach(el => el.classList.remove('missing')); card.classList.toggle('expanded'); if (card.classList.contains('expanded')) updateCardContent(card); }
+            function updateAllCards() { document.querySelectorAll('.card.expanded').forEach(updateCardContent); }
+            function copyTemplate(card) { const preview = card.querySelector('.template-preview'); const copyBtn = card.querySelector('.copy-btn'); const tempTextArea = document.createElement('textarea'); tempTextArea.value = preview.innerText; document.body.appendChild(tempTextArea); tempTextArea.select(); document.execCommand('copy'); document.body.removeChild(tempTextArea); copyBtn.textContent = 'Copied!'; setTimeout(() => { copyBtn.textContent = 'Copy Template'; }, 1500); }
+            function clearAllFields() { const clearButton = document.getElementById('clearAllBtn'); document.querySelectorAll('.sidebar-content .input-field').forEach(input => { input.value = ''; input.classList.remove('missing'); }); document.querySelectorAll('.sidebar-content .select-field').forEach(select => { select.value = ''; select.classList.remove('missing'); const customSelect = select.closest('.select-wrapper').querySelector('.select-selected'); if (customSelect) { customSelect.textContent = select.options[0].textContent; customSelect.classList.remove('missing'); const customOptions = select.closest('.select-wrapper').querySelector('.select-items'); if(customOptions) { const current = customOptions.querySelector('.same-as-selected'); if(current) current.classList.remove('same-as-selected'); } } }); updateAllCards(); clearButton.textContent = 'Cleared!'; setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); }
             function updateCardContent(card) {
-                const templateId = card.dataset.id;
-                const templateData = combinedTemplates.find(t => t.id === templateId);
+                const templateData = combinedTemplates.find(t => t.id === card.dataset.id);
                 if (!templateData) return;
-
                 const requiredFields = card.dataset.required ? card.dataset.required.split(',') : [];
                 const preview = card.querySelector('.template-preview');
                 const warning = card.querySelector('.warning-message');
                 const copyBtn = card.querySelector('.copy-btn');
                 let allRequiredFilled = true;
                 const missingFieldNames = new Set();
-                
                 const fieldValues = {};
-
                 requiredFields.forEach(fieldId => {
                     if (!fieldId) return;
                     let element = document.getElementById(fieldId) || card.querySelector(`[data-field-id="${fieldId}"]`);
-                    
                     if (element && !element.value.trim()) {
                         allRequiredFilled = false;
                         missingFieldNames.add(fieldDisplayNames[fieldId] || fieldId);
-                        
                         let elementToMark = element.closest('.select-wrapper')?.querySelector('.select-selected') || element;
                         elementToMark.classList.add('missing');
                     } else if (element) {
@@ -1376,128 +1218,578 @@
                     }
                     fieldValues[fieldId] = element ? element.value : '';
                 });
-
                 const renderedTemplate = templateData.template.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => {
                     const value = fieldValues[fieldId] || '';
                     const formattedValue = getFormattedValue(fieldId, value);
                     return formattedValue ? `<span class="filled">${formattedValue}</span>` : `<span class="empty">[${fieldDisplayNames[fieldId] || fieldId}]</span>`;
                 });
-                
                 preview.innerHTML = renderedTemplate;
                 warning.style.display = allRequiredFilled ? 'none' : 'block';
                 copyBtn.disabled = !allRequiredFilled;
-                if (!allRequiredFilled) {
-                    warning.textContent = `⚠️ Required: ${[...missingFieldNames].join(', ')}`;
-                }
+                if (!allRequiredFilled) warning.textContent = `⚠️ Required: ${[...missingFieldNames].join(', ')}`;
             }
             
             // --- CDJR CATALOG FUNCTIONS ---
-            function loadCdjrCatalog() {
-                // Since the content is static and already in the HTML,
-                // we just need to make sure the event listeners are attached.
-                if (!catalogListenersAttached) {
-                    attachCatalogEventListeners();
-                    catalogListenersAttached = true;
-                }
+            const cdjrVehicleData = { "Chrysler": { "Current & Future Models": [ { "model": "Chrysler Pacifica", "years": "Minivan | 2017-Present", "description": "The modern successor to the Town & Country. Also available as a class-leading Plug-in Hybrid (PHEV)." }, { "model": "Chrysler Voyager", "years": "Minivan | 2020-Present", "description": "Initially a budget-friendly version of the Pacifica, later transitioned to a fleet-exclusive model." }, { "model": "(Upcoming EV Crossover)", "years": "Crossover SUV | 2025/2026 (Expected)", "description": "Represents the brand's future direction, pivoting towards an all-electric, premium crossover." } ], "Notable Past Models": [ { "model": "Chrysler 300 / 300C", "years": "Full-Size Sedan | 2005-2023", "description": "An iconic rear-wheel-drive American sedan known for its bold styling and available HEMI V8 power." }, { "model": "Chrysler 200", "years": "Mid-Size Sedan | 2011-2017", "description": "Successor to the Sebring, offered with an advanced all-wheel-drive system." }, { "model": "Chrysler Town & Country", "years": "Minivan | 1990-2016", "description": "The brand's flagship luxury minivan for decades, pioneering features like Stow 'n Go seating." }, { "model": "Chrysler Aspen", "years": "Full-Size SUV | 2007-2009", "description": "A short-lived luxury SUV based on the Dodge Durango, notable for its available hybrid powertrain." }, { "model": "Chrysler Concorde / LHS / 300M", "years": "Full-Size Sedan | 1993-2004", "description": "A family of influential \"cab-forward\" sedans that maximized interior space and defined 90s design." }, { "model": "Chrysler New Yorker / Imperial", "years": "Full-Size Luxury Sedan | to 1996", "description": "Long-running nameplates representing the peak of Chrysler luxury in the early 90s." }, { "model": "Chrysler Cirrus", "years": "Mid-Size Sedan | 1995-2000", "description": "A key member of the \"cloud cars\" (alongside Dodge Stratus), praised for its modern design." }, { "model": "Chrysler PT Cruiser", "years": "Compact Hatchback | 2001-2010", "description": "A cultural phenomenon, this retro-styled compact car offered unique versatility and a convertible model." }, { "model": "Chrysler Sebring", "years": "Mid-Size Sedan/Coupe/Convertible | 1995-2010", "description": "A versatile nameplate used on multiple body styles, best known for its popular convertible version." }, { "model": "Chrysler Crossfire", "years": "Sports Car | 2004-2008", "description": "A unique sports car from the Daimler-Chrysler era, based on the Mercedes-Benz SLK platform." }, { "model": "Chrysler Prowler", "years": "Sports Car | 1997-2002", "description": "A factory-built hot rod with an aluminum chassis. Initially launched as a Plymouth." } ] }, "Dodge": { "Current & Future Models": [ { "model": "Dodge Charger", "years": "Muscle Car | 2006-Present", "description": "The latest iteration offers both all-electric (Daytona) and twin-turbo I6 (Sixpack) powertrains." }, { "model": "Dodge Hornet", "years": "Compact Crossover | 2023-Present", "description": "Dodge's entry into the performance CUV segment, offering a powerful R/T PHEV model." }, { "model": "Dodge Durango", "years": "Full-Size SUV | 1998-Present", "description": "The \"three-row Charger,\" a unique SUV that blends utility with true muscle-car performance." } ], "Notable Past Models": [ { "model": "Dodge Challenger", "years": "Muscle Car | 2008-2023", "description": "A celebrated modern revival of the classic pony car, culminating in models like the Hellcat and Demon." }, { "model": "Dodge Viper", "years": "Sports Car | 1992-2017", "description": "An uncompromising, raw American supercar powered by a massive V10 engine. A true legend." }, { "model": "Dodge Dart", "years": "Compact Sedan | 2013-2016", "description": "A compact sedan based on an Alfa Romeo platform, offering distinctive style and options." }, { "model": "Dodge Journey", "years": "Mid-Size Crossover | 2009-2020", "description": "A popular and affordable crossover, often equipped with three rows of seating." }, { "model": "Dodge Caliber", "years": "Compact Hatchback | 2007-2012", "description": "The 5-door hatchback that replaced the Neon, including a high-performance SRT-4 version." }, { "model": "Dodge Nitro", "years": "Compact SUV | 2007-2012", "description": "An aggressively styled SUV based on the Jeep Liberty platform." }, { "model": "Dodge Magnum", "years": "Station Wagon | 2005-2008", "description": "A bold, rear-wheel-drive muscle wagon with Charger-inspired styling and available HEMI power." }, { "model": "Dodge Grand Caravan", "years": "Minivan | 1984-2020", "description": "The minivan that started it all, offering unparalleled value and practicality for families for over 35 years." }, { "model": "Dodge Dakota", "years": "Mid-Size Pickup | 1987-2011", "description": "A unique mid-size truck that stood out by offering an available V8 engine." }, { "model": "Dodge Ram Van / Wagon", "years": "Full-Size Van | to 2003", "description": "The classic, long-running full-size van that was a staple for work and travel." }, { "model": "Dodge Ramcharger", "years": "Full-Size SUV | to 1993", "description": "The classic two-door SUV based on the Ram pickup, a competitor to the Ford Bronco." }, { "model": "Dodge Intrepid", "years": "Full-Size Sedan | 1993-2004", "description": "The Dodge flagship of the \"cab-forward\" era, offering a huge interior and sleek styling." }, { "model": "Dodge Stratus", "years": "Mid-Size Sedan | 1995-2006", "description": "Dodge's \"cloud car\" counterpart to the Chrysler Cirrus, a popular family sedan." }, { "model": "Dodge Neon", "years": "Compact Car | 1995-2005", "description": "A fun-to-drive and affordable compact car, famous for its \"Hi\" marketing and SRT-4 variant." }, { "model": "Dodge Stealth", "years": "Sports Car | 1991-1996", "description": "A rebadged Mitsubishi 3000GT, this was a high-tech, AWD sports car that was ahead of its time." } ] }, "Jeep": { "Current & Future Models": [ { "model": "Jeep Wrangler", "years": "Off-Road SUV | 1987-Present", "description": "The undisputed icon of off-roading. Now in its JL generation, it includes the innovative 4xe Plug-in Hybrid model." }, { "model": "Jeep Gladiator", "years": "Mid-Size Pickup | 2020-Present", "description": "Combines the open-air freedom and off-road capability of a Wrangler with the utility of a pickup truck bed." }, { "model": "Jeep Grand Cherokee", "years": "Mid-Size SUV | 1993-Present", "description": "The benchmark for premium SUVs. Available in 2-row, 3-row (L), and 4xe PHEV versions." }, { "model": "Jeep Wagoneer / Grand Wagoneer", "years": "Full-Size SUV | 2022-Present", "description": "The return of a classic nameplate, representing the pinnacle of premium for the Jeep brand." }, { "model": "Jeep Compass", "years": "Compact Crossover | 2007-Present", "description": "A global compact SUV, now in its second, more refined generation." }, { "model": "Jeep Renegade", "years": "Subcompact Crossover | 2015-Present", "description": "Jeep's entry into the subcompact segment with distinctive styling." }, { "model": "Jeep Recon & Wagoneer S", "years": "Electric SUV | 2025 (Expected)", "description": "Spearheading Jeep's electric future. The Recon is a rugged EV, while the Wagoneer S is a sleek, performance luxury EV." } ], "Notable Past Models": [ { "model": "Jeep Cherokee (XJ & KL)", "years": "Compact SUV | 1984-2001 & 2014-2023", "description": "The original XJ defined the modern SUV. The name was revived for the modern KL crossover." }, { "model": "Jeep Comanche (MJ)", "years": "Compact Pickup | 1985-1992", "description": "The pickup truck version of the legendary Cherokee XJ, prized by collectors." }, { "model": "Jeep Liberty", "years": "Compact SUV | 2002-2012", "description": "The successor to the classic Cherokee, it featured independent front suspension for two generations." }, { "model": "Jeep Commander", "years": "Mid-Size SUV | 2006-2010", "description": "A rugged, boxy, three-row SUV based on the Grand Cherokee platform." }, { "model": "Jeep Patriot", "years": "Compact Crossover | 2007-2017", "description": "A more traditionally styled, boxy counterpart to the first-generation Compass." } ] }, "Ram": { "Current & Future Models": [ { "model": "Ram 1500", "years": "Full-Size Pickup | 2010-Present", "description": "A leader in the truck segment, praised for its benchmark interiors and comfortable ride." }, { "model": "Ram 1500 REV / Ramcharger", "years": "Electric Pickup | 2025 (Expected)", "description": "Ram's two-pronged approach to electrification: the all-electric REV and the innovative Ramcharger range-extended EV." }, { "model": "Ram 2500/3500 Heavy Duty", "years": "Heavy Duty Pickup | 2010-Present", "description": "The workhorses of the lineup, built for extreme towing with the available Cummins diesel engine." }, { "model": "Ram ProMaster", "years": "Full-Size Van | 2014-Present", "description": "A highly capable and versatile front-wheel-drive commercial van based on the Fiat Ducato." } ], "Notable Past Models": [ { "model": "Dodge Ram (Pre-2010)", "years": "Full-Size Pickup | 1981-2009", "description": "The truck line before Ram became a standalone brand. The 2nd Gen (1994-2001) revolutionized truck design." }, { "model": "Ram ProMaster City", "years": "Compact Van | 2015-2022", "description": "A smaller, more maneuverable work van designed for urban environments, based on the Fiat Doblò." } ] }, "Plymouth": { "Notable Past Models": [ { "model": "Plymouth Prowler", "years": "Sports Car | 1997-2001", "description": "The original branding for the retro-styled factory hot rod before it became a Chrysler." }, { "model": "Plymouth Neon", "years": "Compact Car | 1995-2001", "description": "The Plymouth version of the popular and fun-to-drive compact sedan and coupe." }, { "model": "Plymouth Voyager / Grand Voyager", "years": "Minivan | to 2000", "description": "The Plymouth version of the groundbreaking minivan that created a segment." }, { "model": "Plymouth Breeze", "years": "Mid-Size Sedan | 1996-2000", "description": "The Plymouth \"cloud car\" sibling to the Chrysler Cirrus and Dodge Stratus." }, { "model": "Plymouth Acclaim", "years": "Mid-Size Sedan | to 1995", "description": "A reliable and popular sedan from the K-car platform lineage." }, { "model": "Plymouth Laser", "years": "Sports Coupe | to 1994", "description": "A sibling to the Mitsubishi Eclipse and Eagle Talon, part of the Diamond-Star Motors venture." } ] }, "Eagle": { "Notable Past Models": [ { "model": "Eagle Talon", "years": "Sports Coupe | to 1998", "description": "A popular sports coupe from the Diamond-Star Motors venture, known for its available turbo and AWD." }, { "model": "Eagle Vision", "years": "Full-Size Sedan | 1993-1997", "description": "The Eagle version of the innovative \"cab-forward\" sedans, marketed as a sportier alternative." } ] } };
+
+            function populateCdjrCatalog(data) {
+                const contentArea = document.getElementById('catalog-content-area');
+                if (!contentArea) return;
+                contentArea.innerHTML = ''; 
+                Object.keys(data).forEach(brand => {
+                    const tabContent = document.createElement('div');
+                    tabContent.id = `catalog-${brand}`;
+                    tabContent.className = 'catalog-tab-content';
+                    if (brand !== 'Chrysler') tabContent.classList.add('hidden');
+                    
+                    const brandData = data[brand];
+                    Object.keys(brandData).forEach(sectionTitle => {
+                        const section = document.createElement('div');
+                        section.className = 'catalog-view-section';
+                        section.setAttribute('data-brand-color', brand);
+
+                        let vehicleCardsHtml = '';
+                        brandData[sectionTitle].forEach(vehicle => {
+                            vehicleCardsHtml += `
+                                <div class="vehicle-card" data-model="${vehicle.model.toLowerCase()}" data-brand="${brand}">
+                                    <h3>${vehicle.model}</h3>
+                                    <p class="vehicle-years">${vehicle.years}</p>
+                                    <p class="vehicle-desc">${vehicle.description}</p>
+                                </div>`;
+                        });
+
+                        section.innerHTML = `
+                            <div class="catalog-section-header">
+                                <h2>${sectionTitle}</h2>
+                                <div class="catalog-view-switcher">
+                                    <button class="catalog-view-btn view-btn-active" data-view="grid"><i class="fas fa-th-large"></i></button>
+                                    <button class="catalog-view-btn" data-view="list"><i class="fas fa-bars"></i></button>
+                                </div>
+                            </div>
+                            <div class="catalog-view-container">${vehicleCardsHtml}</div>`;
+                        tabContent.appendChild(section);
+                    });
+                    contentArea.appendChild(tabContent);
+                });
             }
 
+            function loadCdjrCatalog() { 
+                populateCdjrCatalog(cdjrVehicleData);
+                if (!catalogListenersAttached) { 
+                    attachCatalogEventListeners(); 
+                    catalogListenersAttached = true; 
+                } 
+            }
             function attachCatalogEventListeners() {
                 const page = document.getElementById('cdjrCatalogPage');
                 if (!page) return;
-
                 const tabsContainer = page.querySelector('.catalog-tabs');
                 const searchInput = page.querySelector('#catalog-search-input');
                 const noResultsMessage = page.querySelector('#catalog-no-results');
-                
-                tabsContainer.addEventListener('click', e => {
-                    if (e.target.matches('.catalog-tab-button')) {
-                        const tabId = e.target.dataset.tab;
-                        tabsContainer.querySelector('.tab-active').classList.remove('tab-active');
-                        e.target.classList.add('tab-active');
+                const contentArea = page.querySelector('#catalog-content-area');
 
-                        page.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.add('hidden'));
-                        page.querySelector(`#catalog-${tabId}`).classList.remove('hidden');
-                    }
+                tabsContainer.addEventListener('click', e => { 
+                    if (e.target.matches('.catalog-tab-button')) { 
+                        searchInput.value = ''; // Clear search on tab click
+                        const tabId = e.target.dataset.tab; 
+                        tabsContainer.querySelector('.tab-active').classList.remove('tab-active'); 
+                        e.target.classList.add('tab-active'); 
+                        
+                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.add('hidden')); 
+                        contentArea.querySelector(`#catalog-${tabId}`).classList.remove('hidden'); 
+                        
+                        // Make sure all cards and sections within the active tab are visible
+                        contentArea.querySelectorAll('.vehicle-card, .catalog-view-section').forEach(el => el.classList.remove('hidden'));
+                        noResultsMessage.classList.add('hidden');
+                    } 
                 });
 
                 searchInput.addEventListener('input', e => {
                     const searchTerm = e.target.value.toLowerCase().trim();
-                    const allCards = page.querySelectorAll('.vehicle-card');
-                    const allSections = page.querySelectorAll('.catalog-view-section');
+                    const allCards = contentArea.querySelectorAll('.vehicle-card');
+                    const allSections = contentArea.querySelectorAll('.catalog-view-section');
                     let visibleCount = 0;
+                    let firstMatchBrand = null;
 
                     if (searchTerm) {
-                        tabsContainer.classList.add('hidden');
-                        page.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.remove('hidden'));
-                        allSections.forEach(s => s.classList.remove('hidden'));
+                        // Show all tab content containers to search through them
+                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.remove('hidden'));
+
+                        allCards.forEach(card => {
+                            const isMatch = card.dataset.model.includes(searchTerm);
+                            card.classList.toggle('hidden', !isMatch);
+                            if (isMatch) {
+                                visibleCount++;
+                                if (!firstMatchBrand) {
+                                    firstMatchBrand = card.dataset.brand;
+                                }
+                            }
+                        });
+
+                        // Update the active tab based on the first search result
+                        if (firstMatchBrand) {
+                            tabsContainer.querySelector('.tab-active')?.classList.remove('tab-active');
+                            tabsContainer.querySelector(`[data-tab="${firstMatchBrand}"]`)?.classList.add('tab-active');
+                        }
+
+                        // Hide sections that have no visible cards
+                        allSections.forEach(section => {
+                            const hasVisibleChildren = section.querySelector('.vehicle-card:not(.hidden)');
+                            section.classList.toggle('hidden', !hasVisibleChildren);
+                        });
                     } else {
-                        tabsContainer.classList.remove('hidden');
-                        const activeTab = tabsContainer.querySelector('.tab-active').dataset.tab;
-                        page.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.toggle('hidden', p.id !== `catalog-${activeTab}`));
+                        // If search is cleared, reset to the active tab's view
+                        const activeTab = tabsContainer.querySelector('.tab-active')?.dataset.tab || 'Chrysler';
+                        allCards.forEach(card => card.classList.remove('hidden'));
+                        allSections.forEach(section => section.classList.remove('hidden'));
+                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => {
+                            p.classList.toggle('hidden', p.id !== `catalog-${activeTab}`);
+                        });
+                        visibleCount = 1; // Prevent "no results" from showing
                     }
-                    
-                    allCards.forEach(card => {
-                        const isMatch = card.dataset.model.includes(searchTerm);
-                        card.classList.toggle('hidden', !isMatch);
-                        if (isMatch) visibleCount++;
-                    });
-                    
-                    // Hide section headers if they have no visible cards
-                    allSections.forEach(section => {
-                         const hasVisibleChildren = section.querySelector('.vehicle-card:not(.hidden)');
-                         section.classList.toggle('hidden', !hasVisibleChildren);
-                    });
 
                     noResultsMessage.classList.toggle('hidden', visibleCount > 0 || !searchTerm);
                 });
 
-                page.querySelectorAll('.catalog-view-switcher').forEach(switcher => {
-                    switcher.addEventListener('click', e => {
-                        const btn = e.target.closest('.catalog-view-btn');
-                        if (!btn) return;
-
+                contentArea.addEventListener('click', e => {
+                    const btn = e.target.closest('.catalog-view-btn');
+                    if (btn) {
                         const view = btn.dataset.view;
+                        const switcher = btn.closest('.catalog-view-switcher');
                         const container = btn.closest('.catalog-view-section').querySelector('.catalog-view-container');
-                        
                         switcher.querySelector('.view-btn-active').classList.remove('view-btn-active');
                         btn.classList.add('view-btn-active');
-                        
                         container.classList.toggle('list-view', view === 'list');
+                    }
+                });
+            }
+
+
+            // --- DEALERSHIP MANAGER FUNCTIONS (REBUILT) ---
+            function initializeDealershipManager() {
+                if (!dealershipsRef) return;
+                if (dealershipManagerInitialized) return;
+                dealershipManagerInitialized = true;
+
+                const page = document.getElementById('dealershipListPage');
+                const searchBar = page.querySelector('#search-bar');
+                const clearSearchBtn = page.querySelector('#clear-search-btn');
+                const addNewBtn = page.querySelector('#add-new-btn');
+                const listContainer = page.querySelector('#credentials-list-container');
+                const tabButtonsContainer = page.querySelector('#tab-buttons');
+                const tabsContainer = page.querySelector('#tabs-container');
+                const noResultsMessage = page.querySelector('#no-results-message');
+                
+                const credentialModal = page.querySelector('#credential-modal');
+                const modalContentInner = credentialModal.querySelector('.modal-content-inner');
+                const modalTitle = page.querySelector('#modal-title');
+                const modalCloseBtn = page.querySelector('#modal-close-btn');
+                const form = page.querySelector('#credential-form');
+                const credentialIdInput = page.querySelector('#credential-id');
+                const categoryInput = page.querySelector('#category');
+                const titleInput = page.querySelector('#title');
+                
+                const toggleLink = page.querySelector('#toggle-link');
+                const toggleLogin = page.querySelector('#toggle-login');
+                const toggleNotes = page.querySelector('#toggle-notes');
+                const linkFieldsContainer = page.querySelector('#link-fields-container');
+                const loginFieldsContainer = page.querySelector('#login-fields-container');
+                const notesSectionContent = page.querySelector('#notes-section-content');
+                const addNoteButtonContainer = page.querySelector('#add-note-button-container');
+
+                const urlInput = page.querySelector('#url');
+                const schedulerLinkInput = page.querySelector('#online-scheduler-link');
+                const browserInput = page.querySelector('#browser');
+                const usernameInput = page.querySelector('#username');
+                const passwordInput = page.querySelector('#password');
+                const passwordToggle = page.querySelector('#password-toggle');
+                const vpnRequiredInput = page.querySelector('#vpn-required');
+                const notesContainer = page.querySelector('#notes-container');
+                const addNoteBtn = page.querySelector('#add-note-btn');
+
+                const deleteModal = page.querySelector('#delete-modal');
+                const deleteModalContent = deleteModal.querySelector('.delete-modal-content');
+                const deleteConfirmBtn = page.querySelector('#delete-confirm-btn');
+                const deleteCancelBtn = page.querySelector('#delete-cancel-btn');
+
+                let activeTab = '';
+                let deleteTimerInterval;
+
+                const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', other: 'Other' };
+                const getBrowserIcon = (browser) => ({ chrome: 'fa-brands fa-chrome text-yellow-400', firefox: 'fa-brands fa-firefox text-orange-500', edge: 'fa-brands fa-edge text-blue-400', safari: 'fa-brands fa-safari text-blue-500' }[browser] || 'fa-solid fa-globe text-gray-400');
+                
+                const copyToClipboard = (text, button) => {
+                    if (!text) return;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalContent = button.innerHTML;
+                        const originalClasses = button.className;
+                        button.disabled = true;
+
+                        if (button.classList.contains('copy-btn-header')) {
+                             button.innerHTML = `Copied!`;
+                        } else {
+                             button.innerHTML = `<i class="fas fa-check mr-1"></i>Copied!`;
+                        }
+                       
+                        button.className = originalClasses.replace(/bg-[\w-]+/g, 'bg-green-600').replace(/hover:bg-[\w-]+/g, '');
+                        setTimeout(() => { 
+                            button.innerHTML = originalContent; 
+                            button.className = originalClasses; 
+                            button.disabled = false; 
+                        }, 1500);
+                    }).catch(err => showToast("Failed to copy", true));
+                };
+
+                const addNoteField = (note = { title: '', description: '' }) => {
+                    const noteDiv = document.createElement('div');
+                    noteDiv.className = 'p-3 bg-[var(--c-surface)] rounded-lg space-y-2';
+                    noteDiv.innerHTML = `
+                        <div class="relative">
+                            <label class="block text-xs font-medium text-[var(--c-on-surface-variant)] mb-1">Note Title</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" class="note-title-input text-sm p-2" value="${note.title}" placeholder="e.g., Security Questions">
+                                <button type="button" class="remove-note-btn text-[var(--c-on-surface-variant)] hover:text-[var(--c-error)] w-8 h-8 flex-shrink-0 flex items-center justify-center text-2xl">&times;</button>
+                            </div>
+                        </div>
+                        <div><label class="block text-xs font-medium text-[var(--c-on-surface-variant)] mb-1">Note Description</label><textarea class="note-description-input text-sm p-2" rows="3" placeholder="e.g., What was your first pet's name?">${note.description}</textarea></div>`;
+                    notesContainer.appendChild(noteDiv);
+                    noteDiv.querySelector('.remove-note-btn').addEventListener('click', () => noteDiv.remove());
+                };
+
+                const renderDealerships = () => {
+                    const credentials = allDealerships;
+                    const categories = [...new Set(credentials.map(c => c.category))].sort((a, b) => a.localeCompare(b));
+                    const isSearching = searchBar.value.trim().length > 0;
+                    const searchFilter = searchBar.value.toLowerCase();
+
+                    let filteredCreds;
+
+                    if (isSearching) {
+                        filteredCreds = credentials.filter(cred => 
+                            cred.title.toLowerCase().includes(searchFilter) || 
+                            (cred.hasLink && cred.url && cred.url.toLowerCase().includes(searchFilter))
+                        );
+                        if (filteredCreds.length > 0) {
+                            activeTab = filteredCreds[0].category;
+                        }
+                    } else {
+                        if (!activeTab && categories.length > 0) activeTab = categories[0];
+                        else if (categories.length > 0 && !categories.includes(activeTab)) activeTab = categories[0];
+                        else if (categories.length === 0) activeTab = '';
+                        
+                        filteredCreds = credentials.filter(cred => cred.category === activeTab);
+                    }
+
+                    tabButtonsContainer.innerHTML = '';
+                    if (categories.length > 0) {
+                        categories.forEach(category => {
+                            const button = document.createElement('button');
+                            button.dataset.tab = category;
+                            button.className = `tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none ${activeTab === category ? 'tab-active' : 'text-[var(--c-on-surface)] hover:bg-[var(--c-surface-light)]'}`;
+                            button.textContent = category;
+                            tabButtonsContainer.appendChild(button);
+                        });
+                    }
+
+                    listContainer.innerHTML = '';
+                    noResultsMessage.classList.toggle('hidden', filteredCreds.length > 0);
+
+                    filteredCreds.forEach(cred => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-[var(--c-surface-light)] rounded-xl shadow-lg border border-[var(--c-border)] overflow-hidden';
+                        card.dataset.id = cred.id;
+
+                        const vpnBadgeHtml = cred.vpnRequired ? `<span class="vpn-badge">VPN</span>` : '';
+                        const categoryBadgeHtml = isSearching ? `<span class="text-xs bg-blue-500 text-white font-bold ml-3 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">${cred.category}</span>` : '';
+                        const iconHtml = `<i class="${getBrowserIcon(cred.browser)} fa-2x"></i>`;
+                        
+                        const copyLinkHeaderButton = cred.hasLink && cred.url ? `<button class="copy-btn-header bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-1 px-3 rounded-full flex-shrink-0" data-value="${cred.url}"><i class="fas fa-link mr-1"></i>Copy link</button>` : '';
+                        
+                        const browserDetailsHtml = `<div><div class="flex justify-between items-center"><span class="text-[var(--c-on-surface-variant)]">Browser:</span><div class="flex items-center gap-2"><i class="${getBrowserIcon(cred.browser)}"></i><span class="font-mono text-[var(--c-on-surface)]">${BROWSER_NAMES[cred.browser] || 'N/A'}</span></div></div></div>`;
+                        const linkDetailsHtml = cred.hasLink && cred.url ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">Website URL</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.url}</p><a href="${cred.url}" target="_blank" class="p-2 text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] hover:bg-[var(--c-surface)] border-l border-[var(--c-border)]" onclick="event.stopPropagation();" aria-label="Open link in new tab"><i class="fas fa-external-link-alt"></i></a></div></div>` : '';
+                        const schedulerLinkDetailsHtml = cred.hasLink && cred.onlineSchedulerLink ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">ONLINE SCHEDULER</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.onlineSchedulerLink}</p><button class="copy-btn bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-2 px-3 rounded-md" data-value="${cred.onlineSchedulerLink}"><i class="fas fa-copy mr-1"></i>Copy</button></div></div>` : '';
+                        const loginDetailsHtml = cred.hasLogin ? `<div class="space-y-3"><div class="grid grid-cols-[auto_1fr] gap-y-3 gap-x-4 items-center"><span class="text-[var(--c-on-surface-variant)]">Username:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.username || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.username || ''}">Copy</button></div><span class="text-[var(--c-on-surface-variant)]">Password:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.password || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.password || ''}">Copy</button></div></div>${(cred.hasLink && cred.onlineSchedulerLink) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : ''}</div>` : '';
+                        const notesDetailsHtml = cred.hasNotes && cred.notes?.length > 0 ? `<div class="space-y-2"><h4 class="text-base font-bold text-[var(--c-on-surface)]">Notes</h4>${cred.notes.map(note => `<div class="pt-2"><p class="font-semibold text-[var(--c-on-surface)]">${note.title || ''}</p><p class="text-[var(--c-on-surface-variant)] whitespace-pre-wrap">${note.description || ''}</p></div>`).join('')}</div>` : '';
+                        const firstColContent = `<div class="space-y-4">${browserDetailsHtml}${(cred.hasLink && cred.url) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${linkDetailsHtml}</div>` : ''}${cred.hasLogin ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${loginDetailsHtml}</div>` : (!cred.hasLogin && cred.hasLink && cred.onlineSchedulerLink ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : '')}</div>`;
+                        const secondColContent = cred.hasNotes && cred.notes?.length > 0 ? `<div class="border-t md:border-t-0 md:border-l border-[var(--c-border)] pt-4 md:pt-0 md:pl-4">${notesDetailsHtml}</div>` : '';
+                        const hasDetails = cred.hasLink || cred.hasLogin;
+
+                        card.innerHTML = `
+                            <div class="card-header p-4 flex items-center justify-between cursor-pointer hover:bg-[var(--c-border)] transition">
+                                <div class="flex items-center gap-4 flex-grow min-w-0">
+                                    <div class="icon-container">${iconHtml}${vpnBadgeHtml}</div>
+                                    <div class="flex items-center min-w-0">
+                                        <h3 class="card-header-title font-bold text-[var(--c-on-surface)] text-lg truncate">${cred.title}</h3>
+                                        ${categoryBadgeHtml}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <div class="action-buttons flex items-center gap-1">
+                                        ${copyLinkHeaderButton}
+                                        <button class="action-btn edit-btn" aria-label="Edit"><i class="fas fa-pencil-alt"></i></button>
+                                        <button class="action-btn delete-btn" aria-label="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                    <div class="h-6 w-px bg-[var(--c-border)] mx-2"></div>
+                                    <i class="fas fa-chevron-down expand-icon text-[var(--c-on-surface-variant)] transition-transform duration-300"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="p-4 grid grid-cols-1 ${hasDetails && secondColContent ? 'md:grid-cols-2' : ''} gap-4">
+                                    ${hasDetails ? firstColContent : `<div>${browserDetailsHtml}</div>`}
+                                    ${secondColContent}
+                                </div>
+                            </div>`;
+                        listContainer.appendChild(card);
                     });
+                };
+                renderDealershipsNow = renderDealerships;
+
+                const updateFormVisibility = () => {
+                    linkFieldsContainer.classList.toggle('hidden', !toggleLink.checked);
+                    urlInput.required = toggleLink.checked;
+                    loginFieldsContainer.classList.toggle('hidden', !toggleLogin.checked);
+                    usernameInput.required = toggleLogin.checked;
+                    passwordInput.required = toggleLogin.checked;
+                    notesSectionContent.classList.toggle('hidden', !toggleNotes.checked);
+                    addNoteButtonContainer.classList.toggle('hidden', !toggleNotes.checked);
+                };
+
+                toggleLink.addEventListener('change', updateFormVisibility);
+                toggleLogin.addEventListener('change', updateFormVisibility);
+                toggleNotes.addEventListener('change', updateFormVisibility);
+
+                searchBar.addEventListener('input', () => { clearSearchBtn.classList.toggle('hidden', searchBar.value.length === 0); renderDealerships(); });
+                clearSearchBtn.addEventListener('click', () => { searchBar.value = ''; clearSearchBtn.classList.add('hidden'); renderDealerships(); searchBar.focus(); });
+                tabButtonsContainer.addEventListener('click', (e) => { 
+                    if (e.target.matches('.tab-button')) { 
+                        searchBar.value = ''; // Clear search when a tab is clicked
+                        clearSearchBtn.classList.add('hidden');
+                        activeTab = e.target.dataset.tab; 
+                        renderDealerships(); 
+                    } 
+                });
+                
+                listContainer.addEventListener('click', (e) => {
+                    const card = e.target.closest('.bg-\\[var\\(--c-surface-light\\)\\]');
+                    if (!card) return;
+
+                    const header = e.target.closest('.card-header');
+                    const button = e.target.closest('button');
+                    const credId = card.dataset.id;
+                    
+                    if (button) {
+                        e.stopPropagation();
+                        if (button.matches('.delete-btn')) {
+                            openDeleteModal(credId);
+                        } else if (button.matches('.edit-btn')) {
+                            const cred = allDealerships.find(c => c.id === credId);
+                            if (cred) openModalForEdit(cred);
+                        } else if (button.matches('.copy-btn-header')) {
+                            copyToClipboard(button.dataset.value, button);
+                        } else if (button.matches('.copy-btn')) {
+                            copyToClipboard(button.dataset.value, button);
+                        }
+                        return;
+                    }
+
+                    if (header) {
+                        header.classList.toggle('expanded');
+                    }
+                });
+
+                const openModalForAdd = () => {
+                    modalTitle.textContent = 'Add New Information';
+                    form.reset();
+                    credentialIdInput.value = '';
+                    toggleLink.checked = true;
+                    toggleLogin.checked = true;
+                    toggleNotes.checked = true;
+                    updateFormVisibility();
+                    notesContainer.innerHTML = '';
+                    addNoteField();
+                    credentialModal.classList.remove('hidden');
+                    setTimeout(() => { credentialModal.classList.remove('opacity-0'); modalContentInner.classList.remove('opacity-0', 'scale-95'); }, 10);
+                };
+
+                const openModalForEdit = (cred) => {
+                    modalTitle.textContent = 'Edit Information';
+                    form.reset();
+                    credentialIdInput.value = cred.id;
+                    categoryInput.value = cred.category;
+                    titleInput.value = cred.title;
+                    browserInput.value = cred.browser;
+                    vpnRequiredInput.checked = cred.vpnRequired;
+                    toggleLink.checked = cred.hasLink;
+                    toggleLogin.checked = cred.hasLogin;
+                    toggleNotes.checked = cred.hasNotes;
+                    updateFormVisibility();
+                    if(cred.hasLink){ urlInput.value = cred.url; schedulerLinkInput.value = cred.onlineSchedulerLink || ''; }
+                    if(cred.hasLogin){ usernameInput.value = cred.username; passwordInput.value = cred.password; }
+                    notesContainer.innerHTML = '';
+                    if(cred.hasNotes && cred.notes?.length > 0){ cred.notes.forEach(note => addNoteField(note)); } 
+                    else { addNoteField(); }
+                    credentialModal.classList.remove('hidden');
+                    setTimeout(() => { credentialModal.classList.remove('opacity-0'); modalContentInner.classList.remove('opacity-0', 'scale-95'); }, 10);
+                };
+
+                const closeCredentialModal = () => {
+                    credentialModal.classList.add('opacity-0');
+                    modalContentInner.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => credentialModal.classList.add('hidden'), 300);
+                };
+
+                addNewBtn.addEventListener('click', openModalForAdd);
+                modalCloseBtn.addEventListener('click', closeCredentialModal);
+                credentialModal.addEventListener('click', (e) => { if (e.target === credentialModal) closeCredentialModal(); });
+                addNoteBtn.addEventListener('click', () => addNoteField());
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!dealershipsRef) { 
+                        showToast("Database connection not ready.", true); 
+                        return; 
+                    }
+                    const credId = credentialIdInput.value;
+                    const newTitle = titleInput.value.trim();
+                    if (allDealerships.some(c => c.title.toLowerCase() === newTitle.toLowerCase() && c.id !== credId)) { 
+                        showToast('An entry with this title already exists.', true); 
+                        return; 
+                    }
+                    
+                    showLoader(credId ? 'Saving Changes...' : 'Adding New Dealership...');
+
+                    const newCredential = {
+                        category: categoryInput.value.trim(), title: newTitle, browser: browserInput.value, vpnRequired: vpnRequiredInput.checked,
+                        hasLink: toggleLink.checked, hasLogin: toggleLogin.checked, hasNotes: toggleNotes.checked,
+                        url: toggleLink.checked ? urlInput.value.trim() : '', onlineSchedulerLink: toggleLink.checked ? schedulerLinkInput.value.trim() : '',
+                        username: toggleLogin.checked ? usernameInput.value.trim() : '', password: toggleLogin.checked ? passwordInput.value : '',
+                        notes: toggleNotes.checked ? Array.from(notesContainer.querySelectorAll('.note-title-input')).map(input => ({ title: input.value.trim(), description: input.closest('.p-3').querySelector('.note-description-input').value.trim() })).filter(n => n.title || n.description) : []
+                    };
+                    
+                    try {
+                        if (credId) { await setDoc(doc(dealershipsRef, credId), newCredential); } 
+                        else { await addDoc(dealershipsRef, newCredential); }
+                        activeTab = newCredential.category;
+                        showToast(`Dealership ${credId ? 'updated' : 'saved'} successfully!`);
+                        closeCredentialModal();
+                    } catch (error) { 
+                        showToast("Failed to save dealership.", true); 
+                    } finally {
+                        hideLoader();
+                    }
+                });
+                
+                passwordToggle.addEventListener('click', () => {
+                    const isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    passwordToggle.className = `fas ${isPassword ? 'fa-eye-slash' : 'fa-eye'} password-toggle`;
+                });
+
+                const openDeleteModal = (id) => {
+                    const cred = allDealerships.find(c => c.id === id);
+                    if (!cred) return;
+                    page.querySelector('#delete-modal-text').innerHTML = `You are about to permanently delete <br> "<strong>${cred.title}</strong>".`;
+                    deleteConfirmBtn.dataset.id = id;
+                    deleteModal.classList.remove('hidden');
+                    
+                    deleteConfirmBtn.disabled = true;
+                    deleteConfirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    let countdown = 3;
+                    deleteConfirmBtn.innerHTML = `Delete (${countdown})`;
+                    deleteTimerInterval = setInterval(() => {
+                        countdown--;
+                        if (countdown > 0) { deleteConfirmBtn.innerHTML = `Delete (${countdown})`; } 
+                        else { clearInterval(deleteTimerInterval); deleteConfirmBtn.disabled = false; deleteConfirmBtn.classList.remove('opacity-50', 'cursor-not-allowed'); deleteConfirmBtn.innerHTML = 'Delete'; }
+                    }, 1000);
+
+                    setTimeout(() => { deleteModal.classList.remove('opacity-0'); deleteModalContent.classList.remove('opacity-0', 'scale-95'); }, 10);
+                };
+
+                const closeDeleteModal = () => {
+                    clearInterval(deleteTimerInterval);
+                    deleteModal.classList.add('opacity-0');
+                    deleteModalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        deleteModal.classList.add('hidden');
+                        deleteConfirmBtn.disabled = false;
+                        deleteConfirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        deleteConfirmBtn.innerHTML = 'Delete';
+                    }, 300);
+                };
+
+                deleteCancelBtn.addEventListener('click', closeDeleteModal);
+                deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+                
+                deleteConfirmBtn.addEventListener('click', async () => {
+                    if (deleteConfirmBtn.disabled || !dealershipsRef) return;
+                    
+                    showLoader('Deleting Dealership...');
+                    const idToDelete = deleteConfirmBtn.dataset.id;
+
+                    try {
+                        await deleteDoc(doc(dealershipsRef, idToDelete));
+                        showToast("Dealership deleted.");
+                        closeDeleteModal();
+                    } catch (error) { 
+                        showToast("Failed to delete dealership.", true); 
+                    } finally {
+                        hideLoader();
+                    }
+                });
+
+                if (unsubscribeFromDealerships) unsubscribeFromDealerships();
+                unsubscribeFromDealerships = onSnapshot(dealershipsRef, (snapshot) => {
+                    allDealerships = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    allDealerships.sort((a,b) => a.title.localeCompare(b.title));
+                    if (appState.currentView === 'dealershipList') {
+                        renderDealerships();
+                    }
+                }, (error) => {
+                    console.error("Error with dealership snapshot listener:", error);
+                    showToast("Error retrieving dealership data.", true);
                 });
             }
 
             let isInitialized = false;
+
+            function showLoader(message = 'Loading...') {
+                const splashScreen = document.getElementById('splashScreen');
+                const splashMessage = splashScreen.querySelector('p');
+                if (splashMessage) {
+                    splashMessage.textContent = message;
+                }
+                splashScreen.classList.remove('hidden');
+                splashScreen.style.opacity = '1';
+                splashScreen.style.visibility = 'visible';
+            }
+
+            function hideLoader() {
+                const splashScreen = document.getElementById('splashScreen');
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+                // Use a timeout to fully hide it after the transition
+                setTimeout(() => {
+                    splashScreen.classList.add('hidden');
+                }, 500); // Match the transition duration in CSS
+            }
+            
             function initializeApp() {
                 if (isInitialized) return;
                 isInitialized = true;
                 
-                // --- Event Listeners ---
                 navigateToHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
                 navigateToTemplateManager.addEventListener('click', () => renderCurrentView('manageTemplates'));
                 navigateToCdjrCatalog.addEventListener('click', () => renderCurrentView('cdjrCatalog'));
+                navigateToDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
                 backToSuiteBtn.addEventListener('click', () => renderCurrentView('toolSuite'));
 
                 document.getElementById('phoneNumber').addEventListener('input', (e) => { const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/); e.target.value = !x[2] ? x[1] : `(${x[1]}) ${x[2]}` + (x[3] ? `-${x[3]}` : ''); });
                 document.getElementById('vin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); });
                 const themeToggle = document.getElementById('themeToggle');
-                themeToggle.addEventListener('click', () => { 
-                    const isLight = body.classList.toggle('light-mode'); 
-                    saveUserPreference('theme', isLight ? 'light' : 'dark');
-                    themeToggle.classList.add('spin'); 
-                    setTimeout(() => themeToggle.classList.remove('spin'), 500); 
-                });
+                themeToggle.addEventListener('click', () => { const isLight = body.classList.toggle('light-mode'); saveUserPreference('theme', isLight ? 'light' : 'dark'); themeToggle.classList.add('spin'); setTimeout(() => themeToggle.classList.remove('spin'), 500); });
                 
-                cardSearchInput.addEventListener('keyup', (e) => { 
-                    const searchTerm = e.target.value.toLowerCase(); 
-                    document.querySelectorAll('.card').forEach(card => { 
-                        card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; 
-                    });
-                });
-                clearSearchBtn.addEventListener('click', () => {
-                    cardSearchInput.value = '';
-                    cardSearchInput.dispatchEvent(new Event('keyup'));
-                });
+                cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
+                clearSearchBtn.addEventListener('click', () => { cardSearchInput.value = ''; cardSearchInput.dispatchEvent(new Event('keyup')); });
 
                 templateSelect.addEventListener('change', renderEditorForSelection);
                 document.getElementById('clearAllBtn').addEventListener('click', clearAllFields);
@@ -1506,81 +1798,35 @@
                 modalConfirmBtn.addEventListener('click', () => { if (confirmCallback) confirmCallback(); });
                 modalCancelBtn.addEventListener('click', hideConfirmationModal);
                 
-                document.body.addEventListener('input', (e) => {
-                    if (e.target.matches('.sidebar-content .input-field, .sidebar-content .select-field, .in-card-controls .select-field')) {
-                        updateAllCards();
-                    }
-                });
+                document.body.addEventListener('input', (e) => { if (e.target.matches('.sidebar-content .input-field, .sidebar-content .select-field, .in-card-controls .select-field')) updateAllCards(); });
             }
 
             // --- Authentication Flow ---
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    justAuthenticated = true;
-                } catch (error) { showToast(error.message, true); }
-            });
-
-            signupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
-                try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    justAuthenticated = true;
-                } catch (error) { showToast(error.message, true); }
-            });
-
-            signOutBtn.addEventListener('click', () => {
-                 showConfirmationModal( 'Sign Out', 'Are you sure you want to sign out?',
-                    async () => {
-                        await signOut(auth);
-                        hideConfirmationModal();
-                        showToast("You have been signed out.");
-                    }
-                );
-            });
-
-            showSignupBtn.addEventListener('click', () => {
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
-            });
-
-            showLoginBtn.addEventListener('click', () => {
-                signupForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            });
+            loginForm.addEventListener('submit', async (e) => { e.preventDefault(); try { await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value); justAuthenticated = true; } catch (error) { showToast(error.message, true); } });
+            signupForm.addEventListener('submit', async (e) => { e.preventDefault(); try { await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value); justAuthenticated = true; } catch (error) { showToast(error.message, true); } });
+            signOutBtn.addEventListener('click', () => { showConfirmationModal( 'Sign Out', 'Are you sure you want to sign out?', async () => { await signOut(auth); hideConfirmationModal(); showToast("You have been signed out."); }); });
+            showSignupBtn.addEventListener('click', () => { loginForm.classList.add('hidden'); signupForm.classList.remove('hidden'); });
+            showLoginBtn.addEventListener('click', () => { signupForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
             
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     userId = user.uid;
-                    console.log("User authenticated with UID:", userId);
-                    
                     const isFreshLogin = justAuthenticated;
-                    if (isFreshLogin) {
-                        showToast("Login successful!");
-                        justAuthenticated = false;
-                    }
+                    if (isFreshLogin) { showToast("Login successful!"); justAuthenticated = false; }
+                    showLoader('Loading Application...');
                     
-                    splashScreen.classList.remove('hidden');
-
                     setTimeout(async () => {
                         authContainer.classList.add('hidden');
                         appContainer.classList.remove('hidden');
-                        
                         initializeApp();
                         renderCurrentView('toolSuite');
-
                         try {
                             const userPath = `artifacts/${appId}/users/${userId}`;
                             const publicPath = `artifacts/${appId}/public/data`;
-                            
                             userTemplatesRef = collection(db, `${userPath}/templates`);
                             publicTemplatesRef = collection(db, `${publicPath}/default_templates`);
                             settingsDocRef = doc(db, `${userPath}/settings`, 'preferences');
+                            dealershipsRef = collection(db, `${userPath}/dealerships`);
                             
                             await initializeUserSettings(); 
                             
@@ -1588,27 +1834,23 @@
                             publicTmpls = publicSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), isPublic: true, isCustom: false }));
 
                             if (unsubscribeFromTemplates) unsubscribeFromTemplates();
+                            unsubscribeFromTemplates = onSnapshot(userTemplatesRef, (userSnapshot) => { mergeAndRenderTemplates(userSnapshot); });
 
-                            unsubscribeFromTemplates = onSnapshot(userTemplatesRef, (userSnapshot) => {
-                                mergeAndRenderTemplates(userSnapshot);
-                            }, (error) => {
-                                console.error("Error with template snapshot listener:", error);
-                                showToast("Error listening for template updates.", true);
-                            });
-                            
+                            initializeDealershipManager();
+
                         } catch (error) {
                             console.error("Error during data setup:", error);
                             showToast("Error loading user data.", true);
                         } finally {
-                            splashScreen.classList.add('hidden');
+                            hideLoader();
                         }
                     }, isFreshLogin ? 1000 : 100);
-
                 } else {
-                    console.log("No user signed in.");
                     userId = null;
                     if (unsubscribeFromTemplates) unsubscribeFromTemplates();
-                    
+                    if (unsubscribeFromDealerships) unsubscribeFromDealerships();
+                    dealershipManagerInitialized = false;
+                    renderDealershipsNow = null;
                     setTimeout(() => {
                         splashScreen.classList.add('hidden');
                         appContainer.classList.add('hidden');
@@ -1616,7 +1858,6 @@
                     }, 500);
                 }
             });
-
         });
     </script>
 </body>
