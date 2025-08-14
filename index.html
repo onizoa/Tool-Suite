@@ -844,6 +844,10 @@
                         searchContainer.classList.remove('hidden');
                         backToSuiteBtn.classList.remove('hidden');
                         headerTitle.innerHTML = `${hotAlertsLogoSVG} <span>Hot Alerts</span>`;
+                        
+                        // FIX: Explicitly build the custom select for the title dropdown
+                        buildCustomSelect(document.querySelector('#sidebar .select-wrapper'));
+
                         cardContainer.classList.remove('loading');
                         loader.classList.add('hidden');
                         renderAllCards();
