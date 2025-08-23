@@ -91,7 +91,7 @@
         ::-webkit-scrollbar-track { background-color: transparent; }
         ::-webkit-scrollbar-thumb { background-color: var(--c-thumb); border-radius: 4px; border: 2px solid var(--c-surface); }
         ::-webkit-scrollbar-thumb:hover { background-color: var(--c-primary-variant); }
-        .sidebar-content, .card-container, .settings-container, #manageTemplatesContainer, #cdjrCatalogPage, #dealershipListPage { scrollbar-width: thin; scrollbar-color: var(--c-thumb) var(--c-surface); }
+        .sidebar-content, .card-container, .settings-container, #manageTemplatesContainer, #carCatalogPage, #dealershipListPage { scrollbar-width: thin; scrollbar-color: var(--c-thumb) var(--c-surface); }
 
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-background); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s, visibility 0.5s; }
         #splashScreen.hidden { opacity: 0; visibility: hidden; }
@@ -115,8 +115,8 @@
         .input-group { margin-bottom: 8px; }
 
         .header-btn { overflow: visible; }
-        .header-btn::after { content: attr(aria-label); position: absolute; top: calc(100% + 12px); left: 0; background-color: var(--c-primary); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; box-shadow: 0 4px 12px var(--c-shadow); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
-        .header-btn::before { content: ''; position: absolute; top: calc(100% + 2px); left: 15px; border: 5px solid transparent; border-bottom-color: var(--c-primary); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
+        .header-btn::after { content: attr(aria-label); position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); background-color: var(--c-primary); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; box-shadow: 0 4px 12px var(--c-shadow); opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
+        .header-btn::before { content: ''; position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-bottom-color: var(--c-primary); opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
         .header-btn:hover::after, .header-btn:hover::before { opacity: 1; visibility: visible; transform: translateY(0); }
         
         .select-wrapper { position: relative; width: 100%; }
@@ -163,16 +163,13 @@
         #clearSearchBtn svg { stroke: var(--c-primary-variant); transition: stroke var(--transition-speed); }
         #clearSearchBtn:hover { background-color: var(--c-primary-variant); }
         #clearSearchBtn:hover svg { stroke: #fff; }
-        .header-btn { cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--c-surface); border: 1px solid var(--c-border); position: relative; transition: background-color var(--transition-speed); }
-        .header-btn:hover { background-color: var(--c-primary-variant); }
+        .header-btn { cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--c-surface); border: 1px solid var(--c-border); position: relative; transition: background-color var(--transition-speed), opacity var(--transition-speed); }
+        .header-btn:hover { opacity: 0.7; }
+        .header-btn.active:hover { opacity: 1; }
         .header-icon { transition: transform var(--animation-speed) ease, opacity calc(var(--animation-speed) / 2) ease, stroke var(--transition-speed), fill var(--transition-speed); position: absolute; stroke: var(--c-primary-variant); fill: none; }
-        .header-btn:hover .header-icon { stroke: #fff; fill: #fff; }
-        .header-icon.moon { fill: var(--c-primary-variant); stroke: none; }
-        #themeToggle.spin .header-icon { transform: rotate(360deg); }
-        body:not(.light-mode) .header-icon.sun { display: none; }
-        body.light-mode .header-icon.moon { display: none; }
-        /*body.view-hotAlerts #hotAlertsPage .search-input {margin-left: 200px;}*/
-
+        .header-btn.active { background-color: var(--c-primary); border-color: var(--c-primary-variant); }
+        .header-btn.active .header-icon { stroke: #fff; }
+        
         .page-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transform: translateY(15px); transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s; display: flex; }
         .page-content.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0s; }
 
@@ -231,9 +228,9 @@
         .tool-card h3 { font-size: 22px; font-weight: 700; margin: 0 0 12px 0; color: var(--c-on-surface); }
         .tool-card p { font-size: 15px; color: var(--c-on-surface-variant); line-height: 1.6; margin: 0; }
 
-        #cdjrCatalogPage { flex-direction: column; padding: 40px; overflow-y: auto; }
+        #carCatalogPage { flex-direction: column; padding: 40px; overflow-y: auto; }
         .catalog-container { width: 100%; max-width: 1200px; margin: 0 auto; }
-        .catalog-search-container { margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .catalog-controls { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .catalog-search-container .relative { position: relative; }
         .catalog-tabs { display: flex; flex-wrap: wrap; justify-content: center; border-bottom: 1px solid var(--c-border); margin-bottom: 32px; }
         .catalog-tab-button { padding: 12px 24px; font-weight: 600; border: none; background: none; color: var(--c-on-surface-variant); border-bottom: 3px solid transparent; transition: color 0.3s, border-color 0.3s; font-size: 16px; }
@@ -246,6 +243,7 @@
         [data-brand-color="Ram"] .catalog-section-header { border-color: #facc15; } [data-brand-color="Ram"] .catalog-section-header h2 { color: #facc15; }
         [data-brand-color="Plymouth"] .catalog-section-header { border-color: #22d3ee; } [data-brand-color="Plymouth"] .catalog-section-header h2 { color: #22d3ee; }
         [data-brand-color="Eagle"] .catalog-section-header { border-color: #9ca3af; } [data-brand-color="Eagle"] .catalog-section-header h2 { color: #9ca3af; }
+        [data-brand-color="Infiniti"] .catalog-section-header { border-color: #a3a3a3; } [data-brand-color="Infiniti"] .catalog-section-header h2 { color: #a3a3a3; }
 
         .catalog-view-switcher { display: flex; gap: 8px; }
         .catalog-view-btn { background-color: var(--c-surface-light); border: 1px solid var(--c-border); color: var(--c-on-surface-variant); padding: 8px; border-radius: 6px; }
@@ -288,6 +286,14 @@
 
         #manageTemplatesPage .select-items {max-height: 400px;}
         
+        /* New Styles for Theme Toggle Card */
+        .tool-card-icon.theme-sun, .tool-card-icon.theme-moon {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        body:not(.light-mode) .tool-card-icon.theme-sun { display: none; }
+        body.light-mode .tool-card-icon.theme-moon { display: none; }
     </style>
     <style>
         /* Styles from tester.html for Dealership Manager */
@@ -419,16 +425,20 @@
                 </div>
             </div>
             <div class="header-controls">
-                <button id="backToSuiteBtn" class="header-btn hidden" aria-label="Back to Tool Suite">
-                    <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-                </button>
-                <button id="themeToggle" class="header-btn" aria-label="Toggle Theme">
-                    <svg class="header-icon sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
-                    <svg class="header-icon moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
-                </button>
-                <button id="signOutBtn" class="header-btn" aria-label="Sign Out">
-                    <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                </button>
+                <div id="headerNavContainer" class="flex items-center gap-5">
+                    <button id="headerNavToolSuite" class="header-btn" aria-label="Tool Suite">
+                        <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    </button>
+                    <button id="headerNavHotAlerts" class="header-btn" aria-label="Hot Alerts">
+                        <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <button id="headerNavDealershipList" class="header-btn" aria-label="Dealership List">
+                        <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    </button>
+                    <button id="headerNavCarCatalog" class="header-btn" aria-label="Car Catalog">
+                        <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -445,15 +455,28 @@
                         <h3>Dealership List</h3>
                         <p>View and manage a list of dealerships.</p>
                     </div>
-                    <div class="tool-card" id="navigateToCdjrCatalog">
+                    <div class="tool-card" id="navigateToCarCatalog">
                         <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>
-                        <h3>CDJR Catalog</h3>
-                        <p>An interactive guide to models from Chrysler, Jeep, Dodge, Ram, and more.</p>
+                        <h3>Car Catalog</h3>
+                        <p>An interactive guide to models from CDJR and INFINITI.</p>
                     </div>
                     <div class="tool-card" id="navigateToTemplateManager">
                         <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         <h3>Template Manager</h3>
                         <p>Create, edit, and delete your own custom templates for the Hot Alerts tool.</p>
+                    </div>
+                    <div class="tool-card" id="themeToggleCard">
+                        <div class="tool-card-icon-wrapper" style="width: 64px; height: 64px; margin-bottom: 20px; position: relative;">
+                            <svg class="tool-card-icon theme-sun" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                            <svg class="tool-card-icon theme-moon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                        </div>
+                        <h3>Toggle Theme</h3>
+                        <p>Switch between light and dark modes for a comfortable viewing experience.</p>
+                    </div>
+                    <div class="tool-card" id="signOutCard">
+                        <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <h3>Sign Out</h3>
+                        <p>Securely log out of your account and end your current session.</p>
                     </div>
                 </div>
             </div>
@@ -499,12 +522,20 @@
                 </div>
             </div>
 
-            <div id="cdjrCatalogPage" class="page-content">
+            <div id="carCatalogPage" class="page-content">
                 <div class="catalog-container">
-                    <div class="catalog-search-container" style="margin-top: 2rem;">
-                         <div style="position: relative;">
-                            <div class="search-icon" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
-                            <input type="text" id="catalog-search-input" placeholder="Search all vehicles (e.g., 'Viper', 'Cherokee')..." class="input-field" style="padding-left: 48px;">
+                    <div class="catalog-controls">
+                        <div class="select-wrapper">
+                            <select id="brandSelector" class="select-field">
+                                <option value="CDJR">CDJR (Chrysler, Dodge, Jeep, Ram)</option>
+                                <option value="INFINITI">INFINITI</option>
+                            </select>
+                        </div>
+                         <div class="catalog-search-container" style="margin-bottom: 0;">
+                             <div style="position: relative;">
+                                <div class="search-icon" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                                <input type="text" id="catalog-search-input" placeholder="Search all vehicles..." class="input-field" style="padding-left: 48px;">
+                            </div>
                         </div>
                     </div>
                     <div class="catalog-tabs">
@@ -797,18 +828,22 @@
             const signupForm = document.getElementById('signupForm');
             const showSignupBtn = document.getElementById('showSignup');
             const showLoginBtn = document.getElementById('showLogin');
-            const signOutBtn = document.getElementById('signOutBtn');
-
+            
             const headerTitle = document.getElementById('headerTitle');
             const searchContainer = document.getElementById('searchContainer');
-            const backToSuiteBtn = document.getElementById('backToSuiteBtn');
             const cardSearchInput = document.getElementById('cardSearchInput');
             const clearSearchBtn = document.getElementById('clearSearchBtn');
 
             const navigateToHotAlerts = document.getElementById('navigateToHotAlerts');
             const navigateToTemplateManager = document.getElementById('navigateToTemplateManager');
-            const navigateToCdjrCatalog = document.getElementById('navigateToCdjrCatalog');
+            const navigateToCarCatalog = document.getElementById('navigateToCarCatalog');
             const navigateToDealershipList = document.getElementById('navigateToDealershipList');
+
+            const headerNavContainer = document.getElementById('headerNavContainer');
+            const headerNavToolSuite = document.getElementById('headerNavToolSuite');
+            const headerNavHotAlerts = document.getElementById('headerNavHotAlerts');
+            const headerNavDealershipList = document.getElementById('headerNavDealershipList');
+            const headerNavCarCatalog = document.getElementById('headerNavCarCatalog');
 
             const cardContainer = document.getElementById('cardContainer');
             const loader = document.getElementById('loader');
@@ -830,13 +865,26 @@
                 appState.currentView = view;
                 allPageContents.forEach(page => page.classList.remove('active'));
                 document.getElementById(`${view}Page`).classList.add('active');
-                searchContainer.classList.add('hidden');
-                backToSuiteBtn.classList.add('hidden');
+                
+                searchContainer.classList.toggle('hidden', view !== 'hotAlerts');
+                headerNavContainer.classList.toggle('hidden', view === 'toolSuite');
+
+                // Handle active state for new header buttons
+                const navButtons = {
+                    toolSuite: headerNavToolSuite,
+                    hotAlerts: headerNavHotAlerts,
+                    dealershipList: headerNavDealershipList,
+                    carCatalog: headerNavCarCatalog
+                };
+                Object.values(navButtons).forEach(btn => btn?.classList.remove('active'));
+                if (navButtons[view]) {
+                    navButtons[view].classList.add('active');
+                }
 
                 const toolSuiteSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
                 const hotAlertsLogoSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`;
                 const manageTemplatesSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
-                const cdjrCatalogSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>`;
+                const carCatalogSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>`;
                 const dealershipListSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
 
                 if (view === 'toolSuite') {
@@ -847,27 +895,19 @@
                     loader.classList.remove('hidden');
                     cardContainer.appendChild(loader);
                     setTimeout(() => {
-                        searchContainer.classList.remove('hidden');
-                        backToSuiteBtn.classList.remove('hidden');
                         headerTitle.innerHTML = `${hotAlertsLogoSVG} <span>Hot Alerts</span>`;
-                        
-                        // FIX: Explicitly build the custom select for the title dropdown
                         buildCustomSelect(document.querySelector('#sidebar .select-wrapper'));
-
                         cardContainer.classList.remove('loading');
                         loader.classList.add('hidden');
                         renderAllCards();
                     }, 200);
                 } else if (view === 'manageTemplates') {
-                    backToSuiteBtn.classList.remove('hidden');
                     headerTitle.innerHTML = `${manageTemplatesSVG} <span>Template Manager</span>`;
                     renderManageTemplatesView();
-                } else if (view === 'cdjrCatalog') {
-                    backToSuiteBtn.classList.remove('hidden');
-                    headerTitle.innerHTML = `${cdjrCatalogSVG} <span>CDJR Catalog</span>`;
-                    loadCdjrCatalog();
+                } else if (view === 'carCatalog') {
+                    headerTitle.innerHTML = `${carCatalogSVG} <span>Car Catalog</span>`;
+                    initializeCarCatalog();
                 } else if (view === 'dealershipList') {
-                    backToSuiteBtn.classList.remove('hidden');
                     headerTitle.innerHTML = `${dealershipListSVG} <span>Dealership List</span>`;
                     initializeDealershipManager();
                     if (allDealerships.length > 0 && typeof renderDealershipsNow === 'function') {
@@ -951,7 +991,6 @@
                         tireSelect.appendChild(option);
                     });
                     tireSelectWrapper.appendChild(tireSelect);
-                    inCardControls.appendChild(tireSelectWrapper);
                     buildCustomSelect(tireSelectWrapper);
                 }
                 cardContainer.appendChild(card);
@@ -1239,19 +1278,31 @@
                 if (!allRequiredFilled) warning.textContent = `⚠️ Required: ${[...missingFieldNames].join(', ')}`;
             }
             
-            // --- CDJR CATALOG FUNCTIONS ---
-            const cdjrVehicleData = { "Chrysler": { "Current & Future Models": [ { "model": "Chrysler Pacifica", "years": "Minivan | 2017-Present", "description": "The modern successor to the Town & Country. Also available as a class-leading Plug-in Hybrid (PHEV)." }, { "model": "Chrysler Voyager", "years": "Minivan | 2020-Present", "description": "Initially a budget-friendly version of the Pacifica, later transitioned to a fleet-exclusive model." }, { "model": "(Upcoming EV Crossover)", "years": "Crossover SUV | 2025/2026 (Expected)", "description": "Represents the brand's future direction, pivoting towards an all-electric, premium crossover." } ], "Notable Past Models": [ { "model": "Chrysler 300 / 300C", "years": "Full-Size Sedan | 2005-2023", "description": "An iconic rear-wheel-drive American sedan known for its bold styling and available HEMI V8 power." }, { "model": "Chrysler 200", "years": "Mid-Size Sedan | 2011-2017", "description": "Successor to the Sebring, offered with an advanced all-wheel-drive system." }, { "model": "Chrysler Town & Country", "years": "Minivan | 1990-2016", "description": "The brand's flagship luxury minivan for decades, pioneering features like Stow 'n Go seating." }, { "model": "Chrysler Aspen", "years": "Full-Size SUV | 2007-2009", "description": "A short-lived luxury SUV based on the Dodge Durango, notable for its available hybrid powertrain." }, { "model": "Chrysler Concorde / LHS / 300M", "years": "Full-Size Sedan | 1993-2004", "description": "A family of influential \"cab-forward\" sedans that maximized interior space and defined 90s design." }, { "model": "Chrysler New Yorker / Imperial", "years": "Full-Size Luxury Sedan | to 1996", "description": "Long-running nameplates representing the peak of Chrysler luxury in the early 90s." }, { "model": "Chrysler Cirrus", "years": "Mid-Size Sedan | 1995-2000", "description": "A key member of the \"cloud cars\" (alongside Dodge Stratus), praised for its modern design." }, { "model": "Chrysler PT Cruiser", "years": "Compact Hatchback | 2001-2010", "description": "A cultural phenomenon, this retro-styled compact car offered unique versatility and a convertible model." }, { "model": "Chrysler Sebring", "years": "Mid-Size Sedan/Coupe/Convertible | 1995-2010", "description": "A versatile nameplate used on multiple body styles, best known for its popular convertible version." }, { "model": "Chrysler Crossfire", "years": "Sports Car | 2004-2008", "description": "A unique sports car from the Daimler-Chrysler era, based on the Mercedes-Benz SLK platform." }, { "model": "Chrysler Prowler", "years": "Sports Car | 1997-2002", "description": "A factory-built hot rod with an aluminum chassis. Initially launched as a Plymouth." } ] }, "Dodge": { "Current & Future Models": [ { "model": "Dodge Charger", "years": "Muscle Car | 2006-Present", "description": "The latest iteration offers both all-electric (Daytona) and twin-turbo I6 (Sixpack) powertrains." }, { "model": "Dodge Hornet", "years": "Compact Crossover | 2023-Present", "description": "Dodge's entry into the performance CUV segment, offering a powerful R/T PHEV model." }, { "model": "Dodge Durango", "years": "Full-Size SUV | 1998-Present", "description": "The \"three-row Charger,\" a unique SUV that blends utility with true muscle-car performance." } ], "Notable Past Models": [ { "model": "Dodge Challenger", "years": "Muscle Car | 2008-2023", "description": "A celebrated modern revival of the classic pony car, culminating in models like the Hellcat and Demon." }, { "model": "Dodge Viper", "years": "Sports Car | 1992-2017", "description": "An uncompromising, raw American supercar powered by a massive V10 engine. A true legend." }, { "model": "Dodge Dart", "years": "Compact Sedan | 2013-2016", "description": "A compact sedan based on an Alfa Romeo platform, offering distinctive style and options." }, { "model": "Dodge Journey", "years": "Mid-Size Crossover | 2009-2020", "description": "A popular and affordable crossover, often equipped with three rows of seating." }, { "model": "Dodge Caliber", "years": "Compact Hatchback | 2007-2012", "description": "The 5-door hatchback that replaced the Neon, including a high-performance SRT-4 version." }, { "model": "Dodge Nitro", "years": "Compact SUV | 2007-2012", "description": "An aggressively styled SUV based on the Jeep Liberty platform." }, { "model": "Dodge Magnum", "years": "Station Wagon | 2005-2008", "description": "A bold, rear-wheel-drive muscle wagon with Charger-inspired styling and available HEMI power." }, { "model": "Dodge Grand Caravan", "years": "Minivan | 1984-2020", "description": "The minivan that started it all, offering unparalleled value and practicality for families for over 35 years." }, { "model": "Dodge Dakota", "years": "Mid-Size Pickup | 1987-2011", "description": "A unique mid-size truck that stood out by offering an available V8 engine." }, { "model": "Dodge Ram Van / Wagon", "years": "Full-Size Van | to 2003", "description": "The classic, long-running full-size van that was a staple for work and travel." }, { "model": "Dodge Ramcharger", "years": "Full-Size SUV | to 1993", "description": "The classic two-door SUV based on the Ram pickup, a competitor to the Ford Bronco." }, { "model": "Dodge Intrepid", "years": "Full-Size Sedan | 1993-2004", "description": "The Dodge flagship of the \"cab-forward\" era, offering a huge interior and sleek styling." }, { "model": "Dodge Stratus", "years": "Mid-Size Sedan | 1995-2006", "description": "Dodge's \"cloud car\" counterpart to the Chrysler Cirrus, a popular family sedan." }, { "model": "Dodge Neon", "years": "Compact Car | 1995-2005", "description": "A fun-to-drive and affordable compact car, famous for its \"Hi\" marketing and SRT-4 variant." }, { "model": "Dodge Stealth", "years": "Sports Car | 1991-1996", "description": "A rebadged Mitsubishi 3000GT, this was a high-tech, AWD sports car that was ahead of its time." } ] }, "Jeep": { "Current & Future Models": [ { "model": "Jeep Wrangler", "years": "Off-Road SUV | 1987-Present", "description": "The undisputed icon of off-roading. Now in its JL generation, it includes the innovative 4xe Plug-in Hybrid model." }, { "model": "Jeep Gladiator", "years": "Mid-Size Pickup | 2020-Present", "description": "Combines the open-air freedom and off-road capability of a Wrangler with the utility of a pickup truck bed." }, { "model": "Jeep Grand Cherokee", "years": "Mid-Size SUV | 1993-Present", "description": "The benchmark for premium SUVs. Available in 2-row, 3-row (L), and 4xe PHEV versions." }, { "model": "Jeep Wagoneer / Grand Wagoneer", "years": "Full-Size SUV | 2022-Present", "description": "The return of a classic nameplate, representing the pinnacle of premium for the Jeep brand." }, { "model": "Jeep Compass", "years": "Compact Crossover | 2007-Present", "description": "A global compact SUV, now in its second, more refined generation." }, { "model": "Jeep Renegade", "years": "Subcompact Crossover | 2015-Present", "description": "Jeep's entry into the subcompact segment with distinctive styling." }, { "model": "Jeep Recon & Wagoneer S", "years": "Electric SUV | 2025 (Expected)", "description": "Spearheading Jeep's electric future. The Recon is a rugged EV, while the Wagoneer S is a sleek, performance luxury EV." } ], "Notable Past Models": [ { "model": "Jeep Cherokee (XJ & KL)", "years": "Compact SUV | 1984-2001 & 2014-2023", "description": "The original XJ defined the modern SUV. The name was revived for the modern KL crossover." }, { "model": "Jeep Comanche (MJ)", "years": "Compact Pickup | 1985-1992", "description": "The pickup truck version of the legendary Cherokee XJ, prized by collectors." }, { "model": "Jeep Liberty", "years": "Compact SUV | 2002-2012", "description": "The successor to the classic Cherokee, it featured independent front suspension for two generations." }, { "model": "Jeep Commander", "years": "Mid-Size SUV | 2006-2010", "description": "A rugged, boxy, three-row SUV based on the Grand Cherokee platform." }, { "model": "Jeep Patriot", "years": "Compact Crossover | 2007-2017", "description": "A more traditionally styled, boxy counterpart to the first-generation Compass." } ] }, "Ram": { "Current & Future Models": [ { "model": "Ram 1500", "years": "Full-Size Pickup | 2010-Present", "description": "A leader in the truck segment, praised for its benchmark interiors and comfortable ride." }, { "model": "Ram 1500 REV / Ramcharger", "years": "Electric Pickup | 2025 (Expected)", "description": "Ram's two-pronged approach to electrification: the all-electric REV and the innovative Ramcharger range-extended EV." }, { "model": "Ram 2500/3500 Heavy Duty", "years": "Heavy Duty Pickup | 2010-Present", "description": "The workhorses of the lineup, built for extreme towing with the available Cummins diesel engine." }, { "model": "Ram ProMaster", "years": "Full-Size Van | 2014-Present", "description": "A highly capable and versatile front-wheel-drive commercial van based on the Fiat Ducato." } ], "Notable Past Models": [ { "model": "Dodge Ram (Pre-2010)", "years": "Full-Size Pickup | 1981-2009", "description": "The truck line before Ram became a standalone brand. The 2nd Gen (1994-2001) revolutionized truck design." }, { "model": "Ram ProMaster City", "years": "Compact Van | 2015-2022", "description": "A smaller, more maneuverable work van designed for urban environments, based on the Fiat Doblò." } ] }, "Plymouth": { "Notable Past Models": [ { "model": "Plymouth Prowler", "years": "Sports Car | 1997-2001", "description": "The original branding for the retro-styled factory hot rod before it became a Chrysler." }, { "model": "Plymouth Neon", "years": "Compact Car | 1995-2001", "description": "The Plymouth version of the popular and fun-to-drive compact sedan and coupe." }, { "model": "Plymouth Voyager / Grand Voyager", "years": "Minivan | to 2000", "description": "The Plymouth version of the groundbreaking minivan that created a segment." }, { "model": "Plymouth Breeze", "years": "Mid-Size Sedan | 1996-2000", "description": "The Plymouth \"cloud car\" sibling to the Chrysler Cirrus and Dodge Stratus." }, { "model": "Plymouth Acclaim", "years": "Mid-Size Sedan | to 1995", "description": "A reliable and popular sedan from the K-car platform lineage." }, { "model": "Plymouth Laser", "years": "Sports Coupe | to 1994", "description": "A sibling to the Mitsubishi Eclipse and Eagle Talon, part of the Diamond-Star Motors venture." } ] }, "Eagle": { "Notable Past Models": [ { "model": "Eagle Talon", "years": "Sports Coupe | to 1998", "description": "A popular sports coupe from the Diamond-Star Motors venture, known for its available turbo and AWD." }, { "model": "Eagle Vision", "years": "Full-Size Sedan | 1993-1997", "description": "The Eagle version of the innovative \"cab-forward\" sedans, marketed as a sportier alternative." } ] } };
+            // --- CAR CATALOG FUNCTIONS ---
+            const carCatalogData = {
+                "CDJR": { "Chrysler": { "Current & Future Models": [ { "model": "Chrysler Pacifica", "years": "Minivan | 2017-Present", "description": "The modern successor to the Town & Country. Also available as a class-leading Plug-in Hybrid (PHEV)." }, { "model": "Chrysler Voyager", "years": "Minivan | 2020-Present", "description": "Initially a budget-friendly version of the Pacifica, later transitioned to a fleet-exclusive model." }, { "model": "(Upcoming EV Crossover)", "years": "Crossover SUV | 2025/2026 (Expected)", "description": "Represents the brand's future direction, pivoting towards an all-electric, premium crossover." } ], "Notable Past Models": [ { "model": "Chrysler 300 / 300C", "years": "Full-Size Sedan | 2005-2023", "description": "An iconic rear-wheel-drive American sedan known for its bold styling and available HEMI V8 power." }, { "model": "Chrysler 200", "years": "Mid-Size Sedan | 2011-2017", "description": "Successor to the Sebring, offered with an advanced all-wheel-drive system." }, { "model": "Chrysler Town & Country", "years": "Minivan | 1990-2016", "description": "The brand's flagship luxury minivan for decades, pioneering features like Stow 'n Go seating." }, { "model": "Chrysler Aspen", "years": "Full-Size SUV | 2007-2009", "description": "A short-lived luxury SUV based on the Dodge Durango, notable for its available hybrid powertrain." }, { "model": "Chrysler Concorde / LHS / 300M", "years": "Full-Size Sedan | 1993-2004", "description": "A family of influential \"cab-forward\" sedans that maximized interior space and defined 90s design." }, { "model": "Chrysler New Yorker / Imperial", "years": "Full-Size Luxury Sedan | to 1996", "description": "Long-running nameplates representing the peak of Chrysler luxury in the early 90s." }, { "model": "Chrysler Cirrus", "years": "Mid-Size Sedan | 1995-2000", "description": "A key member of the \"cloud cars\" (alongside Dodge Stratus), praised for its modern design." }, { "model": "Chrysler PT Cruiser", "years": "Compact Hatchback | 2001-2010", "description": "A cultural phenomenon, this retro-styled compact car offered unique versatility and a convertible model." }, { "model": "Chrysler Sebring", "years": "Mid-Size Sedan/Coupe/Convertible | 1995-2010", "description": "A versatile nameplate used on multiple body styles, best known for its popular convertible version." }, { "model": "Chrysler Crossfire", "years": "Sports Car | 2004-2008", "description": "A unique sports car from the Daimler-Chrysler era, based on the Mercedes-Benz SLK platform." }, { "model": "Chrysler Prowler", "years": "Sports Car | 1997-2002", "description": "A factory-built hot rod with an aluminum chassis. Initially launched as a Plymouth." } ] }, "Dodge": { "Current & Future Models": [ { "model": "Dodge Charger", "years": "Muscle Car | 2006-Present", "description": "The latest iteration offers both all-electric (Daytona) and twin-turbo I6 (Sixpack) powertrains." }, { "model": "Dodge Hornet", "years": "Compact Crossover | 2023-Present", "description": "Dodge's entry into the performance CUV segment, offering a powerful R/T PHEV model." }, { "model": "Dodge Durango", "years": "Full-Size SUV | 1998-Present", "description": "The \"three-row Charger,\" a unique SUV that blends utility with true muscle-car performance." } ], "Notable Past Models": [ { "model": "Dodge Challenger", "years": "Muscle Car | 2008-2023", "description": "A celebrated modern revival of the classic pony car, culminating in models like the Hellcat and Demon." }, { "model": "Dodge Viper", "years": "Sports Car | 1992-2017", "description": "An uncompromising, raw American supercar powered by a massive V10 engine. A true legend." }, { "model": "Dodge Dart", "years": "Compact Sedan | 2013-2016", "description": "A compact sedan based on an Alfa Romeo platform, offering distinctive style and options." }, { "model": "Dodge Journey", "years": "Mid-Size Crossover | 2009-2020", "description": "A popular and affordable crossover, often equipped with three rows of seating." }, { "model": "Dodge Caliber", "years": "Compact Hatchback | 2007-2012", "description": "The 5-door hatchback that replaced the Neon, including a high-performance SRT-4 version." }, { "model": "Dodge Nitro", "years": "Compact SUV | 2007-2012", "description": "An aggressively styled SUV based on the Jeep Liberty platform." }, { "model": "Dodge Magnum", "years": "Station Wagon | 2005-2008", "description": "A bold, rear-wheel-drive muscle wagon with Charger-inspired styling and available HEMI power." }, { "model": "Dodge Grand Caravan", "years": "Minivan | 1984-2020", "description": "The minivan that started it all, offering unparalleled value and practicality for families for over 35 years." }, { "model": "Dodge Dakota", "years": "Mid-Size Pickup | 1987-2011", "description": "A unique mid-size truck that stood out by offering an available V8 engine." }, { "model": "Dodge Ram Van / Wagon", "years": "Full-Size Van | to 2003", "description": "The classic, long-running full-size van that was a staple for work and travel." }, { "model": "Dodge Ramcharger", "years": "Full-Size SUV | to 1993", "description": "The classic two-door SUV based on the Ram pickup, a competitor to the Ford Bronco." }, { "model": "Dodge Intrepid", "years": "Full-Size Sedan | 1993-2004", "description": "The Dodge flagship of the \"cab-forward\" era, offering a huge interior and sleek styling." }, { "model": "Dodge Stratus", "years": "Mid-Size Sedan | 1995-2006", "description": "Dodge's \"cloud car\" counterpart to the Chrysler Cirrus, a popular family sedan." }, { "model": "Dodge Neon", "years": "Compact Car | 1995-2005", "description": "A fun-to-drive and affordable compact car, famous for its \"Hi\" marketing and SRT-4 variant." }, { "model": "Dodge Stealth", "years": "Sports Car | 1991-1996", "description": "A rebadged Mitsubishi 3000GT, this was a high-tech, AWD sports car that was ahead of its time." } ] }, "Jeep": { "Current & Future Models": [ { "model": "Jeep Wrangler", "years": "Off-Road SUV | 1987-Present", "description": "The undisputed icon of off-roading. Now in its JL generation, it includes the innovative 4xe Plug-in Hybrid model." }, { "model": "Jeep Gladiator", "years": "Mid-Size Pickup | 2020-Present", "description": "Combines the open-air freedom and off-road capability of a Wrangler with the utility of a pickup truck bed." }, { "model": "Jeep Grand Cherokee", "years": "Mid-Size SUV | 1993-Present", "description": "The benchmark for premium SUVs. Available in 2-row, 3-row (L), and 4xe PHEV versions." }, { "model": "Jeep Wagoneer / Grand Wagoneer", "years": "Full-Size SUV | 2022-Present", "description": "The return of a classic nameplate, representing the pinnacle of premium for the Jeep brand." }, { "model": "Jeep Compass", "years": "Compact Crossover | 2007-Present", "description": "A global compact SUV, now in its second, more refined generation." }, { "model": "Jeep Renegade", "years": "Subcompact Crossover | 2015-Present", "description": "Jeep's entry into the subcompact segment with distinctive styling." }, { "model": "Jeep Recon & Wagoneer S", "years": "Electric SUV | 2025 (Expected)", "description": "Spearheading Jeep's electric future. The Recon is a rugged EV, while the Wagoneer S is a sleek, performance luxury EV." } ], "Notable Past Models": [ { "model": "Jeep Cherokee (XJ & KL)", "years": "Compact SUV | 1984-2001 & 2014-2023", "description": "The original XJ defined the modern SUV. The name was revived for the modern KL crossover." }, { "model": "Jeep Comanche (MJ)", "years": "Compact Pickup | 1985-1992", "description": "The pickup truck version of the legendary Cherokee XJ, prized by collectors." }, { "model": "Jeep Liberty", "years": "Compact SUV | 2002-2012", "description": "The successor to the classic Cherokee, it featured independent front suspension for two generations." }, { "model": "Jeep Commander", "years": "Mid-Size SUV | 2006-2010", "description": "A rugged, boxy, three-row SUV based on the Grand Cherokee platform." }, { "model": "Jeep Patriot", "years": "Compact Crossover | 2007-2017", "description": "A more traditionally styled, boxy counterpart to the first-generation Compass." } ] }, "Ram": { "Current & Future Models": [ { "model": "Ram 1500", "years": "Full-Size Pickup | 2010-Present", "description": "A leader in the truck segment, praised for its benchmark interiors and comfortable ride." }, { "model": "Ram 1500 REV / Ramcharger", "years": "Electric Pickup | 2025 (Expected)", "description": "Ram's two-pronged approach to electrification: the all-electric REV and the innovative Ramcharger range-extended EV." }, { "model": "Ram 2500/3500 Heavy Duty", "years": "Heavy Duty Pickup | 2010-Present", "description": "The workhorses of the lineup, built for extreme towing with the available Cummins diesel engine." }, { "model": "Ram ProMaster", "years": "Full-Size Van | 2014-Present", "description": "A highly capable and versatile front-wheel-drive commercial van based on the Fiat Ducato." } ], "Notable Past Models": [ { "model": "Dodge Ram (Pre-2010)", "years": "Full-Size Pickup | 1981-2009", "description": "The truck line before Ram became a standalone brand. The 2nd Gen (1994-2001) revolutionized truck design." }, { "model": "Ram ProMaster City", "years": "Compact Van | 2015-2022", "description": "A smaller, more maneuverable work van designed for urban environments, based on the Fiat Doblò." } ] }, "Plymouth": { "Notable Past Models": [ { "model": "Plymouth Prowler", "years": "Sports Car | 1997-2001", "description": "The original branding for the retro-styled factory hot rod before it became a Chrysler." }, { "model": "Plymouth Neon", "years": "Compact Car | 1995-2001", "description": "The Plymouth version of the popular and fun-to-drive compact sedan and coupe." }, { "model": "Plymouth Voyager / Grand Voyager", "years": "Minivan | to 2000", "description": "The Plymouth version of the groundbreaking minivan that created a segment." }, { "model": "Plymouth Breeze", "years": "Mid-Size Sedan | 1996-2000", "description": "The Plymouth \"cloud car\" sibling to the Chrysler Cirrus and Dodge Stratus." }, { "model": "Plymouth Acclaim", "years": "Mid-Size Sedan | to 1995", "description": "A reliable and popular sedan from the K-car platform lineage." }, { "model": "Plymouth Laser", "years": "Sports Coupe | to 1994", "description": "A sibling to the Mitsubishi Eclipse and Eagle Talon, part of the Diamond-Star Motors venture." } ] }, "Eagle": { "Notable Past Models": [ { "model": "Eagle Talon", "years": "Sports Coupe | to 1998", "description": "A popular sports coupe from the Diamond-Star Motors venture, known for its available turbo and AWD." }, { "model": "Eagle Vision", "years": "Full-Size Sedan | 1993-1997", "description": "The Eagle version of the innovative \"cab-forward\" sedans, marketed as a sportier alternative." } ] } },
+                "INFINITI": { "Infiniti": { "Current Models": [ { "model": "INFINITI Q50", "years": "Sedan | 2014-Present", "description": "The brand's sport sedan, successor to the G-series, offering a blend of performance and luxury with a potent twin-turbo V6." }, { "model": "INFINITI QX50", "years": "Crossover SUV | 2014-Present", "description": "A compact luxury crossover featuring the world's first production variable compression ratio (VC-Turbo) engine." }, { "model": "INFINITI QX55", "years": "Crossover Coupe | 2022-Present", "description": "A stylish crossover with a dramatic, coupe-like roofline inspired by the iconic FX series." }, { "model": "INFINITI QX60", "years": "SUV | 2014-Present", "description": "A premium three-row, seven-passenger SUV designed for families, offering a comfortable and luxurious interior." }, { "model": "INFINITI QX80", "years": "Full-Size SUV | 2014-Present", "description": "The flagship full-size SUV with a commanding presence, robust V8 power, and seating for up to eight passengers." } ], "Discontinued Models": [ { "model": "INFINITI G-Series (G35/G37)", "years": "Sedan, Coupe, Convertible | 1991-2015", "description": "A cornerstone of the brand, celebrated for its sporty rear-wheel-drive dynamics and powerful V6 engines." }, { "model": "INFINITI Q60", "years": "Coupe, Convertible | 2014-2022", "description": "The successor to the G-series coupe, offering striking styling and potent twin-turbo V6 performance." }, { "model": "INFINITI Q70 (M-Series)", "years": "Sedan | 2003-2019", "description": "The brand's mid-size luxury sedan, available with V6, V8, and hybrid powertrains." }, { "model": "INFINITI FX-Series (FX35/FX50)", "years": "Crossover SUV | 2003-2013", "description": "A groundbreaking and aggressively styled performance crossover, often called the 'Bionic Cheetah'." }, { "model": "INFINITI QX70", "years": "Crossover SUV | 2014-2017", "description": "The renamed successor to the popular FX-Series, continuing its legacy of sporty performance." }, { "model": "INFINITI EX-Series (EX35)", "years": "Crossover SUV | 2008-2013", "description": "A compact luxury crossover, notable for introducing the Around View Monitor. Later renamed QX50." }, { "model": "INFINITI JX35", "years": "SUV | 2013", "description": "A seven-passenger crossover introduced for one model year before being renamed the QX60." }, { "model": "INFINITI QX30", "years": "Crossover SUV | 2017-2019", "description": "A compact luxury crossover developed in collaboration with Mercedes-Benz." }, { "model": "INFINITI Q45", "years": "Sedan | 1990-2006", "description": "The original flagship full-size luxury sedan, known for its powerful V8 engine and advanced features." } ] } }
+            };
 
-            function populateCdjrCatalog(data) {
+            function renderCatalogContent(brandKey) {
                 const contentArea = document.getElementById('catalog-content-area');
-                if (!contentArea) return;
-                contentArea.innerHTML = ''; 
-                Object.keys(data).forEach(brand => {
+                const tabsContainer = document.querySelector('.catalog-tabs');
+                const data = carCatalogData[brandKey];
+                if (!contentArea || !data) return;
+
+                contentArea.innerHTML = '';
+                tabsContainer.classList.toggle('hidden', brandKey !== 'CDJR');
+
+                const brandsToRender = (brandKey === 'CDJR') ? Object.keys(data) : [Object.keys(data)[0]];
+                
+                brandsToRender.forEach((brand, index) => {
                     const tabContent = document.createElement('div');
                     tabContent.id = `catalog-${brand}`;
                     tabContent.className = 'catalog-tab-content';
-                    if (brand !== 'Chrysler') tabContent.classList.add('hidden');
-                    
+                    if (brandKey === 'CDJR' && index !== 0) {
+                        tabContent.classList.add('hidden');
+                    }
+
                     const brandData = data[brand];
                     Object.keys(brandData).forEach(sectionTitle => {
                         const section = document.createElement('div');
@@ -1283,20 +1334,37 @@
                 });
             }
 
-            function loadCdjrCatalog() { 
-                populateCdjrCatalog(cdjrVehicleData);
-                if (!catalogListenersAttached) { 
-                    attachCatalogEventListeners(); 
-                    catalogListenersAttached = true; 
-                } 
+            function initializeCarCatalog() { 
+                if (catalogListenersAttached) {
+                    // If already initialized, just ensure the correct view is rendered
+                    const brandSelector = document.getElementById('brandSelector');
+                    renderCatalogContent(brandSelector.value);
+                    return;
+                }
+                
+                // Build custom select for the new brand selector
+                const brandSelectorWrapper = document.querySelector('#carCatalogPage .select-wrapper');
+                buildCustomSelect(brandSelectorWrapper);
+
+                attachCarCatalogEventListeners(); 
+                catalogListenersAttached = true; 
+                renderCatalogContent('CDJR'); // Initial render
             }
-            function attachCatalogEventListeners() {
-                const page = document.getElementById('cdjrCatalogPage');
+
+            function attachCarCatalogEventListeners() {
+                const page = document.getElementById('carCatalogPage');
                 if (!page) return;
+                const brandSelector = page.querySelector('#brandSelector');
                 const tabsContainer = page.querySelector('.catalog-tabs');
                 const searchInput = page.querySelector('#catalog-search-input');
                 const noResultsMessage = page.querySelector('#catalog-no-results');
                 const contentArea = page.querySelector('#catalog-content-area');
+
+                brandSelector.addEventListener('change', () => {
+                    searchInput.value = ''; // Clear search on brand change
+                    renderCatalogContent(brandSelector.value);
+                    noResultsMessage.classList.add('hidden');
+                });
 
                 tabsContainer.addEventListener('click', e => { 
                     if (e.target.matches('.catalog-tab-button')) { 
@@ -1308,7 +1376,6 @@
                         contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.add('hidden')); 
                         contentArea.querySelector(`#catalog-${tabId}`).classList.remove('hidden'); 
                         
-                        // Make sure all cards and sections within the active tab are visible
                         contentArea.querySelectorAll('.vehicle-card, .catalog-view-section').forEach(el => el.classList.remove('hidden'));
                         noResultsMessage.classList.add('hidden');
                     } 
@@ -1320,42 +1387,41 @@
                     const allSections = contentArea.querySelectorAll('.catalog-view-section');
                     let visibleCount = 0;
                     let firstMatchBrand = null;
+                    const isCdjr = brandSelector.value === 'CDJR';
 
-                    if (searchTerm) {
-                        // Show all tab content containers to search through them
+                    if (searchTerm && isCdjr) {
                         contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.remove('hidden'));
+                    }
 
-                        allCards.forEach(card => {
-                            const isMatch = card.dataset.model.includes(searchTerm);
-                            card.classList.toggle('hidden', !isMatch);
-                            if (isMatch) {
-                                visibleCount++;
-                                if (!firstMatchBrand) {
-                                    firstMatchBrand = card.dataset.brand;
-                                }
+                    allCards.forEach(card => {
+                        const isMatch = card.dataset.model.includes(searchTerm);
+                        card.classList.toggle('hidden', !isMatch);
+                        if (isMatch) {
+                            visibleCount++;
+                            if (!firstMatchBrand && isCdjr) {
+                                firstMatchBrand = card.dataset.brand;
                             }
-                        });
-
-                        // Update the active tab based on the first search result
-                        if (firstMatchBrand) {
-                            tabsContainer.querySelector('.tab-active')?.classList.remove('tab-active');
-                            tabsContainer.querySelector(`[data-tab="${firstMatchBrand}"]`)?.classList.add('tab-active');
                         }
+                    });
 
-                        // Hide sections that have no visible cards
-                        allSections.forEach(section => {
-                            const hasVisibleChildren = section.querySelector('.vehicle-card:not(.hidden)');
-                            section.classList.toggle('hidden', !hasVisibleChildren);
-                        });
-                    } else {
-                        // If search is cleared, reset to the active tab's view
-                        const activeTab = tabsContainer.querySelector('.tab-active')?.dataset.tab || 'Chrysler';
-                        allCards.forEach(card => card.classList.remove('hidden'));
-                        allSections.forEach(section => section.classList.remove('hidden'));
-                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => {
-                            p.classList.toggle('hidden', p.id !== `catalog-${activeTab}`);
-                        });
-                        visibleCount = 1; // Prevent "no results" from showing
+                    if (firstMatchBrand && isCdjr) {
+                        tabsContainer.querySelector('.tab-active')?.classList.remove('tab-active');
+                        tabsContainer.querySelector(`[data-tab="${firstMatchBrand}"]`)?.classList.add('tab-active');
+                    }
+
+                    allSections.forEach(section => {
+                        const hasVisibleChildren = section.querySelector('.vehicle-card:not(.hidden)');
+                        section.classList.toggle('hidden', !hasVisibleChildren);
+                    });
+                    
+                    if (!searchTerm) {
+                        if(isCdjr) {
+                            const activeTab = tabsContainer.querySelector('.tab-active')?.dataset.tab || 'Chrysler';
+                            contentArea.querySelectorAll('.catalog-tab-content').forEach(p => {
+                                p.classList.toggle('hidden', p.id !== `catalog-${activeTab}`);
+                            });
+                        }
+                        visibleCount = 1; 
                     }
 
                     noResultsMessage.classList.toggle('hidden', visibleCount > 0 || !searchTerm);
@@ -1787,16 +1853,44 @@
                 if (isInitialized) return;
                 isInitialized = true;
                 
+                const themeToggleCard = document.getElementById('themeToggleCard');
+                const signOutCard = document.getElementById('signOutCard');
+
+                // Card navigation
                 navigateToHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
                 navigateToTemplateManager.addEventListener('click', () => renderCurrentView('manageTemplates'));
-                navigateToCdjrCatalog.addEventListener('click', () => renderCurrentView('cdjrCatalog'));
+                navigateToCarCatalog.addEventListener('click', () => renderCurrentView('carCatalog'));
                 navigateToDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
-                backToSuiteBtn.addEventListener('click', () => renderCurrentView('toolSuite'));
+                
+                // Header navigation
+                headerNavToolSuite.addEventListener('click', () => renderCurrentView('toolSuite'));
+                headerNavHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
+                headerNavDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
+                headerNavCarCatalog.addEventListener('click', () => renderCurrentView('carCatalog'));
 
                 document.getElementById('phoneNumber').addEventListener('input', (e) => { const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/); e.target.value = !x[2] ? x[1] : `(${x[1]}) ${x[2]}` + (x[3] ? `-${x[3]}` : ''); });
                 document.getElementById('vin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); });
-                const themeToggle = document.getElementById('themeToggle');
-                themeToggle.addEventListener('click', () => { const isLight = body.classList.toggle('light-mode'); saveUserPreference('theme', isLight ? 'light' : 'dark'); themeToggle.classList.add('spin'); setTimeout(() => themeToggle.classList.remove('spin'), 500); });
+                
+                themeToggleCard.addEventListener('click', () => {
+                    const isLight = body.classList.toggle('light-mode');
+                    saveUserPreference('theme', isLight ? 'light' : 'dark');
+                    
+                    const iconContainer = themeToggleCard.querySelector('.tool-card-icon-wrapper');
+                    iconContainer.style.transition = 'transform 0.5s ease';
+                    iconContainer.style.transform = 'rotate(360deg)';
+                    setTimeout(() => {
+                        iconContainer.style.transition = '';
+                        iconContainer.style.transform = '';
+                    }, 500);
+                });
+
+                signOutCard.addEventListener('click', () => {
+                    showConfirmationModal('Sign Out', 'Are you sure you want to sign out?', async () => {
+                        await signOut(auth);
+                        hideConfirmationModal();
+                        showToast("You have been signed out.");
+                    });
+                });
                 
                 cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
                 clearSearchBtn.addEventListener('click', () => { cardSearchInput.value = ''; cardSearchInput.dispatchEvent(new Event('keyup')); });
@@ -1814,7 +1908,6 @@
             // --- Authentication Flow ---
             loginForm.addEventListener('submit', async (e) => { e.preventDefault(); try { await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value); justAuthenticated = true; } catch (error) { showToast(error.message, true); } });
             signupForm.addEventListener('submit', async (e) => { e.preventDefault(); try { await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value); justAuthenticated = true; } catch (error) { showToast(error.message, true); } });
-            signOutBtn.addEventListener('click', () => { showConfirmationModal( 'Sign Out', 'Are you sure you want to sign out?', async () => { await signOut(auth); hideConfirmationModal(); showToast("You have been signed out."); }); });
             showSignupBtn.addEventListener('click', () => { loginForm.classList.add('hidden'); signupForm.classList.remove('hidden'); });
             showLoginBtn.addEventListener('click', () => { signupForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
             
@@ -1872,6 +1965,3 @@
     </script>
 </body>
 </html>
-
-
-
