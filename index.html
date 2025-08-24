@@ -1613,7 +1613,9 @@
                 brandSidebar.addEventListener('click', e => {
                     const brandBtn = e.target.closest('.brand-btn');
                     if (!brandBtn) return;
-                    
+
+                        document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
+
                     const brand = brandBtn.dataset.brand;
                     
                     document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
@@ -1654,6 +1656,8 @@
                 });
 
                 searchInput.addEventListener('input', e => {
+                    document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
+
                     const searchTerm = e.target.value.toLowerCase().trim();
                     
                     // Show or hide the clear button based on input
