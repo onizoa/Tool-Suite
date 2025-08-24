@@ -136,7 +136,7 @@
 
         .input-field, textarea { width: 100%; padding: 11px 16px; background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; color: var(--c-on-surface); font-family: var(--font-family-sans); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
         .input-field::placeholder, textarea::placeholder { color: var(--c-on-surface-variant); }
-        .input-field:focus, textarea:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
+        .search-input:focus, .input-field:focus, textarea:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
         .input-field.missing, .select-selected.missing { border-color: var(--c-error) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-error) 20%, transparent) !important; animation: shake 0.3s; }
         
         .sidebar-footer { padding-top: 16px; border-top: 1px solid var(--c-border); }
@@ -157,12 +157,14 @@
         .header-title .header-page-icon { width: 28px; height: 28px; stroke: var(--c-on-surface); }
         .header-controls { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
         .search-container { position: relative; width: 100%; max-width: 500px; transition: opacity var(--animation-speed), visibility var(--animation-speed); }
-        .search-input { width: 100%; padding: 12px 40px 12px 48px; border-radius: 20px; border: 1px solid var(--c-border); background-color: var(--c-background); color: var(--c-on-surface); font-size: 14px; outline: none; }
+        .search-input { width: 100%; padding: 12px 64px 12px 48px; border-radius: 8px; border: 1px solid var(--c-border); background-color: var(--c-background); color: var(--c-on-surface); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: var(--c-on-surface); opacity: 0.5; z-index: 1; }
-        #clearSearchBtn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 60px; height: 30px; background-color: var(--c-surface); border-radius: 9999px; border: 1px solid var(--c-border); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background-color var(--transition-speed); }
-        #clearSearchBtn svg { stroke: var(--c-primary-variant); transition: stroke var(--transition-speed); }
-        #clearSearchBtn:hover { background-color: var(--c-primary-variant); }
-        #clearSearchBtn:hover svg { stroke: #fff; }
+
+        #catalog-search-input {padding-right: 4rem; /* Make space for the clear button */}
+        #catalog-clear-search-btn {color: var(--c-on-surface-variant);transition: color 0.2s;}
+        #catalog-clear-search-btn:hover {color: var(--c-primary);}
+        #clearSearchBtn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); z-index: 2; cursor: pointer; color: var(--c-on-surface-variant); transition: color 0.2s; background: none; border: none; padding: 4px 8px; }
+        #clearSearchBtn:hover { color: var(--c-primary); }
         .header-btn { cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--c-surface); border: 1px solid var(--c-border); position: relative; transition: background-color var(--transition-speed), opacity var(--transition-speed); }
         .header-btn:hover { opacity: 0.7; }
         .header-btn.active:hover { opacity: 1; }
@@ -227,14 +229,20 @@
         .tool-card-icon { width: 64px; height: 64px; margin-bottom: 20px; color: var(--c-primary); }
         .tool-card h3 { font-size: 22px; font-weight: 700; margin: 0 0 12px 0; color: var(--c-on-surface); }
         .tool-card p { font-size: 15px; color: var(--c-on-surface-variant); line-height: 1.6; margin: 0; }
-
-        #carCatalogPage { flex-direction: column; padding: 40px; overflow-y: auto; }
-        .catalog-container { width: 100%; max-width: 1200px; margin: 0 auto; }
-        .catalog-controls { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .catalog-search-container .relative { position: relative; }
-        .catalog-tabs { display: flex; flex-wrap: wrap; justify-content: center; border-bottom: 1px solid var(--c-border); margin-bottom: 32px; }
-        .catalog-tab-button { padding: 12px 24px; font-weight: 600; border: none; background: none; color: var(--c-on-surface-variant); border-bottom: 3px solid transparent; transition: color 0.3s, border-color 0.3s; font-size: 16px; }
-        .catalog-tab-button.tab-active { color: var(--c-primary); border-bottom-color: var(--c-primary); }
+        
+        /* START: New Car Catalog Styles */
+        #carCatalogPage { padding: 0; }
+        .catalog-sidebar { width: 256px; background-color: var(--c-surface); border-right: 1px solid var(--c-border); padding: 16px; overflow-y: auto; flex-shrink: 0; }
+        .catalog-sidebar h2 { font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem; color: var(--c-on-surface); }
+        .brand-btn { padding: 8px 12px; border-radius: 6px; transition: background-color 0.2s, color 0.2s; display: block; width: 100%; text-align: left; font-weight: 600; color: var(--c-on-surface); }
+        .brand-btn:hover, .brand-btn.active { background-color: var(--c-surface-light); color: var(--c-primary); }
+        .tab-btn { padding: 6px 10px; font-size: 14px; color: var(--c-on-surface-variant); border-radius: 4px; display: block; width: 100%; text-align: left; transition: background-color 0.2s, color 0.2s; }
+        .tab-btn:hover, .tab-btn.active { background-color: var(--c-surface-light); color: var(--c-primary); }
+        .catalog-main-content { flex: 1 1 0%; display: flex; flex-direction: column; min-height: 0; }
+        .catalog-global-search { padding: 16px; border-bottom: 1px solid var(--c-border); }
+        #catalog-content-area { padding: 24px; overflow-y: auto; flex: 1 1 0%; position: relative; }
+        /* END: New Car Catalog Styles */
+        
         .catalog-view-section { margin-bottom: 40px; }
         .catalog-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 24px; border-bottom: 2px solid; }
         [data-brand-color="Chrysler"] .catalog-section-header { border-color: #00aaff; } [data-brand-color="Chrysler"] .catalog-section-header h2 { color: #00aaff; }
@@ -385,6 +393,9 @@
         }
         #dealershipListPage .action-btn.edit-btn:hover { color: var(--c-primary); }
         #dealershipListPage .action-btn.delete-btn:hover { color: var(--c-error); }
+        /* Style for Dealership search clear button hover */
+        #dealershipListPage #clear-search-btn span {transition: color 0.2s;}
+        #dealershipListPage #clear-search-btn:hover span {color: var(--c-primary);}
     </style>
 </head>
 <body>
@@ -421,11 +432,11 @@
                 <div class="search-container hidden" id="searchContainer">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input type="text" id="cardSearchInput" class="search-input" placeholder="Search templates...">
-                    <button id="clearSearchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button id="clearSearchBtn" class="text-sm font-medium hidden">Clear</button>
                 </div>
             </div>
             <div class="header-controls">
-                <div id="headerNavContainer" class="flex items-center gap-5">
+                <div id="headerNavContainer" class="flex items-center gap-4">
                     <button id="headerNavToolSuite" class="header-btn" aria-label="Tool Suite">
                         <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                     </button>
@@ -523,34 +534,41 @@
             </div>
 
             <div id="carCatalogPage" class="page-content">
-                <div class="catalog-container">
-                    <div class="catalog-controls">
-                        <div class="select-wrapper">
-                            <select id="brandSelector" class="select-field">
-                                <option value="CDJR">CDJR (Chrysler, Dodge, Jeep, Ram)</option>
-                                <option value="INFINITI">INFINITI</option>
-                            </select>
-                        </div>
-                         <div class="catalog-search-container" style="margin-bottom: 0;">
-                             <div style="position: relative;">
-                                <div class="search-icon" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
-                                <input type="text" id="catalog-search-input" placeholder="Search all vehicles..." class="input-field" style="padding-left: 48px;">
+                <aside class="catalog-sidebar">
+                    <h2 class="text-lg font-bold mb-4">Brands</h2>
+                    <ul id="brandSidebar" class="space-y-2">
+                        <li>
+                            <button data-brand="CDJR" class="brand-btn w-full text-left font-semibold">CDJR</button>
+                            <ul id="cdjrTabs" class="ml-4 mt-2 hidden space-y-1">
+                                <li><button class="tab-btn" data-tab="Chrysler">Chrysler</button></li>
+                                <li><button class="tab-btn" data-tab="Dodge">Dodge</button></li>
+                                <li><button class="tab-btn" data-tab="Jeep">Jeep</button></li>
+                                <li><button class="tab-btn" data-tab="Ram">Ram</button></li>
+                                <li><button class="tab-btn" data-tab="Plymouth">Plymouth</button></li>
+                                <li><button class="tab-btn" data-tab="Eagle">Eagle</button></li>
+                            </ul>
+                        </li>
+                        <li><button data-brand="INFINITI" class="brand-btn w-full text-left font-semibold">INFINITI</button></li>
+                    </ul>
+                </aside>
+
+                <div class="catalog-main-content">
+                    <div class="catalog-global-search">
+                        <div class="relative max-w-lg mx-auto">
+                            <div class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             </div>
+                         <input type="text" id="catalog-search-input" placeholder="Search all vehicles..." class="input-field w-full pl-10">
+                            <button id="catalog-clear-search-btn" class="absolute top-1/2 -translate-y-1/2 right-2 hidden text-sm font-medium" aria-label="Clear search">
+                                Clear
+                            </button>
                         </div>
                     </div>
-                    <div class="catalog-tabs">
-                        <button data-tab="Chrysler" class="catalog-tab-button tab-active">Chrysler</button>
-                        <button data-tab="Dodge" class="catalog-tab-button">Dodge</button>
-                        <button data-tab="Jeep" class="catalog-tab-button">Jeep</button>
-                        <button data-tab="Ram" class="catalog-tab-button">Ram</button>
-                        <button data-tab="Plymouth" class="catalog-tab-button">Plymouth</button>
-                        <button data-tab="Eagle" class="catalog-tab-button">Eagle</button>
-                    </div>
-                    <main id="catalog-content-area">
-                        </main>
-                    <div id="catalog-no-results" class="hidden">
-                        <h3>No vehicles found</h3>
-                        <p>Try adjusting your search term.</p>
+
+                    <main id="catalog-content-area"></main>
+                    <div id="catalog-no-results" class="hidden text-center py-8">
+                        <h3 class="text-xl font-semibold">No vehicles found</h3>
+                        <p class="text-sm text-[var(--c-on-surface-variant)]">Try adjusting your search term.</p>
                     </div>
                 </div>
             </div>
@@ -564,7 +582,7 @@
                             </span>
                             <input type="text" id="search-bar" placeholder="Search for Dealerships" class="pr-20">
                             <button id="clear-search-btn" class="absolute inset-y-0 right-0 flex items-center px-4 hidden transition-opacity" aria-label="Clear search">
-                                <span class="text-sm font-medium text-[var(--c-on-surface-variant)] hover:text-white">Clear</span>
+                                <span class="text-sm font-medium text-[var(--c-on-surface-variant)]">Clear</span>
                             </button>
                         </div>
                         <button id="add-new-btn" class="btn btn-primary">
@@ -816,7 +834,7 @@
             let userTmpls = [];
             let catalogListenersAttached = false;
             const fieldDisplayNames = { customerTitle: "Select Title", customerName: "Customer Name", phoneNumber: "Phone Number", vehicle: "Vehicle", vin: "VIN", advisor: "Advisor", schedule: "Schedule", accessoryParts: "Accessory / Parts", tireBrandSize: "Tire Brand & Size", service: "Service", otherConcern: "Other Concern", recall: "RECALL", numberOfTires: "Number of Tires" };
-            const appState = { currentView: 'toolSuite', editorMode: 'none', selectedTemplateId: null, hiddenTemplates: [] };
+            const appState = { currentView: 'toolSuite', editorMode: 'none', selectedTemplateId: null, hiddenTemplates: [], carCatalogView: 'CDJR' };
             const body = document.body;
             
             const splashScreen = document.getElementById('splashScreen');
@@ -1284,35 +1302,93 @@
                 "INFINITI": { "Infiniti": { "Current Models": [ { "model": "INFINITI Q50", "years": "Sedan | 2014-Present", "description": "The brand's sport sedan, successor to the G-series, offering a blend of performance and luxury with a potent twin-turbo V6." }, { "model": "INFINITI QX50", "years": "Crossover SUV | 2014-Present", "description": "A compact luxury crossover featuring the world's first production variable compression ratio (VC-Turbo) engine." }, { "model": "INFINITI QX55", "years": "Crossover Coupe | 2022-Present", "description": "A stylish crossover with a dramatic, coupe-like roofline inspired by the iconic FX series." }, { "model": "INFINITI QX60", "years": "SUV | 2014-Present", "description": "A premium three-row, seven-passenger SUV designed for families, offering a comfortable and luxurious interior." }, { "model": "INFINITI QX80", "years": "Full-Size SUV | 2014-Present", "description": "The flagship full-size SUV with a commanding presence, robust V8 power, and seating for up to eight passengers." } ], "Discontinued Models": [ { "model": "INFINITI G-Series (G35/G37)", "years": "Sedan, Coupe, Convertible | 1991-2015", "description": "A cornerstone of the brand, celebrated for its sporty rear-wheel-drive dynamics and powerful V6 engines." }, { "model": "INFINITI Q60", "years": "Coupe, Convertible | 2014-2022", "description": "The successor to the G-series coupe, offering striking styling and potent twin-turbo V6 performance." }, { "model": "INFINITI Q70 (M-Series)", "years": "Sedan | 2003-2019", "description": "The brand's mid-size luxury sedan, available with V6, V8, and hybrid powertrains." }, { "model": "INFINITI FX-Series (FX35/FX50)", "years": "Crossover SUV | 2003-2013", "description": "A groundbreaking and aggressively styled performance crossover, often called the 'Bionic Cheetah'." }, { "model": "INFINITI QX70", "years": "Crossover SUV | 2014-2017", "description": "The renamed successor to the popular FX-Series, continuing its legacy of sporty performance." }, { "model": "INFINITI EX-Series (EX35)", "years": "Crossover SUV | 2008-2013", "description": "A compact luxury crossover, notable for introducing the Around View Monitor. Later renamed QX50." }, { "model": "INFINITI JX35", "years": "SUV | 2013", "description": "A seven-passenger crossover introduced for one model year before being renamed the QX60." }, { "model": "INFINITI QX30", "years": "Crossover SUV | 2017-2019", "description": "A compact luxury crossover developed in collaboration with Mercedes-Benz." }, { "model": "INFINITI Q45", "years": "Sedan | 1990-2006", "description": "The original flagship full-size luxury sedan, known for its powerful V8 engine and advanced features." } ] } }
             };
 
+
+            function renderSearchResults(matches) {
+                const contentArea = document.getElementById('catalog-content-area');
+                const noResultsMessage = document.getElementById('catalog-no-results');
+                contentArea.innerHTML = '';
+
+                if (matches.length === 0) {
+                    noResultsMessage.classList.remove('hidden');
+                    document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
+                    document.getElementById('cdjrTabs').classList.add('hidden');
+                    return;
+                }
+
+                noResultsMessage.classList.add('hidden');
+
+                // Group matches by sub-brand (e.g., Jeep, Dodge) to create sections
+                const groupedBySubBrand = matches.reduce((acc, vehicle) => {
+                    (acc[vehicle.subBrand] = acc[vehicle.subBrand] || []).push(vehicle);
+                    return acc;
+                }, {});
+
+                // Highlight the corresponding brands in the sidebar
+                const uniqueBrandKeys = new Set(matches.map(v => v.brandKey));
+                const uniqueSubBrands = new Set(matches.map(v => v.subBrand));
+
+                document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => {
+                    btn.classList.toggle('active', uniqueBrandKeys.has(btn.dataset.brand));
+                });
+                
+                document.getElementById('cdjrTabs').classList.toggle('hidden', !uniqueBrandKeys.has('CDJR'));
+
+                document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => {
+                    btn.classList.toggle('active', uniqueSubBrands.has(btn.dataset.tab));
+                });
+
+                // Render the grouped results into the content area
+                for (const subBrand in groupedBySubBrand) {
+                    const vehicles = groupedBySubBrand[subBrand];
+                    const section = document.createElement('div');
+                    section.className = 'catalog-view-section';
+                    section.setAttribute('data-brand-color', subBrand);
+
+                    let vehicleCardsHtml = '';
+                    vehicles.forEach(vehicle => {
+                        vehicleCardsHtml += `
+                            <div class="vehicle-card" data-model="${vehicle.model.toLowerCase()}">
+                                <h3>${vehicle.model}</h3>
+                                <p class="vehicle-years">${vehicle.years}</p>
+                                <p class="vehicle-desc">${vehicle.description}</p>
+                            </div>`;
+                    });
+
+                    section.innerHTML = `
+                        <div class="catalog-section-header">
+                            <h2>${subBrand}</h2>
+                            <div class="catalog-view-switcher">
+                                <button class="catalog-view-btn view-btn-active" data-view="grid"><i class="fas fa-th-large"></i></button>
+                                <button class="catalog-view-btn" data-view="list"><i class="fas fa-bars"></i></button>
+                            </div>
+                        </div>
+                        <div class="catalog-view-container">${vehicleCardsHtml}</div>`;
+                    contentArea.appendChild(section);
+                }
+            }
+
             function renderCatalogContent(brandKey) {
                 const contentArea = document.getElementById('catalog-content-area');
-                const tabsContainer = document.querySelector('.catalog-tabs');
                 const data = carCatalogData[brandKey];
                 if (!contentArea || !data) return;
 
                 contentArea.innerHTML = '';
-                tabsContainer.classList.toggle('hidden', brandKey !== 'CDJR');
-
-                const brandsToRender = (brandKey === 'CDJR') ? Object.keys(data) : [Object.keys(data)[0]];
+                appState.carCatalogView = brandKey;
                 
-                brandsToRender.forEach((brand, index) => {
-                    const tabContent = document.createElement('div');
-                    tabContent.id = `catalog-${brand}`;
-                    tabContent.className = 'catalog-tab-content';
-                    if (brandKey === 'CDJR' && index !== 0) {
-                        tabContent.classList.add('hidden');
-                    }
-
+                const brandsToRender = Object.keys(data);
+                
+                brandsToRender.forEach(brand => {
                     const brandData = data[brand];
                     Object.keys(brandData).forEach(sectionTitle => {
                         const section = document.createElement('div');
                         section.className = 'catalog-view-section';
+                        section.id = `section-${brand}`;
                         section.setAttribute('data-brand-color', brand);
 
                         let vehicleCardsHtml = '';
                         brandData[sectionTitle].forEach(vehicle => {
                             vehicleCardsHtml += `
-                                <div class="vehicle-card" data-model="${vehicle.model.toLowerCase()}" data-brand="${brand}">
+                                <div class="vehicle-card" data-model="${vehicle.model.toLowerCase()}">
                                     <h3>${vehicle.model}</h3>
                                     <p class="vehicle-years">${vehicle.years}</p>
                                     <p class="vehicle-desc">${vehicle.description}</p>
@@ -1328,103 +1404,119 @@
                                 </div>
                             </div>
                             <div class="catalog-view-container">${vehicleCardsHtml}</div>`;
-                        tabContent.appendChild(section);
+                        contentArea.appendChild(section);
                     });
-                    contentArea.appendChild(tabContent);
                 });
             }
 
+
             function initializeCarCatalog() { 
                 if (catalogListenersAttached) {
-                    // If already initialized, just ensure the correct view is rendered
-                    const brandSelector = document.getElementById('brandSelector');
-                    renderCatalogContent(brandSelector.value);
                     return;
                 }
                 
-                // Build custom select for the new brand selector
-                const brandSelectorWrapper = document.querySelector('#carCatalogPage .select-wrapper');
-                buildCustomSelect(brandSelectorWrapper);
-
                 attachCarCatalogEventListeners(); 
                 catalogListenersAttached = true; 
-                renderCatalogContent('CDJR'); // Initial render
+                document.querySelector('#brandSidebar .brand-btn[data-brand="CDJR"]').click();
             }
 
             function attachCarCatalogEventListeners() {
                 const page = document.getElementById('carCatalogPage');
                 if (!page) return;
-                const brandSelector = page.querySelector('#brandSelector');
-                const tabsContainer = page.querySelector('.catalog-tabs');
+                
+                const brandSidebar = page.querySelector('#brandSidebar');
+                const cdjrTabsContainer = page.querySelector('#cdjrTabs');
                 const searchInput = page.querySelector('#catalog-search-input');
                 const noResultsMessage = page.querySelector('#catalog-no-results');
                 const contentArea = page.querySelector('#catalog-content-area');
+                const clearSearchBtn = page.querySelector('#catalog-clear-search-btn'); // Get the new button
 
-                brandSelector.addEventListener('change', () => {
-                    searchInput.value = ''; // Clear search on brand change
-                    renderCatalogContent(brandSelector.value);
-                    noResultsMessage.classList.add('hidden');
+                brandSidebar.addEventListener('click', e => {
+                    const brandBtn = e.target.closest('.brand-btn');
+                    if (!brandBtn) return;
+                    
+                    const brand = brandBtn.dataset.brand;
+                    
+                    document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
+                    brandBtn.classList.add('active');
+
+                    if (brand === 'CDJR') {
+                        cdjrTabsContainer.classList.remove('hidden');
+                        renderCatalogContent('CDJR');
+                        cdjrTabsContainer.querySelector('.tab-btn')?.classList.add('active');
+                    } else {
+                        cdjrTabsContainer.classList.add('hidden');
+                        renderCatalogContent('INFINITI');
+                    }
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
                 });
 
-                tabsContainer.addEventListener('click', e => { 
-                    if (e.target.matches('.catalog-tab-button')) { 
-                        searchInput.value = ''; // Clear search on tab click
-                        const tabId = e.target.dataset.tab; 
-                        tabsContainer.querySelector('.tab-active').classList.remove('tab-active'); 
-                        e.target.classList.add('tab-active'); 
-                        
-                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.add('hidden')); 
-                        contentArea.querySelector(`#catalog-${tabId}`).classList.remove('hidden'); 
-                        
-                        contentArea.querySelectorAll('.vehicle-card, .catalog-view-section').forEach(el => el.classList.remove('hidden'));
-                        noResultsMessage.classList.add('hidden');
-                    } 
+                cdjrTabsContainer.addEventListener('click', e => {
+                    const tabBtn = e.target.closest('.tab-btn');
+                    if (!tabBtn) return;
+                    
+                    e.stopPropagation();
+
+                    cdjrTabsContainer.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                    tabBtn.classList.add('active');
+
+                    const brandToShow = tabBtn.dataset.tab;
+                    const targetSection = document.getElementById(`section-${brandToShow}`);
+                    const scrollContainer = document.getElementById('catalog-content-area');
+
+                    if (targetSection && scrollContainer) {
+                        const topPosition = targetSection.offsetTop - parseInt(getComputedStyle(scrollContainer).paddingTop);
+                        scrollContainer.scrollTo({
+                            top: topPosition,
+                            behavior: 'smooth'
+                        });
+                    }
                 });
 
                 searchInput.addEventListener('input', e => {
                     const searchTerm = e.target.value.toLowerCase().trim();
-                    const allCards = contentArea.querySelectorAll('.vehicle-card');
-                    const allSections = contentArea.querySelectorAll('.catalog-view-section');
-                    let visibleCount = 0;
-                    let firstMatchBrand = null;
-                    const isCdjr = brandSelector.value === 'CDJR';
+                    
+                    // Show or hide the clear button based on input
+                    clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
 
-                    if (searchTerm && isCdjr) {
-                        contentArea.querySelectorAll('.catalog-tab-content').forEach(p => p.classList.remove('hidden'));
+                    if (!searchTerm) {
+                        const lastView = appState.carCatalogView || 'CDJR';
+                        renderCatalogContent(lastView);
+                        document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.brand === lastView));
+                        document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => btn.classList.remove('active'));
+                        if (lastView === 'CDJR') {
+                            document.getElementById('cdjrTabs').classList.remove('hidden');
+                            document.querySelector('#cdjrTabs .tab-btn')?.classList.add('active');
+                        } else {
+                             document.getElementById('cdjrTabs').classList.add('hidden');
+                        }
+                        noResultsMessage.classList.add('hidden');
+                        return;
                     }
 
-                    allCards.forEach(card => {
-                        const isMatch = card.dataset.model.includes(searchTerm);
-                        card.classList.toggle('hidden', !isMatch);
-                        if (isMatch) {
-                            visibleCount++;
-                            if (!firstMatchBrand && isCdjr) {
-                                firstMatchBrand = card.dataset.brand;
+                    const allMatches = [];
+                    for (const brandKey in carCatalogData) {
+                        for (const subBrand in carCatalogData[brandKey]) {
+                            for (const sectionTitle in carCatalogData[brandKey][subBrand]) {
+                                const vehicles = carCatalogData[brandKey][subBrand][sectionTitle];
+                                vehicles.forEach(vehicle => {
+                                    if (vehicle.model.toLowerCase().includes(searchTerm)) {
+                                        allMatches.push({ ...vehicle, brandKey, subBrand });
+                                    }
+                                });
                             }
                         }
-                    });
-
-                    if (firstMatchBrand && isCdjr) {
-                        tabsContainer.querySelector('.tab-active')?.classList.remove('tab-active');
-                        tabsContainer.querySelector(`[data-tab="${firstMatchBrand}"]`)?.classList.add('tab-active');
                     }
+                    renderSearchResults(allMatches);
+                });
 
-                    allSections.forEach(section => {
-                        const hasVisibleChildren = section.querySelector('.vehicle-card:not(.hidden)');
-                        section.classList.toggle('hidden', !hasVisibleChildren);
-                    });
-                    
-                    if (!searchTerm) {
-                        if(isCdjr) {
-                            const activeTab = tabsContainer.querySelector('.tab-active')?.dataset.tab || 'Chrysler';
-                            contentArea.querySelectorAll('.catalog-tab-content').forEach(p => {
-                                p.classList.toggle('hidden', p.id !== `catalog-${activeTab}`);
-                            });
-                        }
-                        visibleCount = 1; 
-                    }
-
-                    noResultsMessage.classList.toggle('hidden', visibleCount > 0 || !searchTerm);
+                // Add a click event listener for the new clear button
+                clearSearchBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    // Manually trigger the input event to reset the search results
+                    searchInput.dispatchEvent(new Event('input')); 
+                    searchInput.focus(); // Optional: Keep the user in the search bar
                 });
 
                 contentArea.addEventListener('click', e => {
@@ -1439,7 +1531,6 @@
                     }
                 });
             }
-
 
             // --- DEALERSHIP MANAGER FUNCTIONS (REBUILT) ---
             function initializeDealershipManager() {
@@ -1892,7 +1983,8 @@
                     });
                 });
                 
-                cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
+                cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
+
                 clearSearchBtn.addEventListener('click', () => { cardSearchInput.value = ''; cardSearchInput.dispatchEvent(new Event('keyup')); });
 
                 templateSelect.addEventListener('change', renderEditorForSelection);
