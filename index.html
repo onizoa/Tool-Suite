@@ -183,6 +183,8 @@
 
         #hotAlertsPage { flex-grow: 1; min-height: 0; }
         #hotAlertsPage .copy-btn {margin-top: 20px;}
+        #hotAlertsPage .card { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        #hotAlertsPage .card.show { opacity: 1; transform: translateY(0); }
 
         .card-container { flex-grow: 1; padding: 14px 40px 40px; overflow-y: auto; }
         .card-container.loading { display: flex; align-items: center; justify-content: center; }
@@ -1121,6 +1123,13 @@
                     return;
                 }
                 combinedTemplates.forEach(addCardToDOM);
+
+                const cards = cardContainer.querySelectorAll('.card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('show');
+                    }, index * 50);
+                });
             }
 
             function addCardToDOM(templateData) {
@@ -1894,7 +1903,7 @@
                 cards.forEach((card, index) => {
                     setTimeout(() => {
                         card.classList.add('show');
-                    }, index * 75); // 75ms delay between each card's animation
+                    }, index * 50); // 75ms delay between each card's animation
                 });
                 // END: Add new code
                 };
