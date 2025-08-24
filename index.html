@@ -116,6 +116,11 @@
 
         .header-btn { overflow: visible; }
         .header-btn::after { content: attr(aria-label); position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); background-color: var(--c-primary); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; box-shadow: 0 4px 12px var(--c-shadow); opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
+        .header-controls .header-btn:last-child::after,
+        .header-controls .header-btn:nth-last-child(2)::after { left: auto; right: 0; transform: translateX(0); }
+        .header-controls .header-btn:last-child::before,
+        .header-controls .header-btn:nth-last-child(2)::before { left: auto; right: 12px; transform: translateX(0);}
+
         .header-btn::before { content: ''; position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-bottom-color: var(--c-primary); opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s, visibility 0.2s; transition-delay: 0.3s; z-index: 1001; }
         .header-btn:hover::after, .header-btn:hover::before { opacity: 1; visibility: visible; transform: translateY(0); }
         
@@ -151,7 +156,7 @@
         .btn-full-width { width: 100%; }
         
         .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--c-border); background-color: var(--c-surface); flex-shrink: 0; gap: 20px;}
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--c-border); background-color: var(--c-surface); flex-shrink: 0; gap: 20px; position: relative; z-index: 10;  }
         #headerLeft { display: flex; align-items: center; gap: 40px; flex-grow: 1; }
         .header-title { font-size: 24px; font-weight: 700; color: var(--c-on-surface); display: flex; align-items: center; gap: 12px; }
         .header-title .header-page-icon { width: 28px; height: 28px; stroke: var(--c-on-surface); }
@@ -166,7 +171,7 @@
         #clearSearchBtn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); z-index: 2; cursor: pointer; color: var(--c-on-surface-variant); transition: color 0.2s; background: none; border: none; padding: 4px 8px; }
         #clearSearchBtn:hover { color: var(--c-primary); }
         .header-btn { cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--c-surface); border: 1px solid var(--c-border); position: relative; transition: background-color var(--transition-speed), opacity var(--transition-speed); }
-        .header-btn:hover { opacity: 0.7; }
+        .header-btn:hover { background-color: var(--c-border); }
         .header-btn.active:hover { opacity: 1; }
         .header-icon { transition: transform var(--animation-speed) ease, opacity calc(var(--animation-speed) / 2) ease, stroke var(--transition-speed), fill var(--transition-speed); position: absolute; stroke: var(--c-primary-variant); fill: none; }
         .header-btn.active { background-color: var(--c-primary); border-color: var(--c-primary-variant); }
@@ -239,7 +244,7 @@
         .tab-btn { padding: 6px 10px; font-size: 14px; color: var(--c-on-surface-variant); border-radius: 4px; display: block; width: 100%; text-align: left; transition: background-color 0.2s, color 0.2s; }
         .tab-btn:hover, .tab-btn.active { background-color: var(--c-surface-light); color: var(--c-primary); }
         .catalog-main-content { flex: 1 1 0%; display: flex; flex-direction: column; min-height: 0; }
-        .catalog-global-search { padding: 16px; border-bottom: 1px solid var(--c-border); }
+        .catalog-global-search { padding: 16px; }
         #catalog-content-area { padding: 24px; overflow-y: auto; flex: 1 1 0%; position: relative; }
         /* END: New Car Catalog Styles */
         
@@ -269,6 +274,7 @@
             overflow-y: auto;
             flex-direction: column;
         }
+
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c-modal-backdrop); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; z-index: 1000; }
         .modal-overlay.visible { opacity: 1; visibility: visible; }
@@ -396,6 +402,72 @@
         /* Style for Dealership search clear button hover */
         #dealershipListPage #clear-search-btn span {transition: color 0.2s;}
         #dealershipListPage #clear-search-btn:hover span {color: var(--c-primary);}
+
+        /* Help FAB */
+        #helpFab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background-color: var(--c-primary); color: #fff; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px var(--c-shadow); cursor: pointer; z-index: 998; transition: transform 0.2s ease-in-out, background-color 0.2s; }
+        #helpFab:hover { transform: scale(1.1); background-color: var(--c-primary-variant); }
+
+        /* Help Modal */
+        .help-modal-content { max-width: 600px; text-align: left; transform: scale(0.95); transition: transform 0.3s; }
+        .modal-overlay.visible .help-modal-content { transform: scale(1); }
+        .help-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--c-border); padding-bottom: 12px; margin-bottom: 16px; }
+        #helpModalCloseBtn { background: none; border: none; color: var(--c-on-surface-variant); opacity: 0.8;}
+        #helpModalCloseBtn:hover {opacity: 1;}
+        .help-modal-body { line-height: 1.7; color: var(--c-on-surface); max-height: 60vh; overflow-y: auto; padding-right: 12px; /* For scrollbar spacing */}
+        .help-modal-body p {margin-bottom: 1rem;}
+        .help-modal-body ul {list-style-type: disc; padding-left: 20px;}
+        .help-modal-body li {margin-bottom: 0.5rem;}
+
+       
+        /* Modern chevron scroll buttons for tabs */
+        .scroll-chevron {
+            position: absolute;
+            top: 0;
+            bottom: 1px; /* To avoid overlapping the bottom border */
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            color: var(--c-primary);
+            border: none;
+        }
+        #scroll-left-btn {
+            background: linear-gradient(to right, var(--c-surface) 50%, transparent);
+        }
+        #scroll-right-btn {
+            background: linear-gradient(to left, var(--c-surface) 50%, transparent);
+        }
+        .scroll-chevron svg {
+            transition: transform 0.2s;
+        }
+        .scroll-chevron:hover svg {
+            transform: scale(1.2);
+        }
+        .scroll-chevron.hidden {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+        .relative.group:hover .scroll-chevron {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Hide scrollbar and add fade effect for tabs */
+        #dealershipListPage #tab-buttons {
+            -webkit-mask-image: linear-gradient(to right, transparent, black 30px, black calc(100% - 30px), transparent);
+            mask-image: linear-gradient(to right, transparent, black 30px, black calc(100% - 30px), transparent);
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        #dealershipListPage #tab-buttons::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+
     </style>
 </head>
 <body>
@@ -429,11 +501,6 @@
         <header class="main-header">
             <div id="headerLeft">
                 <div id="headerTitle" class="header-title"></div>
-                <div class="search-container hidden" id="searchContainer">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="cardSearchInput" class="search-input" placeholder="Search templates...">
-                    <button id="clearSearchBtn" class="text-sm font-medium hidden">Clear</button>
-                </div>
             </div>
             <div class="header-controls">
                 <div id="headerNavContainer" class="flex items-center gap-4">
@@ -510,8 +577,19 @@
                     </div>
                     <div class="sidebar-footer"> <button class="btn btn-secondary btn-full-width" id="clearAllBtn">Clear All Fields</button> </div>
                 </aside>
-                <div class="card-container" id="cardContainer">
-                    <div class="loader hidden" id="loader"></div>
+
+                <div class="flex-grow flex flex-col min-h-0">
+                    <div class="px-10 py-4 bg-[var(--c-background)]" id="searchContainer">
+                         <div class="relative max-w-lg">
+                            <svg class="search-icon" style="stroke: var(--c-on-surface-variant);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="cardSearchInput" class="search-input" placeholder="Search templates...">
+                            <button id="clearSearchBtn" class="absolute top-1/2 -translate-y-1/2 right-2 hidden text-sm font-medium" aria-label="Clear search">Clear</button>
+                         </div>
+                    </div>
+
+                    <div class="card-container" id="cardContainer">
+                        <div class="loader hidden" id="loader"></div>
+                    </div>
                 </div>
             </div>
                 
@@ -593,7 +671,16 @@
                     <div class="mb-8 max-w-4xl mx-auto" id="tabs-container">
                         <div class="flex items-end border-b border-[var(--c-border)]">
                             <h3 class="text-lg font-semibold text-[var(--c-on-surface)] mb-0 mr-6 pb-3 whitespace-nowrap">Schedulers:</h3>
-                            <div class="flex flex-wrap" id="tab-buttons"></div>
+                            <div class="relative flex-grow overflow-hidden group">
+                                <div class="flex overflow-x-auto whitespace-nowrap" id="tab-buttons">
+                                    </div>
+                                <button id="scroll-left-btn" class="scroll-chevron left-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                                </button>
+                                <button id="scroll-right-btn" class="scroll-chevron right-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -738,6 +825,22 @@
 
     <div id="toastNotification"></div>
 
+     
+    <button id="helpFab" aria-label="Help">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+    </button>
+
+    <div id="helpModal" class="modal-overlay">
+        <div class="modal-content help-modal-content">
+            <div class="help-modal-header">
+                <h3 id="helpModalTitle" class="text-xl font-bold"></h3>
+                <button id="helpModalCloseBtn" class="text-2xl">&times;</button>
+            </div>
+            <div id="helpModalBody" class="help-modal-body">
+                </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -879,12 +982,108 @@
             const toastNotification = document.getElementById('toastNotification');
             let confirmCallback = null;
 
+
+            const helpFab = document.getElementById('helpFab');
+            const helpModal = document.getElementById('helpModal');
+            const helpModalCloseBtn = document.getElementById('helpModalCloseBtn');
+            const helpModalTitle = document.getElementById('helpModalTitle');
+            const helpModalBody = document.getElementById('helpModalBody');
+
+            const helpContent = {
+                toolSuite: {
+                    title: "How the Tool Suite Works",
+                    body: `
+                        <p>This is your main navigation hub. Each card represents a different tool within the application.</p>
+                        <ul>
+                            <li><strong>Hot Alerts:</strong> Generate templated messages for customer communication.</li>
+                            <li><strong>Dealership List:</strong> Manage a secure list of dealership credentials and links.</li>
+                            <li><strong>Car Catalog:</strong> An interactive guide to CDJR and INFINITI vehicle models.</li>
+                            <li><strong>Template Manager:</strong> Create and edit your own custom templates for the Hot Alerts tool.</li>
+                            <li><strong>Toggle Theme:</strong> Switch between light and dark modes.</li>
+                            <li><strong>Sign Out:</strong> Securely log out of your account.</li>
+                        </ul>
+                    `
+                },
+                hotAlerts: {
+                    title: "Using the Hot Alerts Page",
+                    body: `
+                        <p>This page is designed for quickly generating pre-defined messages.</p>
+                        <ul>
+                            <li><strong>Sidebar:</strong> Fill in any relevant customer or vehicle details on the left. The values you enter will automatically populate the templates.</li>
+                            <li><strong>Templates:</strong> Click on a template's title (e.g., "Follow Up") to expand it and see a preview.</li>
+                            <li><strong>Copying:</strong> Once all required fields for a template are filled, the "Copy Template" button will be enabled. Click it to copy the complete message to your clipboard.</li>
+                            <li><strong>Search:</strong> Use the search bar at the top to quickly filter the list of templates by title.</li>
+                        </ul>
+                    `
+                },
+                dealershipList: {
+                    title: "Using the Dealership List",
+                    body: `
+                        <p>This tool is a secure place to store and manage dealership information, links, and login credentials.</p>
+                        <ul>
+                            <li><strong>Tabs:</strong> Dealerships are organized by scheduler type. Click a tab at the top to view all entries for that category.</li>
+                            <li><strong>Search:</strong> Use the search bar to find a dealership by its name or website URL across all categories.</li>
+                            <li><strong>Expanding Cards:</strong> Click anywhere on a dealership's header to expand it and view details like browser preference, links, login info, and notes.</li>
+                            <li><strong>Actions:</strong> Use the buttons on the right of each card to quickly copy a website link, edit the entry, or delete it.</li>
+                            <li><strong>Add New:</strong> Click the 'Add New' button to open a form where you can <strong>manually enter</strong> and save all the information for a new dealership.</li>
+                        </ul>
+                    `
+                },
+                carCatalog: {
+                    title: "Using the Car Catalog",
+                    body: `
+                        <p>This is an interactive guide to vehicle models from CDJR and INFINITI.</p>
+                        <ul>
+                            <li><strong>Sidebar:</strong> Select a main brand (CDJR or INFINITI) from the sidebar on the left to load its models.</li>
+                            <li><strong>Sub-Brands (CDJR):</strong> When CDJR is selected, you can click on a sub-brand (e.g., Jeep, Dodge) to automatically scroll to that section in the list.</li>
+                            <li><strong>Global Search:</strong> Use the search bar at the top to find a vehicle by its model name across all brands and sub-brands. The sidebar will highlight where the results are from.</li>
+                            <li><strong>View Toggles:</strong> Each section has grid and list view toggles on the right side of its header to change the layout.</li>
+                        </ul>
+                    `
+                },
+                manageTemplates: {
+                    title: "Using the Template Manager",
+                    body: `
+                        <p>Here you can customize the templates used in the Hot Alerts tool.</p>
+                        <ul>
+                            <li><strong>Select a Template:</strong> Choose a template from the dropdown to preview or edit it. Default templates can be hidden/unhidden, while custom templates can be fully edited.</li>
+                            <li><strong>Create New:</strong> Click the "New" button to open the editor and create a brand new custom template.</li>
+                            <li><strong>Editing:</strong> When editing, you can change the title and body. Use the "Available Fields" tags to insert placeholders like [[customerName]] into your template body.</li>
+                            <li><strong>Saving & Deleting:</strong> After making changes to a custom template, you can save them or delete the template entirely.</li>
+                        </ul>
+                    `
+                }
+            };
+
+            const openHelpModal = () => {
+                const currentPageId = appState.currentView;
+                const content = helpContent[currentPageId];
+                if (content) {
+                    helpModalTitle.textContent = content.title;
+                    helpModalBody.innerHTML = content.body;
+                } else {
+                    helpModalTitle.textContent = "Help";
+                    helpModalBody.innerHTML = "<p>No help information is available for this page.</p>";
+                }
+                helpModal.classList.add('visible');
+            };
+
+            const closeHelpModal = () => {
+                helpModal.classList.remove('visible');
+            };
+
+            helpFab.addEventListener('click', openHelpModal);
+            helpModalCloseBtn.addEventListener('click', closeHelpModal);
+            helpModal.addEventListener('click', (e) => {
+                if (e.target === helpModal) {
+                    closeHelpModal();
+                }
+            });
+
             function renderCurrentView(view) {
                 appState.currentView = view;
                 allPageContents.forEach(page => page.classList.remove('active'));
                 document.getElementById(`${view}Page`).classList.add('active');
-                
-                searchContainer.classList.toggle('hidden', view !== 'hotAlerts');
                 headerNavContainer.classList.toggle('hidden', view === 'toolSuite');
 
                 // Handle active state for new header buttons
@@ -1581,6 +1780,46 @@
 
                 let activeTab = '';
                 let deleteTimerInterval;
+
+                // --- Chevron scroll logic for scheduler tabs ---
+                const tabContainer = page.querySelector('#tab-buttons');
+                const scrollLeftBtn = page.querySelector('#scroll-left-btn');
+                const scrollRightBtn = page.querySelector('#scroll-right-btn');
+
+                const manageChevronVisibility = () => {
+                    if (tabContainer.scrollWidth > tabContainer.clientWidth) {
+                        const scrollLeft = tabContainer.scrollLeft;
+                        const maxScrollLeft = tabContainer.scrollWidth - tabContainer.clientWidth;
+                        scrollLeftBtn.classList.toggle('hidden', scrollLeft <= 0);
+                        scrollRightBtn.classList.toggle('hidden', scrollLeft >= maxScrollLeft - 1);
+                    } else {
+                        scrollLeftBtn.classList.add('hidden');
+                        scrollRightBtn.classList.add('hidden');
+                    }
+                };
+                
+                scrollLeftBtn.addEventListener('click', () => {
+                    tabContainer.scrollBy({ left: -250, behavior: 'smooth' });
+                });
+
+                scrollRightBtn.addEventListener('click', () => {
+                    tabContainer.scrollBy({ left: 250, behavior: 'smooth' });
+                });
+
+                tabContainer.addEventListener('scroll', () => setTimeout(manageChevronVisibility, 100));
+                
+                // Use ResizeObserver to check visibility when content changes
+                const observer = new ResizeObserver(manageChevronVisibility);
+                observer.observe(tabContainer);
+
+                // --- Mouse wheel scroll logic for scheduler tabs ---
+                tabContainer.addEventListener('wheel', (e) => {
+                    if (tabContainer.scrollWidth > tabContainer.clientWidth) {
+                        e.preventDefault();
+                        tabContainer.scrollLeft += e.deltaY;
+                    }
+                });
+
 
                 const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', other: 'Other' };
                 const getBrowserIcon = (browser) => ({ chrome: 'fa-brands fa-chrome text-yellow-400', firefox: 'fa-brands fa-firefox text-orange-500', edge: 'fa-brands fa-edge text-blue-400', safari: 'fa-brands fa-safari text-blue-500' }[browser] || 'fa-solid fa-globe text-gray-400');
