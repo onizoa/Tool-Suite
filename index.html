@@ -222,7 +222,7 @@
 
         .editor-actions { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--c-border); display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0; }
         
-        #toolSuitePage { flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 40px; }
+        #toolSuitePage { flex-direction: column; align-items: center; justify-content: flex-start; flex-grow: 1; padding: 40px; overflow-y: auto; }
         .tool-suite-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; width: 100%; max-width: 1000px; }
         .tool-card { background-color: var(--c-surface); border-radius: 16px; border: 1px solid var(--c-border); padding: 32px; text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; align-items: center; }
         .tool-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px var(--c-shadow), 0 0 25px 0 #0088cc; }
