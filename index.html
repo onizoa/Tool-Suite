@@ -376,7 +376,7 @@
         #dealershipListPage .btn-secondary:hover { background-color: var(--c-border); }
 
         #dealershipListPage .tab-active { background-color: var(--c-primary); color: white; }
-        #dealershipListPage #tab-buttons .tab-button { display: block; width: 100%; text-align: left; padding: 8px 12px; border-radius: 6px; font-weight: 600; transition: background-color 0.2s, color 0.2s; }
+        #dealershipListPage #tab-buttons .tab-button { display: block; width: 100%; text-align: left; padding: 8px 12px; border-radius: 6px; font-weight: 400; transition: background-color 0.2s, color 0.2s; }
         #dealershipListPage #tab-buttons .tab-button.tab-active { background-color: var(--c-surface-light); color: var(--c-primary); }
         #dealershipListPage #tab-buttons .tab-button:not(.tab-active):hover { background-color: var(--c-surface-light);}
         
@@ -1537,6 +1537,8 @@
                         card.classList.add('show');
                     }, index * 50);
                 });
+
+                initializeScrollSpy();
             }
 
             function renderCatalogContent(brandKey) {
@@ -1586,8 +1588,38 @@
                         card.classList.add('show');
                     }, index * 50); // 50ms delay between each card
                 });
+
+                initializeScrollSpy();
             }
 
+
+            function initializeScrollSpy() {
+                const contentArea = document.getElementById('catalog-content-area');
+                const cdjrTabs = document.querySelectorAll('#cdjrTabs .tab-btn');
+                const sections = contentArea.querySelectorAll('.catalog-view-section');
+                if (sections.length === 0 || cdjrTabs.length === 0) return;
+
+                const observerOptions = {
+                    root: contentArea, // The scrollable container is the viewport
+                    rootMargin: "0px 0px -60% 0px", // Triggers when a section is in the top 40% of the view
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const sectionId = entry.target.id;
+                            const tabName = sectionId.replace('section-', '');
+                            
+                            cdjrTabs.forEach(tab => {
+                                tab.classList.toggle('active', tab.dataset.tab === tabName);
+                            });
+                        }
+                    });
+                }, observerOptions);
+
+                sections.forEach(section => observer.observe(section));
+            }
 
             function initializeCarCatalog() { 
                 if (catalogListenersAttached) {
