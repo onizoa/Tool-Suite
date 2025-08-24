@@ -183,7 +183,7 @@
         #hotAlertsPage { flex-grow: 1; min-height: 0; }
         #hotAlertsPage .copy-btn {margin-top: 20px;}
 
-        .card-container { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        .card-container { flex-grow: 1; padding: 14px 40px 40px; overflow-y: auto; }
         .card-container.loading { display: flex; align-items: center; justify-content: center; }
         .card { background-color: var(--c-surface); border-radius: 12px; margin-bottom: 24px; border: 1px solid var(--c-border); overflow: hidden; transition: box-shadow 0.3s, opacity 0.3s, transform 0.3s; width: 100%; }
         .card:hover { box-shadow: 0 8px 30px var(--c-shadow); }
@@ -1194,7 +1194,7 @@
                         <div class="warning-message"></div>
                         <button class="btn btn-primary copy-btn">Copy Template</button>
                     </div>`;
-                if (templateData.title.toLowerCase() === 'tire') {
+                if (templateData.title.toLowerCase().includes('tire')) {
                     const inCardControls = card.querySelector('.in-card-controls');
                     const tireSelectWrapper = document.createElement('div');
                     tireSelectWrapper.className = 'select-wrapper input-group';
@@ -1208,6 +1208,7 @@
                         tireSelect.appendChild(option);
                     });
                     tireSelectWrapper.appendChild(tireSelect);
+                    inCardControls.appendChild(tireSelectWrapper);
                     buildCustomSelect(tireSelectWrapper);
                 }
                 cardContainer.appendChild(card);
@@ -1459,7 +1460,17 @@
             function toggleCard(card) { document.querySelectorAll('.card.expanded').forEach(openCard => { if (openCard !== card) openCard.classList.remove('expanded'); }); document.querySelectorAll('.missing').forEach(el => el.classList.remove('missing')); card.classList.toggle('expanded'); if (card.classList.contains('expanded')) updateCardContent(card); }
             function updateAllCards() { document.querySelectorAll('.card.expanded').forEach(updateCardContent); }
             function copyTemplate(card) { const preview = card.querySelector('.template-preview'); const copyBtn = card.querySelector('.copy-btn'); const tempTextArea = document.createElement('textarea'); tempTextArea.value = preview.innerText; document.body.appendChild(tempTextArea); tempTextArea.select(); document.execCommand('copy'); document.body.removeChild(tempTextArea); copyBtn.textContent = 'Copied!'; setTimeout(() => { copyBtn.textContent = 'Copy Template'; }, 1500); }
-            function clearAllFields() { const clearButton = document.getElementById('clearAllBtn'); document.querySelectorAll('.sidebar-content .input-field').forEach(input => { input.value = ''; input.classList.remove('missing'); }); document.querySelectorAll('.sidebar-content .select-field').forEach(select => { select.value = ''; select.classList.remove('missing'); const customSelect = select.closest('.select-wrapper').querySelector('.select-selected'); if (customSelect) { customSelect.textContent = select.options[0].textContent; customSelect.classList.remove('missing'); const customOptions = select.closest('.select-wrapper').querySelector('.select-items'); if(customOptions) { const current = customOptions.querySelector('.same-as-selected'); if(current) current.classList.remove('same-as-selected'); } } }); updateAllCards(); clearButton.textContent = 'Cleared!'; setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); }
+            function clearAllFields() { 
+
+                const expandedCard = document.querySelector('.card.expanded');
+                    if (expandedCard) {
+                        expandedCard.classList.remove('expanded');
+                    }
+                const clearButton = document.getElementById('clearAllBtn'); document.querySelectorAll('.sidebar-content .input-field').forEach(input => { input.value = ''; input.classList.remove('missing'); }); document.querySelectorAll('.sidebar-content .select-field').forEach(select => { select.value = ''; select.classList.remove('missing'); 
+                const customSelect = select.closest('.select-wrapper').querySelector('.select-selected'); if (customSelect) { customSelect.textContent = select.options[0].textContent; customSelect.classList.remove('missing'); 
+                const customOptions = select.closest('.select-wrapper').querySelector('.select-items'); if(customOptions) { const current = customOptions.querySelector('.same-as-selected'); if(current) current.classList.remove('same-as-selected'); } } }); updateAllCards(); clearButton.textContent = 'Cleared!'; setTimeout(() => { clearButton.textContent = 'Clear All Fields'; }, 1500); 
+            }
+
             function updateCardContent(card) {
                 const templateData = combinedTemplates.find(t => t.id === card.dataset.id);
                 if (!templateData) return;
