@@ -2046,10 +2046,14 @@
                     try {
                         if (credId) { await setDoc(doc(dealershipsRef, credId), newCredential); } 
                         else { await addDoc(dealershipsRef, newCredential); }
-                        activeTab = newCredential.category;
+                        
+                        // This now correctly updates the page's state for the active tab.
+                        page.dataset.activeTab = newCredential.category; 
+                        
                         showToast(`Dealership ${credId ? 'updated' : 'saved'} successfully!`);
                         closeCredentialModal();
                     } catch (error) { 
+                        console.error("Error during form submission:", error); // Added for better debugging
                         showToast("Failed to save dealership.", true); 
                     } finally {
                         hideLoader();
