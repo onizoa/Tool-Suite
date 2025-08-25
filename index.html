@@ -1632,120 +1632,126 @@
             }
 
             function attachCarCatalogEventListeners() {
-                const page = document.getElementById('carCatalogPage');
-                if (!page) return;
+            const page = document.getElementById('carCatalogPage');
+            if (!page) return;
+            
+            const brandSidebar = page.querySelector('#brandSidebar');
+            const cdjrTabsContainer = page.querySelector('#cdjrTabs');
+            const searchInput = page.querySelector('#catalog-search-input');
+            const noResultsMessage = page.querySelector('#catalog-no-results');
+            const contentArea = page.querySelector('#catalog-content-area');
+            const clearSearchBtn = page.querySelector('#catalog-clear-search-btn'); // Get the new button
+
+            brandSidebar.addEventListener('click', e => {
+                const brandBtn = e.target.closest('.brand-btn');
+                if (!brandBtn) return;
+
+                // Clear search input when a main brand button is clicked
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+
+                document.getElementById('catalog-content-area').scrollTop = 0;
+
+                const brand = brandBtn.dataset.brand;
                 
-                const brandSidebar = page.querySelector('#brandSidebar');
-                const cdjrTabsContainer = page.querySelector('#cdjrTabs');
-                const searchInput = page.querySelector('#catalog-search-input');
-                const noResultsMessage = page.querySelector('#catalog-no-results');
-                const contentArea = page.querySelector('#catalog-content-area');
-                const clearSearchBtn = page.querySelector('#catalog-clear-search-btn'); // Get the new button
+                document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
+                brandBtn.classList.add('active');
 
-                brandSidebar.addEventListener('click', e => {
-                    const brandBtn = e.target.closest('.brand-btn');
-                    if (!brandBtn) return;
+                if (brand === 'CDJR') {
+                    cdjrTabsContainer.classList.remove('hidden');
+                    renderCatalogContent('CDJR');
+                    cdjrTabsContainer.querySelector('.tab-btn')?.classList.add('active');
+                } else {
+                    cdjrTabsContainer.classList.add('hidden');
+                    renderCatalogContent('INFINITI');
+                }
+            });
 
-                        document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
+            cdjrTabsContainer.addEventListener('click', e => {
+                const tabBtn = e.target.closest('.tab-btn');
+                if (!tabBtn) return;
+                
+                e.stopPropagation();
 
-                    const brand = brandBtn.dataset.brand;
-                    
-                    document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
-                    brandBtn.classList.add('active');
-
-                    if (brand === 'CDJR') {
-                        cdjrTabsContainer.classList.remove('hidden');
-                        renderCatalogContent('CDJR');
-                        cdjrTabsContainer.querySelector('.tab-btn')?.classList.add('active');
-                    } else {
-                        cdjrTabsContainer.classList.add('hidden');
-                        renderCatalogContent('INFINITI');
-                    }
-                    searchInput.value = '';
-                    searchInput.dispatchEvent(new Event('input'));
-                });
-
-                cdjrTabsContainer.addEventListener('click', e => {
-                    const tabBtn = e.target.closest('.tab-btn');
-                    if (!tabBtn) return;
-                    
-                    e.stopPropagation();
-
+                // Check if a search term exists before clearing
+                if (!searchInput.value.trim()) {
                     cdjrTabsContainer.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
                     tabBtn.classList.add('active');
+                }
 
-                    const brandToShow = tabBtn.dataset.tab;
-                    const targetSection = document.getElementById(`section-${brandToShow}`);
-                    const scrollContainer = document.getElementById('catalog-content-area');
+                const brandToShow = tabBtn.dataset.tab;
+                const targetSection = document.getElementById(`section-${brandToShow}`);
+                const scrollContainer = document.getElementById('catalog-content-area');
 
-                    if (targetSection && scrollContainer) {
-                        const topPosition = targetSection.offsetTop - parseInt(getComputedStyle(scrollContainer).paddingTop);
-                        scrollContainer.scrollTo({
-                            top: topPosition,
-                            behavior: 'smooth'
-                        });
+                if (targetSection && scrollContainer) {
+                    const topPosition = targetSection.offsetTop - parseInt(getComputedStyle(scrollContainer).paddingTop);
+                    scrollContainer.scrollTo({
+                        top: topPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+
+            searchInput.addEventListener('input', e => {
+                document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
+
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                // Show or hide the clear button based on input
+                clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
+
+                if (!searchTerm) {
+                    const lastView = appState.carCatalogView || 'CDJR';
+                    renderCatalogContent(lastView);
+                    document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.brand === lastView));
+                    document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => btn.classList.remove('active'));
+                    if (lastView === 'CDJR') {
+                        document.getElementById('cdjrTabs').classList.remove('hidden');
+                        document.querySelector('#cdjrTabs .tab-btn')?.classList.add('active');
+                    } else {
+                         document.getElementById('cdjrTabs').classList.add('hidden');
                     }
-                });
+                    noResultsMessage.classList.add('hidden');
+                    return;
+                }
 
-                searchInput.addEventListener('input', e => {
-                    document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
-
-                    const searchTerm = e.target.value.toLowerCase().trim();
-                    
-                    // Show or hide the clear button based on input
-                    clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
-
-                    if (!searchTerm) {
-                        const lastView = appState.carCatalogView || 'CDJR';
-                        renderCatalogContent(lastView);
-                        document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.brand === lastView));
-                        document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => btn.classList.remove('active'));
-                        if (lastView === 'CDJR') {
-                            document.getElementById('cdjrTabs').classList.remove('hidden');
-                            document.querySelector('#cdjrTabs .tab-btn')?.classList.add('active');
-                        } else {
-                             document.getElementById('cdjrTabs').classList.add('hidden');
+                const allMatches = [];
+                for (const brandKey in carCatalogData) {
+                    for (const subBrand in carCatalogData[brandKey]) {
+                        for (const sectionTitle in carCatalogData[brandKey][subBrand]) {
+                            const vehicles = carCatalogData[brandKey][subBrand][sectionTitle];
+                            vehicles.forEach(vehicle => {
+                                if (vehicle.model.toLowerCase().includes(searchTerm)) {
+                                    allMatches.push({ ...vehicle, brandKey, subBrand });
+                                }
+                            });
                         }
-                        noResultsMessage.classList.add('hidden');
-                        return;
                     }
+                }
+                renderSearchResults(allMatches);
+            });
 
-                    const allMatches = [];
-                    for (const brandKey in carCatalogData) {
-                        for (const subBrand in carCatalogData[brandKey]) {
-                            for (const sectionTitle in carCatalogData[brandKey][subBrand]) {
-                                const vehicles = carCatalogData[brandKey][subBrand][sectionTitle];
-                                vehicles.forEach(vehicle => {
-                                    if (vehicle.model.toLowerCase().includes(searchTerm)) {
-                                        allMatches.push({ ...vehicle, brandKey, subBrand });
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    renderSearchResults(allMatches);
-                });
+            // Add a click event listener for the new clear button
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                // Manually trigger the input event to reset the search results
+                searchInput.dispatchEvent(new Event('input')); 
+                searchInput.focus(); // Optional: Keep the user in the search bar
+            });
 
-                // Add a click event listener for the new clear button
-                clearSearchBtn.addEventListener('click', () => {
-                    searchInput.value = '';
-                    // Manually trigger the input event to reset the search results
-                    searchInput.dispatchEvent(new Event('input')); 
-                    searchInput.focus(); // Optional: Keep the user in the search bar
-                });
+            contentArea.addEventListener('click', e => {
+                const btn = e.target.closest('.catalog-view-btn');
+                if (btn) {
+                    const view = btn.dataset.view;
+                    const switcher = btn.closest('.catalog-view-switcher');
+                    const container = btn.closest('.catalog-view-section').querySelector('.catalog-view-container');
+                    switcher.querySelector('.view-btn-active').classList.remove('view-btn-active');
+                    btn.classList.add('view-btn-active');
+                    container.classList.toggle('list-view', view === 'list');
+                }
+            });
+        }
 
-                contentArea.addEventListener('click', e => {
-                    const btn = e.target.closest('.catalog-view-btn');
-                    if (btn) {
-                        const view = btn.dataset.view;
-                        const switcher = btn.closest('.catalog-view-switcher');
-                        const container = btn.closest('.catalog-view-section').querySelector('.catalog-view-container');
-                        switcher.querySelector('.view-btn-active').classList.remove('view-btn-active');
-                        btn.classList.add('view-btn-active');
-                        container.classList.toggle('list-view', view === 'list');
-                    }
-                });
-            }
 
             // --- DEALERSHIP MANAGER FUNCTIONS (REBUILT) ---
             function initializeDealershipManager() {
