@@ -335,17 +335,23 @@
         #dealershipListPage .expand-icon { transition: transform 0.3s ease-in-out; }
         #dealershipListPage .card-header.expanded .expand-icon { transform: rotate(-180deg); }
         
+
+        /* This is the collapsed state, copied from the Hot Alerts .card-body */
         #dealershipListPage .card-body {
             max-height: 0;
             overflow: hidden;
             will-change: max-height;
-            transition: max-height 0.4s ease-in-out;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 24px; /* Matches Hot Alerts padding */
             background-color: var(--c-surface);
         }
-        #dealershipListPage .card-header.expanded + .card-body {
-            max-height: 1000px; 
-            border-top: 1px solid var(--c-border);
+
+        /* This is the expanded state, copied from the Hot Alerts .card.expanded .card-body */
+        #dealershipListPage .dealership-card.expanded .card-body {
+            max-height: 1000px;
+            padding: 0 24px 24px; /* Matches Hot Alerts padding */
         }
+        
 
         #dealershipListPage input[type="text"], #dealershipListPage input[type="url"], #dealershipListPage input[type="password"], #dealershipListPage input[type="email"], #dealershipListPage select, #dealershipListPage textarea {
             background-color: var(--c-surface);
@@ -1953,27 +1959,34 @@
                 });
                 
                 listContainer.addEventListener('click', (e) => {
-                    const card = e.target.closest('.bg-\\[var\\(--c-surface-light\\)\\]');
+                    const card = e.target.closest('.dealership-card');
                     if (!card) return;
-                    const header = e.target.closest('.card-header');
-                    const button = e.target.closest('button');
-                    const credId = card.dataset.id;
-                    if (button) {
-                        e.stopPropagation();
-                        if (button.matches('.delete-btn')) {
-                            openDeleteModal(credId);
-                        } else if (button.matches('.edit-btn')) {
+
+                    // Stop the card from expanding if a button or link was clicked
+                    const buttonOrLink = e.target.closest('button, a');
+                    if (buttonOrLink) {
+                        e.stopPropagation(); // Prevents the click from bubbling up to the card
+                        const credId = card.dataset.id;
+                        if (buttonOrLink.matches('.delete-btn')) openDeleteModal(credId);
+                        if (buttonOrLink.matches('.edit-btn')) {
                             const cred = allDealerships.find(c => c.id === credId);
                             if (cred) openModalForEdit(cred);
-                        } else if (button.matches('.copy-btn-header')) {
-                            copyToClipboard(button.dataset.value, button);
-                        } else if (button.matches('.copy-btn')) {
-                            copyToClipboard(button.dataset.value, button);
                         }
-                        return;
+                        if (buttonOrLink.matches('.copy-btn-header, .copy-btn')) {
+                            copyToClipboard(buttonOrLink.dataset.value, buttonOrLink);
+                        }
+                        return; // Exit the function
                     }
-                    if (header) {
-                        header.classList.toggle('expanded');
+                    // If this card is already open, just close it.
+                    if (card.classList.contains('expanded')) {
+                        card.classList.remove('expanded');
+                    } else {
+                        // Close any other cards that might be open
+                        document.querySelectorAll('.dealership-card.expanded').forEach(openCard => {
+                            openCard.classList.remove('expanded');
+                        });
+                        // Open the clicked card
+                        card.classList.add('expanded');
                     }
                 });
 
