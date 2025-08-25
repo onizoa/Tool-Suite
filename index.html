@@ -178,7 +178,7 @@
         .header-btn.active { background-color: var(--c-primary); border-color: var(--c-primary-variant); }
         .header-btn.active .header-icon { stroke: #fff; }
         
-        .page-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transform: translateY(15px); transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s; display: flex; }
+        .page-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transform: translateY(15px); will-change: transform, opacity; transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s; display: flex; }
         .page-content.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0s; }
 
         #hotAlertsPage { flex-grow: 1; min-height: 0; }
@@ -194,7 +194,7 @@
         .card-title { font-size: 18px; font-weight: 600; color: var(--c-primary); }
         .card-toggle-icon { width: 24px; height: 24px; transition: transform 0.3s; }
         .card.expanded .card-toggle-icon { transform: rotate(45deg); }
-        .card-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 24px; }
+        .card-body { max-height: 0; overflow: hidden; will-change: max-height; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 24px; }
         .card.expanded .card-body { max-height: 1000px; padding: 0 24px 24px; }
         .in-card-controls { margin-bottom: 16px; }
         .template-preview { background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; padding: 20px; font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-wrap: break-word; }
@@ -338,6 +338,7 @@
         #dealershipListPage .card-body {
             max-height: 0;
             overflow: hidden;
+            will-change: max-height;
             transition: max-height 0.4s ease-in-out;
             background-color: var(--c-surface);
         }
@@ -789,7 +790,7 @@
         </div>
     </div>
 
-    <script type="module">
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -880,6 +881,17 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+
+            function debounce(func, delay = 250) {
+                let timeoutId;
+                return function(...args) {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        func.apply(this, args);
+                    }, delay);
+                };
+            }
+
             let combinedTemplates = [];
             let publicTmpls = [];
             let userTmpls = [];
@@ -1034,7 +1046,6 @@
                 document.getElementById(`${view}Page`).classList.add('active');
                 headerNavContainer.classList.toggle('hidden', view === 'toolSuite');
 
-                // Handle active state for new header buttons
                 const navButtons = {
                     toolSuite: headerNavToolSuite,
                     hotAlerts: headerNavHotAlerts,
@@ -1126,9 +1137,13 @@
 
                 const cards = cardContainer.querySelectorAll('.card');
                 cards.forEach((card, index) => {
-                    setTimeout(() => {
+                    card.style.transitionDelay = `${index * 50}ms`; 
+                });
+
+                requestAnimationFrame(() => {
+                    cards.forEach(card => {
                         card.classList.add('show');
-                    }, index * 50);
+                    });
                 });
             }
 
@@ -1482,13 +1497,11 @@
 
                 noResultsMessage.classList.add('hidden');
 
-                // Group matches by sub-brand (e.g., Jeep, Dodge) to create sections
                 const groupedBySubBrand = matches.reduce((acc, vehicle) => {
                     (acc[vehicle.subBrand] = acc[vehicle.subBrand] || []).push(vehicle);
                     return acc;
                 }, {});
 
-                // Highlight the corresponding brands in the sidebar
                 const uniqueBrandKeys = new Set(matches.map(v => v.brandKey));
                 const uniqueSubBrands = new Set(matches.map(v => v.subBrand));
 
@@ -1502,7 +1515,6 @@
                     btn.classList.toggle('active', uniqueSubBrands.has(btn.dataset.tab));
                 });
 
-                // Render the grouped results into the content area
                 for (const subBrand in groupedBySubBrand) {
                     const vehicles = groupedBySubBrand[subBrand];
                     const section = document.createElement('div');
@@ -1533,9 +1545,12 @@
 
                 const cards = contentArea.querySelectorAll('.vehicle-card');
                 cards.forEach((card, index) => {
-                    setTimeout(() => {
+                    card.style.transitionDelay = `${index * 50}ms`;
+                });
+                requestAnimationFrame(() => {
+                    cards.forEach(card => {
                         card.classList.add('show');
-                    }, index * 50);
+                    });
                 });
 
                 initializeScrollSpy();
@@ -1583,13 +1598,16 @@
                 });
 
                 const cards = contentArea.querySelectorAll('.vehicle-card');
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('show');
-                    }, index * 50); // 50ms delay between each card
-                });
+                    cards.forEach((card, index) => {
+                        card.style.transitionDelay = `${index * 50}ms`;
+                    });
+                    requestAnimationFrame(() => {
+                        cards.forEach(card => {
+                            card.classList.add('show');
+                        });
+                    });
 
-                initializeScrollSpy();
+                    initializeScrollSpy();
             }
 
 
@@ -1600,8 +1618,8 @@
                 if (sections.length === 0 || cdjrTabs.length === 0) return;
 
                 const observerOptions = {
-                    root: contentArea, // The scrollable container is the viewport
-                    rootMargin: "0px 0px -60% 0px", // Triggers when a section is in the top 40% of the view
+                    root: contentArea,
+                    rootMargin: "0px 0px -60% 0px",
                     threshold: 0
                 };
 
@@ -1632,126 +1650,107 @@
             }
 
             function attachCarCatalogEventListeners() {
-            const page = document.getElementById('carCatalogPage');
-            if (!page) return;
-            
-            const brandSidebar = page.querySelector('#brandSidebar');
-            const cdjrTabsContainer = page.querySelector('#cdjrTabs');
-            const searchInput = page.querySelector('#catalog-search-input');
-            const noResultsMessage = page.querySelector('#catalog-no-results');
-            const contentArea = page.querySelector('#catalog-content-area');
-            const clearSearchBtn = page.querySelector('#catalog-clear-search-btn'); // Get the new button
-
-            brandSidebar.addEventListener('click', e => {
-                const brandBtn = e.target.closest('.brand-btn');
-                if (!brandBtn) return;
-
-                // Clear search input when a main brand button is clicked
-                searchInput.value = '';
-                searchInput.dispatchEvent(new Event('input'));
-
-                document.getElementById('catalog-content-area').scrollTop = 0;
-
-                const brand = brandBtn.dataset.brand;
+                const page = document.getElementById('carCatalogPage');
+                if (!page) return;
                 
-                document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
-                brandBtn.classList.add('active');
+                const brandSidebar = page.querySelector('#brandSidebar');
+                const cdjrTabsContainer = page.querySelector('#cdjrTabs');
+                const searchInput = page.querySelector('#catalog-search-input');
+                const noResultsMessage = page.querySelector('#catalog-no-results');
+                const contentArea = page.querySelector('#catalog-content-area');
+                const clearSearchBtn = page.querySelector('#catalog-clear-search-btn');
 
-                if (brand === 'CDJR') {
-                    cdjrTabsContainer.classList.remove('hidden');
-                    renderCatalogContent('CDJR');
-                    cdjrTabsContainer.querySelector('.tab-btn')?.classList.add('active');
-                } else {
-                    cdjrTabsContainer.classList.add('hidden');
-                    renderCatalogContent('INFINITI');
-                }
-            });
-
-            cdjrTabsContainer.addEventListener('click', e => {
-                const tabBtn = e.target.closest('.tab-btn');
-                if (!tabBtn) return;
-                
-                e.stopPropagation();
-
-                // Check if a search term exists before clearing
-                if (!searchInput.value.trim()) {
-                    cdjrTabsContainer.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-                    tabBtn.classList.add('active');
-                }
-
-                const brandToShow = tabBtn.dataset.tab;
-                const targetSection = document.getElementById(`section-${brandToShow}`);
-                const scrollContainer = document.getElementById('catalog-content-area');
-
-                if (targetSection && scrollContainer) {
-                    const topPosition = targetSection.offsetTop - parseInt(getComputedStyle(scrollContainer).paddingTop);
-                    scrollContainer.scrollTo({
-                        top: topPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-
-            searchInput.addEventListener('input', e => {
-                document.getElementById('catalog-content-area').scrollTop = 0; // Add this line
-
-                const searchTerm = e.target.value.toLowerCase().trim();
-                
-                // Show or hide the clear button based on input
-                clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
-
-                if (!searchTerm) {
-                    const lastView = appState.carCatalogView || 'CDJR';
-                    renderCatalogContent(lastView);
-                    document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.brand === lastView));
-                    document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => btn.classList.remove('active'));
-                    if (lastView === 'CDJR') {
-                        document.getElementById('cdjrTabs').classList.remove('hidden');
-                        document.querySelector('#cdjrTabs .tab-btn')?.classList.add('active');
+                brandSidebar.addEventListener('click', e => {
+                    const brandBtn = e.target.closest('.brand-btn');
+                    if (!brandBtn) return;
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                    document.getElementById('catalog-content-area').scrollTop = 0;
+                    const brand = brandBtn.dataset.brand;
+                    document.querySelectorAll('#brandSidebar .brand-btn, #brandSidebar .tab-btn').forEach(b => b.classList.remove('active'));
+                    brandBtn.classList.add('active');
+                    if (brand === 'CDJR') {
+                        cdjrTabsContainer.classList.remove('hidden');
+                        renderCatalogContent('CDJR');
+                        cdjrTabsContainer.querySelector('.tab-btn')?.classList.add('active');
                     } else {
-                         document.getElementById('cdjrTabs').classList.add('hidden');
+                        cdjrTabsContainer.classList.add('hidden');
+                        renderCatalogContent('INFINITI');
                     }
-                    noResultsMessage.classList.add('hidden');
-                    return;
-                }
+                });
 
-                const allMatches = [];
-                for (const brandKey in carCatalogData) {
-                    for (const subBrand in carCatalogData[brandKey]) {
-                        for (const sectionTitle in carCatalogData[brandKey][subBrand]) {
-                            const vehicles = carCatalogData[brandKey][subBrand][sectionTitle];
-                            vehicles.forEach(vehicle => {
-                                if (vehicle.model.toLowerCase().includes(searchTerm)) {
-                                    allMatches.push({ ...vehicle, brandKey, subBrand });
-                                }
-                            });
+                cdjrTabsContainer.addEventListener('click', e => {
+                    const tabBtn = e.target.closest('.tab-btn');
+                    if (!tabBtn) return;
+                    e.stopPropagation();
+                    if (!searchInput.value.trim()) {
+                        cdjrTabsContainer.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                        tabBtn.classList.add('active');
+                    }
+                    const brandToShow = tabBtn.dataset.tab;
+                    const targetSection = document.getElementById(`section-${brandToShow}`);
+                    const scrollContainer = document.getElementById('catalog-content-area');
+                    if (targetSection && scrollContainer) {
+                        const topPosition = targetSection.offsetTop - parseInt(getComputedStyle(scrollContainer).paddingTop);
+                        scrollContainer.scrollTo({
+                            top: topPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+
+                searchInput.addEventListener('input', e => {
+                    document.getElementById('catalog-content-area').scrollTop = 0;
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
+                    if (!searchTerm) {
+                        const lastView = appState.carCatalogView || 'CDJR';
+                        renderCatalogContent(lastView);
+                        document.querySelectorAll('#brandSidebar .brand-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.brand === lastView));
+                        document.querySelectorAll('#brandSidebar .tab-btn').forEach(btn => btn.classList.remove('active'));
+                        if (lastView === 'CDJR') {
+                            document.getElementById('cdjrTabs').classList.remove('hidden');
+                            document.querySelector('#cdjrTabs .tab-btn')?.classList.add('active');
+                        } else {
+                             document.getElementById('cdjrTabs').classList.add('hidden');
+                        }
+                        noResultsMessage.classList.add('hidden');
+                        return;
+                    }
+                    const allMatches = [];
+                    for (const brandKey in carCatalogData) {
+                        for (const subBrand in carCatalogData[brandKey]) {
+                            for (const sectionTitle in carCatalogData[brandKey][subBrand]) {
+                                const vehicles = carCatalogData[brandKey][subBrand][sectionTitle];
+                                vehicles.forEach(vehicle => {
+                                    if (vehicle.model.toLowerCase().includes(searchTerm)) {
+                                        allMatches.push({ ...vehicle, brandKey, subBrand });
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-                renderSearchResults(allMatches);
-            });
+                    renderSearchResults(allMatches);
+                });
 
-            // Add a click event listener for the new clear button
-            clearSearchBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                // Manually trigger the input event to reset the search results
-                searchInput.dispatchEvent(new Event('input')); 
-                searchInput.focus(); // Optional: Keep the user in the search bar
-            });
+                clearSearchBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input')); 
+                    searchInput.focus();
+                });
 
-            contentArea.addEventListener('click', e => {
-                const btn = e.target.closest('.catalog-view-btn');
-                if (btn) {
-                    const view = btn.dataset.view;
-                    const switcher = btn.closest('.catalog-view-switcher');
-                    const container = btn.closest('.catalog-view-section').querySelector('.catalog-view-container');
-                    switcher.querySelector('.view-btn-active').classList.remove('view-btn-active');
-                    btn.classList.add('view-btn-active');
-                    container.classList.toggle('list-view', view === 'list');
-                }
-            });
-        }
-
+                contentArea.addEventListener('click', e => {
+                    const btn = e.target.closest('.catalog-view-btn');
+                    if (btn) {
+                        const view = btn.dataset.view;
+                        const switcher = btn.closest('.catalog-view-switcher');
+                        const container = btn.closest('.catalog-view-section').querySelector('.catalog-view-container');
+                        switcher.querySelector('.view-btn-active').classList.remove('view-btn-active');
+                        btn.classList.add('view-btn-active');
+                        container.classList.toggle('list-view', view === 'list');
+                    }
+                });
+            }
 
             // --- DEALERSHIP MANAGER FUNCTIONS (REBUILT) ---
             function initializeDealershipManager() {
@@ -1765,9 +1764,7 @@
                 const addNewBtn = page.querySelector('#add-new-btn');
                 const listContainer = page.querySelector('#credentials-list-container');
                 const tabButtonsContainer = page.querySelector('#tab-buttons');
-                const tabsContainer = page.querySelector('#tabs-container');
                 const noResultsMessage = page.querySelector('#no-results-message');
-                
                 const credentialModal = page.querySelector('#credential-modal');
                 const modalContentInner = credentialModal.querySelector('.modal-content-inner');
                 const modalTitle = page.querySelector('#modal-title');
@@ -1776,7 +1773,6 @@
                 const credentialIdInput = page.querySelector('#credential-id');
                 const categoryInput = page.querySelector('#category');
                 const titleInput = page.querySelector('#title');
-                
                 const toggleLink = page.querySelector('#toggle-link');
                 const toggleLogin = page.querySelector('#toggle-login');
                 const toggleNotes = page.querySelector('#toggle-notes');
@@ -1784,7 +1780,6 @@
                 const loginFieldsContainer = page.querySelector('#login-fields-container');
                 const notesSectionContent = page.querySelector('#notes-section-content');
                 const addNoteButtonContainer = page.querySelector('#add-note-button-container');
-
                 const urlInput = page.querySelector('#url');
                 const schedulerLinkInput = page.querySelector('#online-scheduler-link');
                 const browserInput = page.querySelector('#browser');
@@ -1794,13 +1789,10 @@
                 const vpnRequiredInput = page.querySelector('#vpn-required');
                 const notesContainer = page.querySelector('#notes-container');
                 const addNoteBtn = page.querySelector('#add-note-btn');
-
                 const deleteModal = page.querySelector('#delete-modal');
                 const deleteModalContent = deleteModal.querySelector('.delete-modal-content');
                 const deleteConfirmBtn = page.querySelector('#delete-confirm-btn');
                 const deleteCancelBtn = page.querySelector('#delete-cancel-btn');
-
-                let activeTab = '';
                 let deleteTimerInterval;
 
                 const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', other: 'Other' };
@@ -1812,13 +1804,11 @@
                         const originalContent = button.innerHTML;
                         const originalClasses = button.className;
                         button.disabled = true;
-
                         if (button.classList.contains('copy-btn-header')) {
                              button.innerHTML = `Copied!`;
                         } else {
                              button.innerHTML = `<i class="fas fa-check mr-1"></i>Copied!`;
                         }
-                       
                         button.className = originalClasses.replace(/bg-[\w-]+/g, 'bg-green-600').replace(/hover:bg-[\w-]+/g, '');
                         setTimeout(() => { 
                             button.innerHTML = originalContent; 
@@ -1845,113 +1835,96 @@
                 };
 
                 const renderDealerships = () => {
-                const page = document.getElementById('dealershipListPage');
-                const searchBar = page.querySelector('#search-bar');
-                const listContainer = page.querySelector('#credentials-list-container');
-                const tabButtonsContainer = page.querySelector('#tab-buttons');
-                const noResultsMessage = page.querySelector('#no-results-message');
-
-                // Prepare the new content
-                const credentials = allDealerships;
-                const categories = [...new Set(credentials.map(c => c.category))].sort((a, b) => a.localeCompare(b));
-                const isSearching = searchBar.value.trim().length > 0;
-                const searchFilter = searchBar.value.toLowerCase();
-                let activeTab = page.dataset.activeTab || (categories.length > 0 ? categories[0] : '');
-
-                let filteredCreds;
-
-                if (isSearching) {
-                    filteredCreds = credentials.filter(cred =>
-                        cred.title.toLowerCase().includes(searchFilter) ||
-                        (cred.hasLink && cred.url && cred.url.toLowerCase().includes(searchFilter))
-                    );
-                } else {
-                    if (!categories.includes(activeTab) && categories.length > 0) {
-                        activeTab = categories[0];
+                    const page = document.getElementById('dealershipListPage');
+                    const searchBar = page.querySelector('#search-bar');
+                    const listContainer = page.querySelector('#credentials-list-container');
+                    const tabButtonsContainer = page.querySelector('#tab-buttons');
+                    const noResultsMessage = page.querySelector('#no-results-message');
+                    const credentials = allDealerships;
+                    const categories = [...new Set(credentials.map(c => c.category))].sort((a, b) => a.localeCompare(b));
+                    const isSearching = searchBar.value.trim().length > 0;
+                    const searchFilter = searchBar.value.toLowerCase();
+                    let activeTab = page.dataset.activeTab || (categories.length > 0 ? categories[0] : '');
+                    let filteredCreds;
+                    if (isSearching) {
+                        filteredCreds = credentials.filter(cred =>
+                            cred.title.toLowerCase().includes(searchFilter) ||
+                            (cred.hasLink && cred.url && cred.url.toLowerCase().includes(searchFilter))
+                        );
+                    } else {
+                        if (!categories.includes(activeTab) && categories.length > 0) {
+                            activeTab = categories[0];
+                        }
+                        page.dataset.activeTab = activeTab;
+                        filteredCreds = credentials.filter(cred => cred.category === activeTab);
                     }
-                    page.dataset.activeTab = activeTab;
-                    filteredCreds = credentials.filter(cred => cred.category === activeTab);
-                }
-
-                // Update tabs
-                tabButtonsContainer.innerHTML = '';
-                categories.forEach(category => {
-                    const button = document.createElement('button');
-                    button.dataset.tab = category;
-                    button.className = 'tab-button';
-                    if (activeTab === category && !isSearching) {
-                        button.classList.add('tab-active');
-                    }
-                    button.textContent = category;
-                    tabButtonsContainer.appendChild(button);
-                });
-
-                // Clear the container and add the new cards (they will be invisible initially)
-                listContainer.innerHTML = ''; 
-                
-                filteredCreds.forEach(cred => {
-                    const card = document.createElement('div');
-                    // Add the new .dealership-card class for animation
-                    card.className = 'dealership-card bg-[var(--c-surface-light)] rounded-xl shadow-lg border border-[var(--c-border)] overflow-hidden';
-                    card.dataset.id = cred.id;
-                    
-                    // (The rest of your card creation logic remains the same)
-                    const vpnBadgeHtml = cred.vpnRequired ? `<span class="vpn-badge">VPN</span>` : '';
-                    const categoryBadgeHtml = isSearching ? `<span class="text-xs bg-[var(--c-primary)] text-white font-bold ml-3 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">${cred.category}</span>` : '';
-                    const iconHtml = `<i class="${getBrowserIcon(cred.browser)} fa-2x"></i>`;
-                    const copyLinkHeaderButton = cred.hasLink && cred.url ? `<button class="copy-btn-header bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-1 px-3 rounded-full flex-shrink-0" data-value="${cred.url}"><i class="fas fa-link mr-1"></i>Copy link</button>` : '';
-                    const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', other: 'Other' };
-                    const browserDetailsHtml = `<div><div class="flex justify-between items-center"><span class="text-[var(--c-on-surface-variant)]">Browser:</span><div class="flex items-center gap-2"><i class="${getBrowserIcon(cred.browser)}"></i><span class="font-mono text-[var(--c-on-surface)]">${BROWSER_NAMES[cred.browser] || 'N/A'}</span></div></div></div>`;
-                    const linkDetailsHtml = cred.hasLink && cred.url ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">Website URL</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.url}</p><a href="${cred.url}" target="_blank" class="p-2 text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] hover:bg-[var(--c-surface)] border-l border-[var(--c-border)]" onclick="event.stopPropagation();" aria-label="Open link in new tab"><i class="fas fa-external-link-alt"></i></a></div></div>` : '';
-                    const schedulerLinkDetailsHtml = cred.hasLink && cred.onlineSchedulerLink ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">ONLINE SCHEDULER</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.onlineSchedulerLink}</p><button class="copy-btn bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-2 px-3 rounded-md" data-value="${cred.onlineSchedulerLink}"><i class="fas fa-copy mr-1"></i>Copy</button></div></div>` : '';
-                    const loginDetailsHtml = cred.hasLogin ? `<div class="space-y-3"><div class="grid grid-cols-[auto_1fr] gap-y-3 gap-x-4 items-center"><span class="text-[var(--c-on-surface-variant)]">Username:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.username || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.username || ''}">Copy</button></div><span class="text-[var(--c-on-surface-variant)]">Password:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.password || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.password || ''}">Copy</button></div></div>${(cred.hasLink && cred.onlineSchedulerLink) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : ''}</div>` : '';
-                    const notesDetailsHtml = cred.hasNotes && cred.notes?.length > 0 ? `<div class="space-y-2"><h4 class="text-base font-bold text-[var(--c-on-surface)]">Notes</h4>${cred.notes.map(note => `<div class="pt-2"><p class="font-semibold text-[var(--c-on-surface)]">${note.title || ''}</p><p class="text-[var(--c-on-surface-variant)] whitespace-pre-wrap">${note.description || ''}</p></div>`).join('')}</div>` : '';
-                    const firstColContent = `<div class="space-y-4">${browserDetailsHtml}${(cred.hasLink && cred.url) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${linkDetailsHtml}</div>` : ''}${cred.hasLogin ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${loginDetailsHtml}</div>` : (!cred.hasLogin && cred.hasLink && cred.onlineSchedulerLink ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : '')}</div>`;
-                    const secondColContent = cred.hasNotes && cred.notes?.length > 0 ? `<div class="border-t md:border-t-0 md:border-l border-[var(--c-border)] pt-4 md:pt-0 md:pl-4">${notesDetailsHtml}</div>` : '';
-                    const hasDetails = cred.hasLink || cred.hasLogin;
-                    card.innerHTML = `
-                        <div class="card-header p-4 flex items-center justify-between cursor-pointer hover:bg-[var(--c-border)] transition">
-                            <div class="flex items-center gap-4 flex-grow min-w-0">
-                                <div class="icon-container">${iconHtml}${vpnBadgeHtml}</div>
-                                <div class="flex items-center min-w-0">
-                                    <h3 class="card-header-title font-bold text-[var(--c-on-surface)] text-lg truncate">${cred.title}</h3>
-                                    ${categoryBadgeHtml}
+                    tabButtonsContainer.innerHTML = '';
+                    categories.forEach(category => {
+                        const button = document.createElement('button');
+                        button.dataset.tab = category;
+                        button.className = 'tab-button';
+                        if (activeTab === category && !isSearching) {
+                            button.classList.add('tab-active');
+                        }
+                        button.textContent = category;
+                        tabButtonsContainer.appendChild(button);
+                    });
+                    listContainer.innerHTML = ''; 
+                    filteredCreds.forEach(cred => {
+                        const card = document.createElement('div');
+                        card.className = 'dealership-card bg-[var(--c-surface-light)] rounded-xl shadow-lg border border-[var(--c-border)] overflow-hidden';
+                        card.dataset.id = cred.id;
+                        const vpnBadgeHtml = cred.vpnRequired ? `<span class="vpn-badge">VPN</span>` : '';
+                        const categoryBadgeHtml = isSearching ? `<span class="text-xs bg-[var(--c-primary)] text-white font-bold ml-3 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">${cred.category}</span>` : '';
+                        const iconHtml = `<i class="${getBrowserIcon(cred.browser)} fa-2x"></i>`;
+                        const copyLinkHeaderButton = cred.hasLink && cred.url ? `<button class="copy-btn-header bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-1 px-3 rounded-full flex-shrink-0" data-value="${cred.url}"><i class="fas fa-link mr-1"></i>Copy link</button>` : '';
+                        const browserDetailsHtml = `<div><div class="flex justify-between items-center"><span class="text-[var(--c-on-surface-variant)]">Browser:</span><div class="flex items-center gap-2"><i class="${getBrowserIcon(cred.browser)}"></i><span class="font-mono text-[var(--c-on-surface)]">${BROWSER_NAMES[cred.browser] || 'N/A'}</span></div></div></div>`;
+                        const linkDetailsHtml = cred.hasLink && cred.url ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">Website URL</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.url}</p><a href="${cred.url}" target="_blank" class="p-2 text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] hover:bg-[var(--c-surface)] border-l border-[var(--c-border)]" onclick="event.stopPropagation();" aria-label="Open link in new tab"><i class="fas fa-external-link-alt"></i></a></div></div>` : '';
+                        const schedulerLinkDetailsHtml = cred.hasLink && cred.onlineSchedulerLink ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">ONLINE SCHEDULER</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.onlineSchedulerLink}</p><button class="copy-btn bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-2 px-3 rounded-md" data-value="${cred.onlineSchedulerLink}"><i class="fas fa-copy mr-1"></i>Copy</button></div></div>` : '';
+                        const loginDetailsHtml = cred.hasLogin ? `<div class="space-y-3"><div class="grid grid-cols-[auto_1fr] gap-y-3 gap-x-4 items-center"><span class="text-[var(--c-on-surface-variant)]">Username:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.username || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.username || ''}">Copy</button></div><span class="text-[var(--c-on-surface-variant)]">Password:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.password || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.password || ''}">Copy</button></div></div>${(cred.hasLink && cred.onlineSchedulerLink) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : ''}</div>` : '';
+                        const notesDetailsHtml = cred.hasNotes && cred.notes?.length > 0 ? `<div class="space-y-2"><h4 class="text-base font-bold text-[var(--c-on-surface)]">Notes</h4>${cred.notes.map(note => `<div class="pt-2"><p class="font-semibold text-[var(--c-on-surface)]">${note.title || ''}</p><p class="text-[var(--c-on-surface-variant)] whitespace-pre-wrap">${note.description || ''}</p></div>`).join('')}</div>` : '';
+                        const firstColContent = `<div class="space-y-4">${browserDetailsHtml}${(cred.hasLink && cred.url) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${linkDetailsHtml}</div>` : ''}${cred.hasLogin ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${loginDetailsHtml}</div>` : (!cred.hasLogin && cred.hasLink && cred.onlineSchedulerLink ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : '')}</div>`;
+                        const secondColContent = cred.hasNotes && cred.notes?.length > 0 ? `<div class="border-t md:border-t-0 md:border-l border-[var(--c-border)] pt-4 md:pt-0 md:pl-4">${notesDetailsHtml}</div>` : '';
+                        const hasDetails = cred.hasLink || cred.hasLogin;
+                        card.innerHTML = `
+                            <div class="card-header p-4 flex items-center justify-between cursor-pointer hover:bg-[var(--c-border)] transition">
+                                <div class="flex items-center gap-4 flex-grow min-w-0">
+                                    <div class="icon-container">${iconHtml}${vpnBadgeHtml}</div>
+                                    <div class="flex items-center min-w-0">
+                                        <h3 class="card-header-title font-bold text-[var(--c-on-surface)] text-lg truncate">${cred.title}</h3>
+                                        ${categoryBadgeHtml}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <div class="action-buttons flex items-center gap-1">
+                                        ${copyLinkHeaderButton}
+                                        <button class="action-btn edit-btn" aria-label="Edit"><i class="fas fa-pencil-alt"></i></button>
+                                        <button class="action-btn delete-btn" aria-label="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                    <div class="h-6 w-px bg-[var(--c-border)] mx-2"></div>
+                                    <i class="fas fa-chevron-down expand-icon text-[var(--c-on-surface-variant)] transition-transform duration-300"></i>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2 flex-shrink-0">
-                                <div class="action-buttons flex items-center gap-1">
-                                    ${copyLinkHeaderButton}
-                                    <button class="action-btn edit-btn" aria-label="Edit"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="action-btn delete-btn" aria-label="Delete"><i class="fas fa-trash-alt"></i></button>
+                            <div class="card-body">
+                                <div class="p-4 grid grid-cols-1 ${hasDetails && secondColContent ? 'md:grid-cols-2' : ''} gap-4">
+                                    ${hasDetails ? firstColContent : `<div>${browserDetailsHtml}</div>`}
+                                    ${secondColContent}
                                 </div>
-                                <div class="h-6 w-px bg-[var(--c-border)] mx-2"></div>
-                                <i class="fas fa-chevron-down expand-icon text-[var(--c-on-surface-variant)] transition-transform duration-300"></i>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="p-4 grid grid-cols-1 ${hasDetails && secondColContent ? 'md:grid-cols-2' : ''} gap-4">
-                                ${hasDetails ? firstColContent : `<div>${browserDetailsHtml}</div>`}
-                                ${secondColContent}
-                            </div>
-                        </div>`;
-                    listContainer.appendChild(card);
-                });
-
-                listContainer.appendChild(noResultsMessage);
-                noResultsMessage.classList.toggle('hidden', filteredCreds.length > 0);
-                
-                // START: Add this new code to trigger the animation
-                const cards = listContainer.querySelectorAll('.dealership-card');
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('show');
-                    }, index * 50); // 75ms delay between each card's animation
-                });
-                // END: Add new code
+                            </div>`;
+                        listContainer.appendChild(card);
+                    });
+                    listContainer.appendChild(noResultsMessage);
+                    noResultsMessage.classList.toggle('hidden', filteredCreds.length > 0);
+                    const cards = listContainer.querySelectorAll('.dealership-card');
+                    cards.forEach((card, index) => {
+                        card.style.transitionDelay = `${index * 50}ms`;
+                    });
+                    requestAnimationFrame(() => {
+                        cards.forEach(card => {
+                            card.classList.add('show');
+                        });
+                    });
                 };
-                
-                
-
                 renderDealershipsNow = renderDealerships;
 
                 const updateFormVisibility = () => {
@@ -1972,9 +1945,9 @@
                 clearSearchBtn.addEventListener('click', () => { searchBar.value = ''; clearSearchBtn.classList.add('hidden'); renderDealerships(); searchBar.focus(); });
                 tabButtonsContainer.addEventListener('click', (e) => { 
                     if (e.target.matches('.tab-button')) { 
-                        searchBar.value = ''; // Clear search when a tab is clicked
+                        searchBar.value = '';
                         clearSearchBtn.classList.add('hidden');
-                        page.dataset.activeTab = e.target.dataset.tab; // Change to this line
+                        page.dataset.activeTab = e.target.dataset.tab;
                         renderDealerships(); 
                     } 
                 });
@@ -1982,11 +1955,9 @@
                 listContainer.addEventListener('click', (e) => {
                     const card = e.target.closest('.bg-\\[var\\(--c-surface-light\\)\\]');
                     if (!card) return;
-
                     const header = e.target.closest('.card-header');
                     const button = e.target.closest('button');
                     const credId = card.dataset.id;
-                    
                     if (button) {
                         e.stopPropagation();
                         if (button.matches('.delete-btn')) {
@@ -2001,7 +1972,6 @@
                         }
                         return;
                     }
-
                     if (header) {
                         header.classList.toggle('expanded');
                     }
@@ -2065,9 +2035,7 @@
                         showToast('An entry with this title already exists.', true); 
                         return; 
                     }
-                    
                     showLoader(credId ? 'Saving Changes...' : 'Adding New Dealership...');
-
                     const newCredential = {
                         category: categoryInput.value.trim(), title: newTitle, browser: browserInput.value, vpnRequired: vpnRequiredInput.checked,
                         hasLink: toggleLink.checked, hasLogin: toggleLogin.checked, hasNotes: toggleNotes.checked,
@@ -2075,7 +2043,6 @@
                         username: toggleLogin.checked ? usernameInput.value.trim() : '', password: toggleLogin.checked ? passwordInput.value : '',
                         notes: toggleNotes.checked ? Array.from(notesContainer.querySelectorAll('.note-title-input')).map(input => ({ title: input.value.trim(), description: input.closest('.p-3').querySelector('.note-description-input').value.trim() })).filter(n => n.title || n.description) : []
                     };
-                    
                     try {
                         if (credId) { await setDoc(doc(dealershipsRef, credId), newCredential); } 
                         else { await addDoc(dealershipsRef, newCredential); }
@@ -2101,7 +2068,6 @@
                     page.querySelector('#delete-modal-text').innerHTML = `You are about to permanently delete <br> "<strong>${cred.title}</strong>".`;
                     deleteConfirmBtn.dataset.id = id;
                     deleteModal.classList.remove('hidden');
-                    
                     deleteConfirmBtn.disabled = true;
                     deleteConfirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
                     let countdown = 3;
@@ -2111,7 +2077,6 @@
                         if (countdown > 0) { deleteConfirmBtn.innerHTML = `Delete (${countdown})`; } 
                         else { clearInterval(deleteTimerInterval); deleteConfirmBtn.disabled = false; deleteConfirmBtn.classList.remove('opacity-50', 'cursor-not-allowed'); deleteConfirmBtn.innerHTML = 'Delete'; }
                     }, 1000);
-
                     setTimeout(() => { deleteModal.classList.remove('opacity-0'); deleteModalContent.classList.remove('opacity-0', 'scale-95'); }, 10);
                 };
 
@@ -2132,10 +2097,8 @@
                 
                 deleteConfirmBtn.addEventListener('click', async () => {
                     if (deleteConfirmBtn.disabled || !dealershipsRef) return;
-                    
                     showLoader('Deleting Dealership...');
                     const idToDelete = deleteConfirmBtn.dataset.id;
-
                     try {
                         await deleteDoc(doc(dealershipsRef, idToDelete));
                         showToast("Dealership deleted.");
@@ -2147,7 +2110,7 @@
                     }
                 });
 
-                if (unsubscribeFromDealerships) unsubscribeFromDealerships();
+                if (unsubscribeFromDealerships) unsubscribeFromDealships();
                 unsubscribeFromDealerships = onSnapshot(dealershipsRef, (snapshot) => {
                     allDealerships = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     allDealerships.sort((a,b) => a.title.localeCompare(b.title));
@@ -2177,10 +2140,9 @@
                 const splashScreen = document.getElementById('splashScreen');
                 splashScreen.style.opacity = '0';
                 splashScreen.style.visibility = 'hidden';
-                // Use a timeout to fully hide it after the transition
                 setTimeout(() => {
                     splashScreen.classList.add('hidden');
-                }, 500); // Match the transition duration in CSS
+                }, 500);
             }
             
             function initializeApp() {
@@ -2190,13 +2152,11 @@
                 const themeToggleCard = document.getElementById('themeToggleCard');
                 const signOutCard = document.getElementById('signOutCard');
 
-                // Card navigation
                 navigateToHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
                 navigateToTemplateManager.addEventListener('click', () => renderCurrentView('manageTemplates'));
                 navigateToCarCatalog.addEventListener('click', () => renderCurrentView('carCatalog'));
                 navigateToDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
                 
-                // Header navigation
                 headerNavToolSuite.addEventListener('click', () => renderCurrentView('toolSuite'));
                 headerNavHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
                 headerNavDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
@@ -2208,7 +2168,6 @@
                 themeToggleCard.addEventListener('click', () => {
                     const isLight = body.classList.toggle('light-mode');
                     saveUserPreference('theme', isLight ? 'light' : 'dark');
-                    
                     const iconContainer = themeToggleCard.querySelector('.tool-card-icon-wrapper');
                     iconContainer.style.transition = 'transform 0.5s ease';
                     iconContainer.style.transform = 'rotate(360deg)';
@@ -2227,17 +2186,18 @@
                 });
                 
                 cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
-
                 clearSearchBtn.addEventListener('click', () => { cardSearchInput.value = ''; cardSearchInput.dispatchEvent(new Event('keyup')); });
-
                 templateSelect.addEventListener('change', renderEditorForSelection);
                 document.getElementById('clearAllBtn').addEventListener('click', clearAllFields);
                 addNewTemplateBtn.addEventListener('click', handleAddNewClick);
-                
                 modalConfirmBtn.addEventListener('click', () => { if (confirmCallback) confirmCallback(); });
                 modalCancelBtn.addEventListener('click', hideConfirmationModal);
                 
-                document.body.addEventListener('input', (e) => { if (e.target.matches('.sidebar-content .input-field, .sidebar-content .select-field, .in-card-controls .select-field')) updateAllCards(); });
+                const debouncedUpdate = debounce(() => updateAllCards());
+                document.body.addEventListener('input', (e) => {
+                if (e.target.matches('.sidebar-content .input-field, .sidebar-content .select-field, .in-card-controls .select-field'))
+                        debouncedUpdate();
+                });
             }
 
             // --- Authentication Flow ---
@@ -2251,42 +2211,40 @@
                     userId = user.uid;
                     const isFreshLogin = justAuthenticated;
                     if (isFreshLogin) { showToast("Login successful!"); justAuthenticated = false; }
-                    showLoader('Loading Application...');
                     
-                    setTimeout(async () => {
-                        authContainer.classList.add('hidden');
-                        appContainer.classList.remove('hidden');
-                        initializeApp();
-                        renderCurrentView('toolSuite');
-                        try {
-                            const userPath = `artifacts/${appId}/users/${userId}`;
-                            const publicPath = `artifacts/${appId}/public/data`;
-                            userTemplatesRef = collection(db, `${userPath}/templates`);
-                            publicTemplatesRef = collection(db, `${publicPath}/default_templates`);
-                            settingsDocRef = doc(db, `${userPath}/settings`, 'preferences');
-                            dealershipsRef = collection(db, `${userPath}/dealerships`);
-                            
-                            await initializeUserSettings(); 
-                            
-                            const publicSnapshot = await getDocs(publicTemplatesRef);
-                            publicTmpls = publicSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), isPublic: true, isCustom: false }));
+                    authContainer.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
 
-                            if (unsubscribeFromTemplates) unsubscribeFromTemplates();
-                            unsubscribeFromTemplates = onSnapshot(userTemplatesRef, (userSnapshot) => { mergeAndRenderTemplates(userSnapshot); });
+                    initializeApp();
+                    renderCurrentView('toolSuite');
 
-                            initializeDealershipManager();
+                    try {
+                        const userPath = `artifacts/${appId}/users/${userId}`;
+                        const publicPath = `artifacts/${appId}/public/data`;
+                        userTemplatesRef = collection(db, `${userPath}/templates`);
+                        publicTemplatesRef = collection(db, `${publicPath}/default_templates`);
+                        settingsDocRef = doc(db, `${userPath}/settings`, 'preferences');
+                        dealershipsRef = collection(db, `${userPath}/dealerships`);
+                        
+                        await initializeUserSettings(); 
+                        
+                        const publicSnapshot = await getDocs(publicTemplatesRef);
+                        publicTmpls = publicSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), isPublic: true, isCustom: false }));
 
-                        } catch (error) {
-                            console.error("Error during data setup:", error);
-                            showToast("Error loading user data.", true);
-                        } finally {
-                            hideLoader();
-                        }
-                    }, isFreshLogin ? 1000 : 100);
+                        if (unsubscribeFromTemplates) unsubscribeFromTemplates();
+                        unsubscribeFromTemplates = onSnapshot(userTemplatesRef, (userSnapshot) => { mergeAndRenderTemplates(userSnapshot); });
+
+                        initializeDealershipManager();
+
+                    } catch (error) {
+                        console.error("Error during data setup:", error);
+                        showToast("Error loading user data.", true);
+                    }
+
                 } else {
                     userId = null;
                     if (unsubscribeFromTemplates) unsubscribeFromTemplates();
-                    if (unsubscribeFromDealerships) unsubscribeFromDealerships();
+                    if (unsubscribeFromDealerships) unsubscribeFromDealships();
                     dealershipManagerInitialized = false;
                     renderDealershipsNow = null;
                     setTimeout(() => {
@@ -2296,7 +2254,10 @@
                     }, 500);
                 }
             });
-        });
+
+        }); // This is the single, correct closing for the 'DOMContentLoaded' event listener.
+
     </script>
+
 </body>
 </html>
