@@ -2409,11 +2409,10 @@
                     if (unsubscribeFromDealerships) unsubscribeFromDealships();
                     dealershipManagerInitialized = false;
                     renderDealershipsNow = null;
-                    setTimeout(() => {
-                        splashScreen.classList.add('hidden');
-                        appContainer.classList.add('hidden');
-                        authContainer.classList.remove('hidden');
-                    }, 500);
+                    
+                    splashScreen.classList.add('hidden');
+                    appContainer.classList.add('hidden');
+                    authContainer.classList.remove('hidden');
                 }
             });
 
