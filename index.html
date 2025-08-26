@@ -143,7 +143,7 @@
         .input-field, textarea { width: 100%; padding: 12px 16px; min-height: 49px; background-color: var(--c-background); border: 1px solid var(--c-border); border-radius: 8px; color: var(--c-on-surface); font-family: var(--font-family-sans); font-size: 14px; outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
         .input-field::placeholder, textarea::placeholder { color: var(--c-on-surface-variant); }
         .search-input:focus, .input-field:focus, textarea:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); }
-        .input-field.missing, .select-selected.missing { border-color: var(--c-error) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-error) 20%, transparent) !important; animation: shake 0.3s; }
+        .input-field.missing, .select-selected.missing { border-color: var(--c-error) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-error) 20%, transparent) !important;}
         
         .sidebar-footer { padding-top: 16px; border-top: 1px solid var(--c-border); }
         .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; border: none; transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
@@ -309,6 +309,28 @@
         }
         body:not(.light-mode) .tool-card-icon.theme-sun { display: none; }
         body.light-mode .tool-card-icon.theme-moon { display: none; }
+
+        /* Keep the card shadow applied when a card on the Hot Alerts page is expanded */
+        #hotAlertsPage .card.expanded {
+            box-shadow: 0 8px 30px var(--c-shadow);
+        }
+
+        /* Enable text selection for the link and notes fields in the dealership card body */
+        #dealershipListPage .card-header .card-title,
+        #dealershipListPage .card-body p.text-blue-400,
+        #dealershipListPage .card-body .grid > div:nth-child(2) p {
+            user-select: text;
+            -webkit-user-select: text;
+            cursor: text;
+        }
+
+        /* Enable text selection for all content within the vehicle cards */
+        #carCatalogPage .vehicle-card * {
+            user-select: text;
+            -webkit-user-select: text;
+            cursor: text;
+        }
+
     </style>
     <style>
         /* Styles from tester.html for Dealership Manager */
@@ -350,6 +372,11 @@
         #dealershipListPage .dealership-card.expanded .card-body {
             max-height: 1000px;
             padding: 0 24px 24px; /* Matches Hot Alerts padding */
+        }
+
+        /* This new rule removes the unwanted bottom margin from the cards */
+        #dealershipListPage .dealership-card {
+            margin-bottom: 0;
         }
         
 
@@ -435,6 +462,81 @@
         .help-modal-body p {margin-bottom: 1rem;}
         .help-modal-body ul {list-style-type: disc; padding-left: 20px;}
         .help-modal-body li {margin-bottom: 0.5rem;}
+
+        .fab-tooltip {
+            position: relative; /* Required for positioning the tooltip */
+        }
+
+        /* This creates the tooltip text box */
+        .fab-tooltip::after {
+            content: attr(aria-label);
+            position: absolute;
+            top: 50%;
+            right: calc(100% + 12px); /* Position it to the left of the button */
+            transform: translateY(-50%);
+            background-color: var(--c-primary);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px var(--c-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            transition-delay: 0.3s;
+            z-index: 1001;
+        }
+
+        /* This creates the small triangle arrow */
+        .fab-tooltip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-left-color: var(--c-primary); /* Make the arrow point right */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            transition-delay: 0.3s;
+            z-index: 1001;
+        }
+
+        /* This makes the tooltip and arrow appear on hover */
+        .fab-tooltip:hover::after,
+        .fab-tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Sets the card header background to match the sidebar/top bar */
+        #dealershipListPage .card-header {
+            background-color: var(--c-surface);
+        }
+
+        /* Sets a slightly lighter hover color for interactivity */
+        #dealershipListPage .card-header:hover {
+            background-color: var(--c-surface-light);
+        }
+
+        /* Add a shadow effect on hover for better interactivity */
+        #dealershipListPage .dealership-card:hover {
+            box-shadow: 0 8px 24px var(--c-shadow);
+        }
+
+        /* --- SOLUTION --- */
+        /* Keep the shadow applied when the card is expanded */
+        #dealershipListPage .dealership-card.expanded {
+            box-shadow: 0 8px 24px var(--c-shadow);
+        }
+
+        /* Keep the header's hover color applied when the card is expanded */
+        #dealershipListPage .dealership-card.expanded .card-header {
+            background-color: var(--c-surface-light);
+        }
 
     </style>
 </head>
@@ -665,7 +767,7 @@
                             <h2 id="modal-title" class="text-2xl font-semibold text-[var(--c-on-surface)]">Add New Information</h2>
                             <button id="modal-close-btn" class="text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] text-3xl leading-none">&times;</button>
                         </div>
-                        <form id="credential-form" class="flex-grow overflow-y-auto overflow-x-hidden pr-2">
+                        <form id="credential-form" class="flex-grow overflow-y-auto overflow-x-hidden pr-2 pb-20">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
                                 <div class="space-y-4">
                                     <div>
@@ -750,7 +852,7 @@
                              <input type="hidden" id="credential-id">
                         </form>
                         <div id="add-note-button-container" class="absolute bottom-24 right-8 hidden">
-                            <button type="button" id="add-note-btn" class="btn btn-primary w-12 h-12 rounded-full flex items-center justify-center p-0 shadow-lg">
+                            <button type="button" id="add-note-btn" class="fab-tooltip btn-primary w-12 h-12 rounded-full flex items-center justify-center p-0 shadow-lg" aria-label="Add Note">
                                 <i class="fas fa-plus fa-lg"></i>
                             </button>
                         </div>
@@ -1886,26 +1988,40 @@
                     listContainer.innerHTML = ''; 
                     filteredCreds.forEach(cred => {
                         const card = document.createElement('div');
-                        card.className = 'dealership-card bg-[var(--c-surface-light)] rounded-xl shadow-lg border border-[var(--c-border)] overflow-hidden';
+                        // Added back the correct background color class
+                        card.className = 'card dealership-card bg-[var(--c-surface-light)]'; 
                         card.dataset.id = cred.id;
+                        
                         const vpnBadgeHtml = cred.vpnRequired ? `<span class="vpn-badge">VPN</span>` : '';
                         const categoryBadgeHtml = isSearching ? `<span class="text-xs bg-[var(--c-primary)] text-white font-bold ml-3 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">${cred.category}</span>` : '';
                         const iconHtml = `<i class="${getBrowserIcon(cred.browser)} fa-2x"></i>`;
                         const copyLinkHeaderButton = cred.hasLink && cred.url ? `<button class="copy-btn-header bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-1 px-3 rounded-full flex-shrink-0" data-value="${cred.url}"><i class="fas fa-link mr-1"></i>Copy link</button>` : '';
+                        
                         const browserDetailsHtml = `<div><div class="flex justify-between items-center"><span class="text-[var(--c-on-surface-variant)]">Browser:</span><div class="flex items-center gap-2"><i class="${getBrowserIcon(cred.browser)}"></i><span class="font-mono text-[var(--c-on-surface)]">${BROWSER_NAMES[cred.browser] || 'N/A'}</span></div></div></div>`;
                         const linkDetailsHtml = cred.hasLink && cred.url ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">Website URL</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.url}</p><a href="${cred.url}" target="_blank" class="p-2 text-[var(--c-on-surface-variant)] hover:text-[var(--c-on-surface)] hover:bg-[var(--c-surface)] border-l border-[var(--c-border)]" onclick="event.stopPropagation();" aria-label="Open link in new tab"><i class="fas fa-external-link-alt"></i></a></div></div>` : '';
                         const schedulerLinkDetailsHtml = cred.hasLink && cred.onlineSchedulerLink ? `<div><span class="text-sm font-medium text-[var(--c-on-surface-variant)]">ONLINE SCHEDULER</span><div class="flex items-center bg-[var(--c-background)] border border-[var(--c-border)] rounded-lg p-0 mt-1 overflow-hidden"><p class="text-sm text-blue-400 truncate px-3 py-2 flex-grow">${cred.onlineSchedulerLink}</p><button class="copy-btn bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-2 px-3 rounded-md" data-value="${cred.onlineSchedulerLink}"><i class="fas fa-copy mr-1"></i>Copy</button></div></div>` : '';
                         const loginDetailsHtml = cred.hasLogin ? `<div class="space-y-3"><div class="grid grid-cols-[auto_1fr] gap-y-3 gap-x-4 items-center"><span class="text-[var(--c-on-surface-variant)]">Username:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.username || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.username || ''}">Copy</button></div><span class="text-[var(--c-on-surface-variant)]">Password:</span><div class="flex items-center justify-end gap-2"><span class="font-mono text-[var(--c-on-surface)] truncate">${cred.password || ''}</span><button class="copy-btn bg-[var(--c-surface-light)] text-[var(--c-on-surface)] hover:bg-[var(--c-primary)] hover:text-white text-xs font-bold py-1 px-3 rounded" data-value="${cred.password || ''}">Copy</button></div></div>${(cred.hasLink && cred.onlineSchedulerLink) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : ''}</div>` : '';
-                        const notesDetailsHtml = cred.hasNotes && cred.notes?.length > 0 ? `<div class="space-y-2"><h4 class="text-base font-bold text-[var(--c-on-surface)]">Notes</h4>${cred.notes.map(note => `<div class="pt-2"><p class="font-semibold text-[var(--c-on-surface)]">${note.title || ''}</p><p class="text-[var(--c-on-surface-variant)] whitespace-pre-wrap">${note.description || ''}</p></div>`).join('')}</div>` : '';
+                        
+                        const notesContentHtml = cred.hasNotes && cred.notes?.length > 0 
+                            ? cred.notes.map(note => `<div class="pt-2"><p class="font-semibold text-[var(--c-on-surface)]">${note.title || ''}</p><p class="text-[var(--c-on-surface-variant)] whitespace-pre-wrap">${note.description || ''}</p></div>`).join('')
+                            : `<p class="text-[var(--c-on-surface-variant)] italic">No notes have been added.</p>`;
+                        
                         const firstColContent = `<div class="space-y-4">${browserDetailsHtml}${(cred.hasLink && cred.url) ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${linkDetailsHtml}</div>` : ''}${cred.hasLogin ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${loginDetailsHtml}</div>` : (!cred.hasLogin && cred.hasLink && cred.onlineSchedulerLink ? `<div class="pt-4 mt-4 border-t border-[var(--c-border)]">${schedulerLinkDetailsHtml}</div>` : '')}</div>`;
-                        const secondColContent = cred.hasNotes && cred.notes?.length > 0 ? `<div class="border-t md:border-t-0 md:border-l border-[var(--c-border)] pt-4 md:pt-0 md:pl-4">${notesDetailsHtml}</div>` : '';
-                        const hasDetails = cred.hasLink || cred.hasLogin;
+                        
+                        // This column is now always created
+                        const secondColContent = `<div class="border-t md:border-t-0 md:border-l border-[var(--c-border)] pt-4 md:pt-0 md:pl-4">
+                            <div class="space-y-2">
+                                <h4 class="text-base font-bold text-[var(--c-on-surface)]">Notes</h4>
+                                ${notesContentHtml}
+                            </div>
+                        </div>`;
+
                         card.innerHTML = `
-                            <div class="card-header p-4 flex items-center justify-between cursor-pointer hover:bg-[var(--c-border)] transition">
+                            <div class="card-header">
                                 <div class="flex items-center gap-4 flex-grow min-w-0">
                                     <div class="icon-container">${iconHtml}${vpnBadgeHtml}</div>
                                     <div class="flex items-center min-w-0">
-                                        <h3 class="card-header-title font-bold text-[var(--c-on-surface)] text-lg truncate">${cred.title}</h3>
+                                        <h3 class="card-title font-bold text-[var(--c-primary)] text-lg truncate">${cred.title}</h3>
                                         ${categoryBadgeHtml}
                                     </div>
                                 </div>
@@ -1915,18 +2031,19 @@
                                         <button class="action-btn edit-btn" aria-label="Edit"><i class="fas fa-pencil-alt"></i></button>
                                         <button class="action-btn delete-btn" aria-label="Delete"><i class="fas fa-trash-alt"></i></button>
                                     </div>
-                                    <div class="h-6 w-px bg-[var(--c-border)] mx-2"></div>
-                                    <i class="fas fa-chevron-down expand-icon text-[var(--c-on-surface-variant)] transition-transform duration-300"></i>
+                                    <svg class="card-toggle-icon w-6 h-6 text-[var(--c-on-surface-variant)] ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="p-4 grid grid-cols-1 ${hasDetails && secondColContent ? 'md:grid-cols-2' : ''} gap-4">
-                                    ${hasDetails ? firstColContent : `<div>${browserDetailsHtml}</div>`}
+                                <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${firstColContent}
                                     ${secondColContent}
                                 </div>
                             </div>`;
+                        
                         listContainer.appendChild(card);
                     });
+
                     listContainer.appendChild(noResultsMessage);
                     noResultsMessage.classList.toggle('hidden', filteredCreds.length > 0);
                     const cards = listContainer.querySelectorAll('.dealership-card');
@@ -1973,6 +2090,8 @@
 
                     // Stop the card from expanding if a button or link was clicked
                     const buttonOrLink = e.target.closest('button, a');
+                    const header = e.target.closest('.card-header'); // Check if the header was clicked
+
                     if (buttonOrLink) {
                         e.stopPropagation(); // Prevents the click from bubbling up to the card
                         const credId = card.dataset.id;
@@ -1986,16 +2105,19 @@
                         }
                         return; // Exit the function
                     }
-                    // If this card is already open, just close it.
-                    if (card.classList.contains('expanded')) {
-                        card.classList.remove('expanded');
-                    } else {
-                        // Close any other cards that might be open
-                        document.querySelectorAll('.dealership-card.expanded').forEach(openCard => {
-                            openCard.classList.remove('expanded');
-                        });
-                        // Open the clicked card
-                        card.classList.add('expanded');
+                    // Only toggle the card if the header itself was clicked
+                    if (header) {
+                        // If this card is already open, just close it.
+                        if (card.classList.contains('expanded')) {
+                            card.classList.remove('expanded');
+                        } else {
+                            // Close any other cards that might be open
+                            document.querySelectorAll('.dealership-card.expanded').forEach(openCard => {
+                                openCard.classList.remove('expanded');
+                            });
+                            // Open the clicked card
+                            card.classList.add('expanded');
+                        }
                     }
                 });
 
@@ -2296,7 +2418,6 @@
             });
 
         }); 
-
     </script>
 
 </body>
