@@ -1265,13 +1265,17 @@
                 setTimeout(() => { toastNotification.classList.remove('show'); }, 3000);
             }
 
-            function renderAllCards() {
+            function renderAllCards(templatesToRender) {
+                // If no specific list is provided, use the full global list
+                const templates = templatesToRender || combinedTemplates;
+                
                 cardContainer.innerHTML = '';
-                if (combinedTemplates.length === 0) {
-                    cardContainer.innerHTML = `<div class="editor-placeholder"><p>No templates to display.</p><p>You can unhide default templates or create your own in the Template Manager.</p></div>`;
+                if (templates.length === 0) {
+                    cardContainer.innerHTML = `<div class="editor-placeholder"><p>No templates match your search.</p></div>`;
                     return;
                 }
-                combinedTemplates.forEach(addCardToDOM);
+                
+                templates.forEach(addCardToDOM);
 
                 const cards = cardContainer.querySelectorAll('.card');
                 cards.forEach((card, index) => {
@@ -2371,8 +2375,24 @@
                     });
                 });
                 
-                cardSearchInput.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0); document.querySelectorAll('.card').forEach(card => { card.style.display = card.dataset.title.includes(searchTerm) ? 'block' : 'none'; }); });
-                clearSearchBtn.addEventListener('click', () => { cardSearchInput.value = ''; cardSearchInput.dispatchEvent(new Event('keyup')); });
+                cardSearchInput.addEventListener('keyup', (e) => { 
+                    const searchTerm = e.target.value.toLowerCase().trim(); 
+                    clearSearchBtn.classList.toggle('hidden', searchTerm.length === 0);
+                    
+                    const filteredTemplates = combinedTemplates.filter(template => 
+                        template.title.toLowerCase().includes(searchTerm)
+                    );
+                    
+                    renderAllCards(filteredTemplates); 
+                });
+                
+                clearSearchBtn.addEventListener('click', () => { 
+                    cardSearchInput.value = ''; 
+                    clearSearchBtn.classList.add('hidden');
+                    renderAllCards(); // Renders the full, unfiltered list
+                    cardSearchInput.focus();
+                });
+
                 templateSelect.addEventListener('change', renderEditorForSelection);
                 document.getElementById('clearAllBtn').addEventListener('click', clearAllFields);
                 addNewTemplateBtn.addEventListener('click', handleAddNewClick);
