@@ -842,7 +842,14 @@
                                         <h3 class="text-sm font-medium text-[var(--c-on-surface)]">General Settings</h3>
                                         <div>
                                             <label for="browser" class="block text-sm font-medium text-[var(--c-on-surface)] mb-1">Preferred Browser</label>
-                                            <select id="browser"><option value="chrome">Google Chrome</option><option value="firefox">Mozilla Firefox</option><option value="edge">Microsoft Edge</option><option value="safari">Apple Safari</option><option value="other">Other</option></select>
+                                            <select id="browser">
+                                                <option value="chrome">Google Chrome</option>
+                                                <option value="firefox">Mozilla Firefox</option>
+                                                <option value="edge">Microsoft Edge</option>
+                                                <option value="safari">Apple Safari</option>
+                                                <option value="shift">Shift Browser</option>
+                                                <option value="other">Other</option>
+                                            </select>
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <label for="vpn-required" class="font-medium text-[var(--c-on-surface)] cursor-pointer">Requires VPN</label>
@@ -1937,8 +1944,40 @@
                 const deleteCancelBtn = page.querySelector('#delete-cancel-btn');
                 let deleteTimerInterval;
 
-                const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', other: 'Other' };
-                const getBrowserIcon = (browser) => ({ chrome: 'fa-brands fa-chrome text-yellow-400', firefox: 'fa-brands fa-firefox text-orange-500', edge: 'fa-brands fa-edge text-blue-400', safari: 'fa-brands fa-safari text-blue-500' }[browser] || 'fa-solid fa-globe text-gray-400');
+                const BROWSER_NAMES = { chrome: 'Google Chrome', firefox: 'Mozilla Firefox', edge: 'Microsoft Edge', safari: 'Apple Safari', shift: 'Shift Browser', other: 'Other' };
+                const getBrowserIcon = (browser) => {
+                    const icons = {
+                        chrome: '<i class="fa-brands fa-chrome text-yellow-400 fa-2x"></i>',
+                        firefox: '<i class="fa-brands fa-firefox text-orange-500 fa-2x"></i>',
+                        edge: '<i class="fa-brands fa-edge text-blue-400 fa-2x"></i>',
+                        safari: '<i class="fa-brands fa-safari text-blue-500 fa-2x"></i>',
+                        shift: `
+                            <svg width="710" height="710" viewBox="0 0 710 710" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <mask id="mask0_3_428" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="710" height="710">
+                                    <path d="M355 710C551.061 710 710 551.061 710 355C710 158.939 551.061 0 355 0C158.939 0 0 158.939 0 355C0 551.061 158.939 710 355 710Z" fill="white"></path>
+                                </mask>
+                                <g mask="url(#mask0_3_428)">
+                                    <path d="M857.171 354.995L355.024 -146.975L229.531 -21.4824L104.039 104.01L606.186 606.158L731.679 480.665L857.171 354.995Z" fill="url(#paint0_linear_3_428)"></path>
+                                    <path d="M480.682 731.644L606.175 606.151L104.027 104.004L-21.465 229.496L-146.958 354.989L355.012 857.136L480.682 731.644Z" fill="url(#paint1_linear_3_428)"></path>
+                                    <path d="M480.692 0L191.367 0L191.367 240.512L480.692 240.512L480.692 0Z" fill="url(#paint2_linear_3_428)"></path>
+                                    <path d="M514.771 469.664L225.446 469.664L225.446 710.177H514.771V469.664Z" fill="url(#paint3_linear_3_428)"></path>
+                                    <path d="M104.019 355.001L229.512 480.493C298.914 549.896 411.272 549.896 480.497 480.493L229.512 229.508C160.109 160.106 173.067 0.000685573 355.004 0.000685573L229.512 -21.4768L104.019 104.016C34.6167 173.418 34.6167 285.776 104.019 355.001Z" fill="url(#paint4_linear_3_428)"></path>
+                                    <path d="M229.537 229.5L480.522 480.485C549.924 549.887 513.182 709.992 355.029 709.992L480.522 731.47L606.014 605.977C675.417 536.575 675.417 424.217 606.014 354.992L480.522 229.5C411.119 160.097 298.762 160.097 229.537 229.5Z" fill="url(#paint5_linear_3_428)"></path>
+                                </g>
+                                <defs>
+                                    <linearGradient id="paint0_linear_3_428" x1="229.681" y1="-21.3187" x2="731.727" y2="480.727" gradientUnits="userSpaceOnUse"><stop stop-color="#006EDC"></stop><stop offset="1" stop-color="#1FD9FF"></stop></linearGradient>
+                                    <linearGradient id="paint1_linear_3_428" x1="-21.4165" y1="229.584" x2="480.629" y2="731.63" gradientUnits="userSpaceOnUse"><stop stop-color="#514AC6"></stop><stop offset="1" stop-color="#191C64"></stop></linearGradient>
+                                    <linearGradient id="paint2_linear_3_428" x1="191.367" y1="120.345" x2="480.692" y2="120.345" gradientUnits="userSpaceOnUse"><stop stop-color="#003B97"></stop><stop offset="0.09" stop-color="#003B9F" stop-opacity="0.88"></stop><stop offset="0.4" stop-color="#003BBB" stop-opacity="0.51"></stop><stop offset="0.67" stop-color="#003CCF" stop-opacity="0.23"></stop><stop offset="0.87" stop-color="#003CDB" stop-opacity="0.06"></stop><stop offset="1" stop-color="#003DE0" stop-opacity="0"></stop></linearGradient>
+                                    <linearGradient id="paint3_linear_3_428" x1="225.446" y1="589.832" x2="514.771" y2="589.832" gradientUnits="userSpaceOnUse"><stop stop-color="#1B0064" stop-opacity="0"></stop><stop offset="0.2" stop-color="#190061" stop-opacity="0.12"></stop><stop offset="0.54" stop-color="#13005B" stop-opacity="0.44"></stop><stop offset="0.96" stop-color="#0A0051" stop-opacity="0.95"></stop><stop offset="1" stop-color="#0A0050"></stop></linearGradient>
+                                    <linearGradient id="paint4_linear_3_428" x1="506.636" y1="454.454" x2="130.101" y2="77.9193" gradientUnits="userSpaceOnUse"><stop stop-color="#006EDC"></stop><stop offset="1" stop-color="#1FD9FF"></stop></linearGradient>
+                                    <linearGradient id="paint5_linear_3_428" x1="580.211" y1="631.919" x2="203.676" y2="255.384" gradientUnits="userSpaceOnUse"><stop stop-color="#514AC6"></stop><stop offset="1" stop-color="#191C64"></stop></linearGradient>
+                                </defs>
+                            </svg>
+                        `,
+                        other: '<i class="fa-solid fa-globe text-gray-400 fa-2x"></i>'
+                    };
+                    return icons[browser] || icons['other'];
+                };
                 
                 const copyToClipboard = (text, button) => {
                     if (!text) return;
@@ -2020,7 +2059,7 @@
                         
                         const vpnBadgeHtml = cred.vpnRequired ? `<span class="vpn-badge">VPN</span>` : '';
                         const categoryBadgeHtml = isSearching ? `<span class="text-xs bg-[var(--c-primary)] text-white font-bold ml-3 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">${cred.category}</span>` : '';
-                        const iconHtml = `<i class="${getBrowserIcon(cred.browser)} fa-2x"></i>`;
+                        const iconHtml = getBrowserIcon(cred.browser);
                         const copyLinkHeaderButton = cred.hasLink && cred.url ? `<button class="copy-btn-header bg-[var(--c-primary)] hover:bg-[var(--c-primary-variant)] text-white text-xs font-bold py-1 px-3 rounded-full flex-shrink-0" data-value="${cred.url}"><i class="fas fa-link mr-1"></i>Copy link</button>` : '';
                         
                         const browserDetailsHtml = `<div><div class="flex justify-between items-center"><span class="text-[var(--c-on-surface-variant)]">Browser:</span><div class="flex items-center gap-2"><i class="${getBrowserIcon(cred.browser)}"></i><span class="font-mono text-[var(--c-on-surface)]">${BROWSER_NAMES[cred.browser] || 'N/A'}</span></div></div></div>`;
