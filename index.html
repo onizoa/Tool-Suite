@@ -133,7 +133,7 @@
         .select-selected.select-arrow-active { border-color: var(--c-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 20%, transparent); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
         .select-selected::after { content: "▼"; font-size: 11px; color: var(--c-on-surface-variant); transition: all 0.3s; }
         .select-selected.select-arrow-active::after { transform: rotate(180deg); }
-        .select-items { position: absolute; background-color: var(--c-surface); top: 100%; left: 0; right: 0; z-index: 99; border: 1px solid var(--c-primary); border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 8px 16px var(--c-shadow); overflow-y: auto; max-height: 200px; }
+        .select-items { position: absolute; background-color: var(--c-surface); top: 100%; left: 0; right: 0; z-index: 99; border: 1px solid var(--c-primary); border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 8px 16px var(--c-shadow); overflow-y: auto; max-height: 100px; }
         .select-hide { display: none; }
         .select-items div { padding: 12px 16px; cursor: pointer; transition: background-color 0.2s; }
         .select-items div:not(.optgroup):hover { background-color: var(--c-surface-light); }
@@ -185,6 +185,9 @@
         #hotAlertsPage .copy-btn {margin-top: 20px;}
         #hotAlertsPage .card { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
         #hotAlertsPage .card.show { opacity: 1; transform: translateY(0); }
+        #hotAlertsPage #sidebar .select-items,
+        #hotAlertsPage .card .in-card-controls .select-items {max-height: 200px;}
+
 
         .card-container { flex-grow: 1; padding: 14px 40px 40px; overflow-y: auto; }
         .card-container.loading { display: flex; align-items: center; justify-content: center; }
@@ -331,7 +334,65 @@
             cursor: text;
         }
 
-    </style>
+        /* --- MY SCHEDULE STYLES --- */
+        .custom-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23CBD5E0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.8em;
+        }
+        .schedule-agent-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23CBD5E0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1.5rem center;
+            background-size: 1em;
+            padding-right: 4rem; /* Ensures text doesn't overlap the new arrow */
+        }
+        /* --- NEW: Specific styling for My Schedule's custom dropdown --- */
+        #mySchedulePage .select-selected {
+            height: 6rem; /* h-24 */
+            padding: 1.5rem; /* p-6 */
+            text-align: center;
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            background-color: var(--c-surface);
+            border: none; /* CHANGED: Removes the border */
+            box-shadow: 0 4px 12px var(--c-shadow); /* ADDED: Matches other containers */
+            border-radius: 0.75rem;
+        }
+
+        /* This targets the dropdown list itself */
+        #mySchedulePage .select-items {
+            max-height: 480px; /* Limits height to show ~10 items and enables scrolling */
+            border: none;
+        }
+        #mySchedulePage .select-selected.select-arrow-active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-color: var(--c-border); /* ADDED: Prevents border color change */
+            box-shadow: none;               /* ADDED: Removes the blue focus glow */
+        }
+
+    
+        /* Notification Capsule Animation */
+        #scheduleNotification {
+            transition: transform 0.3s ease-in-out;
+            animation: pulseNotice 1s infinite;
+        }
+        #scheduleNotification.show { transform: scale(1); }
+        #scheduleNotification.hide { transform: scale(0); animation: none; }
+        @keyframes pulseNotice {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+</style>
     <style>
         /* Styles from tester.html for Dealership Manager */
         #dealershipListPage body {
@@ -605,6 +666,9 @@
                     <button id="headerNavCarCatalog" class="header-btn" aria-label="Car Catalog">
                         <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>
                     </button>
+                    <button id="headerNavMySchedule" class="header-btn" aria-label="My Schedule">
+                        <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </button>
                 </div>
             </div>
         </header>
@@ -631,6 +695,11 @@
                         <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         <h3>Template Manager</h3>
                         <p>Create, edit, and delete your own custom templates for the Hot Alerts tool.</p>
+                    </div>
+                    <div class="tool-card" id="navigateToMySchedule">
+                         <svg class="tool-card-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <h3>My Schedule</h3>
+                        <p>View agent schedules and track live updates and changes.</p>
                     </div>
                     <div class="tool-card" id="themeToggleCard">
                         <div class="tool-card-icon-wrapper" style="width: 64px; height: 64px; margin-bottom: 20px; position: relative;">
@@ -901,6 +970,72 @@
                 </div>
             </div>
 
+            <!-- START: My Schedule Page Content -->
+            <div id="mySchedulePage" class="page-content">
+                <div class="flex-grow p-4 sm:p-6 md:p-8 overflow-y-auto">
+                    <div class="max-w-5xl mx-auto">
+                        <header class="mb-8">
+                            <h1 class="text-3xl font-bold text-transparent">My Schedule</h1>
+                            <p class="mt-1 text-transparent" style="color: var(--c-on-surface-variant);">Select an agent to view their schedule details. (beta)</p>
+                        </header>
+
+                        <main class="space-y-6">
+                            <!-- Top Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="select-wrapper">
+                                    <select id="agentSelector" class="select-field" style="display: none;">
+                                        <option>Loading agents...</option>
+                                    </select>
+                                    <div id="agentSelectorPlaceholder" class="select-selected" style="height: 6rem; padding: 1.5rem; text-align: center; font-size: 1.25rem; font-weight: 700; background-color: var(--c-surface); border: 1px solid var(--c-border); border-radius: 0.75rem;">
+                                        <span style="color: var(--c-on-surface);">Loading agents...</span>
+                                    </div>
+                                </div>
+
+                                <div id="shiftInfo" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-center" style="background-color: var(--c-surface);">
+                                    <p style="color: var(--c-on-surface-variant);">Shift Information</p>
+                                </div>
+                            </div>
+
+                            <!-- Middle Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div id="dateInfo" class="p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center" style="background-color: var(--c-surface);">
+                                     <p style="color: var(--c-on-surface-variant);">Date Information</p>
+                                </div>
+                                <div class="flex flex-col gap-6">
+                                    <div id="firstBreak" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-between px-4" style="background-color: var(--c-surface);">
+                                         <p class="font-medium" style="color: var(--c-on-surface-variant);">First Break</p>
+                                    </div>
+                                     <div id="lunch" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-between px-4" style="background-color: var(--c-surface);">
+                                         <p class="font-medium" style="color: var(--c-on-surface-variant);">Lunch</p>
+                                    </div>
+                                    <div id="lastBreak" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-between px-4" style="background-color: var(--c-surface);">
+                                         <p class="font-medium" style="color: var(--c-on-surface-variant);">Last Break</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bottom Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div id="offDays" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-center" style="background-color: var(--c-surface);">
+                                    <p style="color: var(--c-on-surface-variant);">Off Days</p>
+                                </div>
+                                <div id="lastUpdate" class="p-6 rounded-xl shadow-lg h-24 flex items-center justify-center" style="background-color: var(--c-surface);">
+                                     <p style="color: var(--c-on-surface-variant);">Last Update Time</p>
+                                </div>
+                            </div>
+
+                            <!-- Change History -->
+                            <div class="pt-6">
+                                <h2 class="text-xl font-semibold mb-3" style="color: var(--c-on-surface);">History</h2>
+                                <div id="changeHistory" class="p-6 rounded-xl shadow-lg min-h-[100px]" style="background-color: var(--c-surface);">
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+            <!-- END: My Schedule Page Content -->
+
+
     <div id="confirmationModal" class="modal-overlay">
         <div class="modal-content">
             <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--c-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
@@ -1063,12 +1198,14 @@
             const navigateToTemplateManager = document.getElementById('navigateToTemplateManager');
             const navigateToCarCatalog = document.getElementById('navigateToCarCatalog');
             const navigateToDealershipList = document.getElementById('navigateToDealershipList');
+            const navigateToMySchedule = document.getElementById('navigateToMySchedule'); 
 
             const headerNavContainer = document.getElementById('headerNavContainer');
             const headerNavToolSuite = document.getElementById('headerNavToolSuite');
             const headerNavHotAlerts = document.getElementById('headerNavHotAlerts');
             const headerNavDealershipList = document.getElementById('headerNavDealershipList');
             const headerNavCarCatalog = document.getElementById('headerNavCarCatalog');
+            const headerNavMySchedule = document.getElementById('headerNavMySchedule'); 
 
             const cardContainer = document.getElementById('cardContainer');
             const loader = document.getElementById('loader');
@@ -1092,6 +1229,167 @@
             const helpModalCloseBtn = document.getElementById('helpModalCloseBtn');
             const helpModalTitle = document.getElementById('helpModalTitle');
             const helpModalBody = document.getElementById('helpModalBody');
+
+// --- START MY SCHEDULE SCRIPT ---
+let myScheduleInitialized = false;
+const myScheduleState = {
+    scheduleData: [],
+    historyData: [],
+    currentAgentNames: [],
+    isFetching: false
+};
+const googleWebAppURL = 'https://script.google.com/macros/s/AKfycbweMPMu10xmIHq1cgHLF3sdaGztsku9aH64wRadoMWod3eoZ6syToL62x0HFNFtxYo8/exec';
+const REFRESH_INTERVAL = 5000;
+
+// Helper function for the CENTERED layout (label on top)
+function formatScheduleContent(label, value) {
+    const displayValue = value && String(value).trim() !== '' ? value : 'N/A';
+    return `<div class="text-center">
+                <p class="text-sm" style="color: var(--c-on-surface-variant);">${label}</p>
+                <p class="text-xl sm:text-2xl font-bold" style="color: var(--c-on-surface);">${displayValue}</p>
+            </div>`;
+}
+
+// Helper function for the ALIGNED layout (label on left)
+function formatScheduleContentAligned(label, value) {
+    const displayValue = value && String(value).trim() !== '' ? value : 'N/A';
+    return `<div class="flex items-center justify-between w-full px-4">
+                <p class="text-lg font-medium" style="color: var(--c-on-surface-variant);">${label}</p>
+                <p class="text-xl sm:text-2xl font-bold" style="color: var(--c-on-surface);">${displayValue}</p>
+            </div>`;
+}
+
+async function fetchScheduleData(scheduleElements) {
+    if (myScheduleState.isFetching) return;
+    myScheduleState.isFetching = true;
+    const previouslySelectedAgent = scheduleElements.agentSelector.value;
+    try {
+        const response = await fetch(googleWebAppURL);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        myScheduleState.scheduleData = data.schedules.map(row => ({ agent: row.AGENTS, shift: row.SHIFT, off: row.OFF, firstBreak: row['1st Break'], lunch: row.Lunch, lastBreak: row['Last Break'] }));
+        myScheduleState.historyData = data.history;
+        const newAgentNames = myScheduleState.scheduleData.map(a => a.agent).filter(Boolean);
+        if (JSON.stringify(myScheduleState.currentAgentNames) !== JSON.stringify(newAgentNames)) {
+            myScheduleState.currentAgentNames = newAgentNames;
+            populateAgentDropdown(previouslySelectedAgent, scheduleElements);
+        }
+        displaySchedule(scheduleElements.agentSelector.value, scheduleElements);
+    } catch (error) {
+        console.error("Error fetching schedule data:", error);
+        displayScheduleError("Failed to load data.", scheduleElements);
+    } finally {
+        myScheduleState.isFetching = false;
+    }
+}
+
+function populateAgentDropdown(selectedAgent, scheduleElements) {
+    document.getElementById('agentSelectorPlaceholder').style.display = 'none';
+    scheduleElements.agentSelector.innerHTML = '';
+    if (myScheduleState.currentAgentNames.length === 0) {
+        scheduleElements.agentSelector.innerHTML = '<option>No agent data found.</option>';
+    } else {
+        let agentFound = false;
+        myScheduleState.currentAgentNames.forEach(agentName => {
+            const option = document.createElement('option');
+            option.value = agentName;
+            option.textContent = agentName;
+            if (agentName === selectedAgent) {
+                option.selected = true;
+                agentFound = true;
+            }
+            scheduleElements.agentSelector.appendChild(option);
+        });
+        if (!agentFound && scheduleElements.agentSelector.options.length > 0) {
+            scheduleElements.agentSelector.options[0].selected = true;
+        }
+    }
+    buildCustomSelect(document.querySelector('#mySchedulePage .select-wrapper'));
+}
+
+function displaySchedule(selectedAgentName, scheduleElements) {
+    const agent = myScheduleState.scheduleData.find(a => a.agent === selectedAgentName);
+    if (!agent) {
+        const placeholder = formatScheduleContent('-', 'N/A');
+        scheduleElements.shiftInfoEl.innerHTML = placeholder;
+        scheduleElements.offDaysEl.innerHTML = placeholder;
+        scheduleElements.firstBreakEl.innerHTML = formatScheduleContentAligned('1st Break', 'N/A');
+        scheduleElements.lunchEl.innerHTML = formatScheduleContentAligned('Lunch', 'N/A');
+        scheduleElements.lastBreakEl.innerHTML = formatScheduleContentAligned('Last Break', 'N/A');
+        scheduleElements.lastUpdateEl.innerHTML = formatScheduleContent('Last Update Time', 'N/A');
+        scheduleElements.changeHistoryEl.innerHTML = `<p class="italic" style="color: var(--c-on-surface-variant);">Select an agent to view history.</p>`;
+        return;
+    }
+
+    // --- Apply the correct layout to each box ---
+    scheduleElements.shiftInfoEl.innerHTML = formatScheduleContent('Shift Information', agent.shift);
+    scheduleElements.offDaysEl.innerHTML = formatScheduleContent('Off Days', agent.off);
+    scheduleElements.firstBreakEl.innerHTML = formatScheduleContentAligned('First Break', agent.firstBreak);
+    scheduleElements.lunchEl.innerHTML = formatScheduleContentAligned('Lunch', agent.lunch);
+    scheduleElements.lastBreakEl.innerHTML = formatScheduleContentAligned('Last Break', agent.lastBreak);
+
+    const agentHistory = myScheduleState.historyData.filter(entry => entry.Agent === selectedAgentName).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    let lastUpdateTime = 'No recent changes';
+    if (agentHistory.length > 0) {
+        lastUpdateTime = new Date(agentHistory[0].timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    scheduleElements.lastUpdateEl.innerHTML = formatScheduleContent('Last Update Time', lastUpdateTime);
+    
+    if (agentHistory.length > 0) {
+        scheduleElements.changeHistoryEl.innerHTML = agentHistory.map(log => {
+            const time = new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const oldValue = log['Old Value'] || 'nothing';
+            const newValue = log['New Value'] || 'nothing';
+            return `<div class="text-sm mb-2 border-b pb-2 last:border-b-0 last:mb-0 last:pb-0" style="color: var(--c-on-surface-variant); border-color: var(--c-border);">
+                        <span class="font-semibold" style="color: var(--c-on-surface);">${time}:</span> 
+                        <span class="font-semibold text-sky-400">${log.Category}</span> 
+                        changed from <span style="color: var(--c-error);">"${oldValue}"</span> 
+                        to <span class="text-green-400">"${newValue}"</span>.
+                    </div>`;
+        }).join('');
+    } else {
+        scheduleElements.changeHistoryEl.innerHTML = `<p class="italic" style="color: var(--c-on-surface-variant);">No change history recorded for this agent today.</p>`;
+    }
+}
+
+function updateScheduleDateTime(scheduleElements) {
+    const now = new Date();
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    scheduleElements.dateInfoEl.innerHTML = `<div class="text-center">
+                                        <p class="text-lg" style="color: var(--c-on-surface-variant);">${now.toLocaleDateString('en-US', dateOptions)}</p>
+                                        <p class="text-4xl font-bold mt-2" style="color: var(--c-on-surface);">${now.toLocaleTimeString('en-US', timeOptions)}</p>
+                                    </div>`;
+}
+
+function displayScheduleError(message, scheduleElements) {
+    scheduleElements.agentSelector.innerHTML = `<option disabled selected>${message}</option>`;
+    buildCustomSelect(document.querySelector('#mySchedulePage .select-wrapper'));
+}
+
+function initializeMySchedule() {
+    if (myScheduleInitialized) return;
+    myScheduleInitialized = true;
+    const scheduleElements = {
+        agentSelector: document.getElementById('agentSelector'),
+        shiftInfoEl: document.getElementById('shiftInfo'),
+        dateInfoEl: document.getElementById('dateInfo'),
+        firstBreakEl: document.getElementById('firstBreak'),
+        lunchEl: document.getElementById('lunch'),
+        lastBreakEl: document.getElementById('lastBreak'),
+        offDaysEl: document.getElementById('offDays'),
+        lastUpdateEl: document.getElementById('lastUpdate'),
+        changeHistoryEl: document.getElementById('changeHistory')
+    };
+    scheduleElements.agentSelector.addEventListener('change', (event) => {
+        displaySchedule(event.target.value, scheduleElements);
+    });
+    fetchScheduleData(scheduleElements);
+    updateScheduleDateTime(scheduleElements);
+    setInterval(() => fetchScheduleData(scheduleElements), REFRESH_INTERVAL);
+    setInterval(() => updateScheduleDateTime(scheduleElements), 1000);
+}
+// --- END MY SCHEDULE SCRIPT ---
 
             const helpContent = {
                 toolSuite: {
@@ -1156,6 +1454,18 @@
                             <li><strong>Saving & Deleting:</strong> After making changes to a custom template, you can save them or delete the template entirely.</li>
                         </ul>
                     `
+                },
+                mySchedule: { 
+                    title: "Using My Schedule",
+                    body: `
+                        <p>This page provides a live view of agent schedules and tracks changes in real-time.</p>
+                        <ul>
+                            <li><strong>Agent Selector:</strong> Use the dropdown at the top-left to choose an agent. Their schedule will load instantly.</li>
+                            <li><strong>Live Data:</strong> The page automatically checks for updates from the master Google Sheet every 5 seconds.</li>
+                            <li><strong>Last Update Time:</strong> This box shows the exact time of the last recorded change for the currently selected agent for today.</li>
+                            <li><strong>Change History:</strong> This section provides a detailed, color-coded log of all changes made to the selected agent's schedule for the current day.</li>
+                        </ul>
+                    `
                 }
             };
 
@@ -1194,7 +1504,8 @@
                     toolSuite: headerNavToolSuite,
                     hotAlerts: headerNavHotAlerts,
                     dealershipList: headerNavDealershipList,
-                    carCatalog: headerNavCarCatalog
+                    carCatalog: headerNavCarCatalog,
+                    mySchedule: headerNavMySchedule
                 };
                 Object.values(navButtons).forEach(btn => btn?.classList.remove('active'));
                 if (navButtons[view]) {
@@ -1206,6 +1517,7 @@
                 const manageTemplatesSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
                 const carCatalogSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="22"></line><line x1="22" y1="12" x2="16" y2="12"></line><line x1="8" y1="12" x2="2" y2="12"></line></svg>`;
                 const dealershipListSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+                const myScheduleSVG = `<svg class="header-page-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
 
                 if (view === 'toolSuite') {
                     headerTitle.innerHTML = `${toolSuiteSVG} <span>Tool Suite</span>`;
@@ -1233,7 +1545,10 @@
                     if (allDealerships.length > 0 && typeof renderDealershipsNow === 'function') {
                         renderDealershipsNow();
                     }
-                }
+                }else if (view === 'mySchedule') { 
+                    headerTitle.innerHTML = `${myScheduleSVG} <span>My Schedule</span>`;
+                    initializeMySchedule();
+                } 
             }
 
             // --- Firestore Functions ---
@@ -2385,11 +2700,13 @@
                 navigateToTemplateManager.addEventListener('click', () => renderCurrentView('manageTemplates'));
                 navigateToCarCatalog.addEventListener('click', () => renderCurrentView('carCatalog'));
                 navigateToDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
-                
+                navigateToMySchedule.addEventListener('click', () => renderCurrentView('mySchedule'));
+
                 headerNavToolSuite.addEventListener('click', () => renderCurrentView('toolSuite'));
                 headerNavHotAlerts.addEventListener('click', () => renderCurrentView('hotAlerts'));
                 headerNavDealershipList.addEventListener('click', () => renderCurrentView('dealershipList'));
                 headerNavCarCatalog.addEventListener('click', () => renderCurrentView('carCatalog'));
+                headerNavMySchedule.addEventListener('click', () => renderCurrentView('mySchedule'));
 
                 document.getElementById('phoneNumber').addEventListener('input', (e) => { const x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/); e.target.value = !x[2] ? x[1] : `(${x[1]}) ${x[2]}` + (x[3] ? `-${x[3]}` : ''); });
                 document.getElementById('vin').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); });
@@ -2538,5 +2855,61 @@
         }); 
     </script>
 
+
+    <!-- Notification Capsule -->
+    <div id="scheduleNotification" class="hidden fixed bottom-8 right-8 bg-[var(--c-primary)] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3 cursor-pointer z-[999] transform scale-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span id="scheduleNotificationText">Your schedule has been updated</span>
+        <button id="closeNotification" class="text-white hover:text-gray-200 focus:outline-none">&times;</button>
+    </div>
+
+    <!-- Audio Alert -->
+    <audio id="notificationSound" preload="auto">
+        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const notification = document.getElementById("scheduleNotification");
+        const notificationText = document.getElementById("scheduleNotificationText");
+        const closeNotificationBtn = document.getElementById("closeNotification");
+        const notificationSound = document.getElementById("notificationSound");
+
+        function showScheduleNotification(message = "Your schedule has been updated") {
+            if (document.getElementById("toolSuitePage")?.classList.contains("active")) return;
+            notificationText.textContent = message;
+            notification.classList.remove("hidden", "hide");
+            requestAnimationFrame(() => notification.classList.add("show"));
+            notificationSound.currentTime = 0;
+            notificationSound.play().catch(() => {});
+        }
+
+        closeNotificationBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            notification.classList.remove("show");
+            notification.classList.add("hide");
+            setTimeout(() => notification.classList.add("hidden"), 300);
+        });
+
+        notification.addEventListener("click", () => {
+            navigateToPage("mySchedulePage");
+            notification.classList.remove("show");
+            notification.classList.add("hide");
+            setTimeout(() => notification.classList.add("hidden"), 300);
+        });
+
+        document.getElementById("headerNavMySchedule")?.addEventListener("click", () => {
+            if (!notification.classList.contains("hidden")) {
+                notification.classList.remove("show");
+                notification.classList.add("hide");
+                setTimeout(() => notification.classList.add("hidden"), 300);
+            }
+        });
+    </script>
 </body>
 </html>
