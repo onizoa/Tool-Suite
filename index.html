@@ -1382,6 +1382,8 @@
 // --- START MY SCHEDULE SCRIPT ---
 let myScheduleInitialized = false;
 const myScheduleState = {
+    retryCount: 0,
+    maxRetries: 10,
     scheduleData: [],
     historyData: [],
     currentAgentNames: [],
@@ -1408,14 +1410,15 @@ function formatScheduleContentAligned(label, value) {
             </div>`;
 }
 
-async function fetchScheduleData(scheduleElements) {
+async function fetchScheduleData(scheduleElements, preferredAgent = null) {
     if (myScheduleState.isFetching) return;
     myScheduleState.isFetching = true;
-    const previouslySelectedAgent = scheduleElements.agentSelector.value;
+    const previouslySelectedAgent = preferredAgent || scheduleElements.agentSelector.value;
     try {
         const response = await fetch(googleWebAppURL);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
+        myScheduleState.retryCount = 0;
         myScheduleState.scheduleData = data.schedules.map(row => ({ agent: row.AGENTS, shift: row.SHIFT, off: row.OFF, firstBreak: row['1st Break'], lunch: row.Lunch, lastBreak: row['Last Break'] }));
         myScheduleState.historyData = data.history;
         const newAgentNames = myScheduleState.scheduleData.map(a => a.agent).filter(Boolean);
@@ -1511,10 +1514,33 @@ function updateScheduleDateTime(scheduleElements) {
                                     </div>`;
 }
 
+
 function displayScheduleError(message, scheduleElements) {
-    scheduleElements.agentSelector.innerHTML = `<option disabled selected>${message}</option>`;
-    buildCustomSelect(document.querySelector('#mySchedulePage .select-wrapper'));
+    const scheduleDetails = scheduleElements.scheduleDetails;
+
+    if (myScheduleState.retryCount < myScheduleState.maxRetries) {
+        myScheduleState.retryCount++;
+        scheduleDetails.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-center p-6">
+                <p class="text-red-500 font-semibold mb-2">${message}</p>
+                <p class="text-sm text-[var(--c-on-surface-variant)]">Retrying... (Attempt ${myScheduleState.retryCount}/${myScheduleState.maxRetries})</p>
+            </div>
+        `;
+
+        setTimeout(() => {
+            const lastSelected = localStorage.getItem('selectedAgentName');
+            fetchScheduleData(scheduleElements, lastSelected);
+        }, 300);
+    } else {
+        scheduleDetails.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-center p-6">
+                <p class="text-red-500 font-semibold mb-4">${message}</p>
+                <p class="text-sm text-[var(--c-on-surface-variant)]">Failed after ${myScheduleState.maxRetries} attempts. Please refresh the page or try again later.</p>
+            </div>
+        `;
+    }
 }
+
 
 function initializeMySchedule() {
     if (myScheduleInitialized) return;
@@ -1534,7 +1560,8 @@ function initializeMySchedule() {
         displaySchedule(event.target.value, scheduleElements);
         try { updateSelectedAgentName(event.target.value); } catch {}
     });
-    fetchScheduleData(scheduleElements);
+    const lastSelected = localStorage.getItem('selectedAgentName');
+        fetchScheduleData(scheduleElements, lastSelected);
     updateScheduleDateTime(scheduleElements);
     setInterval(() => fetchScheduleData(scheduleElements), REFRESH_INTERVAL);
     setInterval(() => updateScheduleDateTime(scheduleElements), 1000);
